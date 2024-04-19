@@ -1,4 +1,4 @@
-# Battle for Wesnoth
+# The Battle for Wesnoth
 
 ## From their [Github](https://github.com/wesnoth/wesnoth)
 
