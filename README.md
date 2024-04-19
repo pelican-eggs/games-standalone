@@ -5,8 +5,6 @@
 * [Impostor Server](among_us/impostor_server)
 * [CrewLink Server](among_us/crewlink_server)
 
-[Battle For Wesnoth](battleforwesnoth)
-
 [BeamNG.drive](beamng)
 
 * [BeamMP Server](beamng/beammp)
@@ -256,6 +254,8 @@
 * [tModLoader](terraria/tmodloader)
 * [TShock](terraria/tshock)
 * [Vanilla](terraria/vanilla)
+
+[The Battle For Wesnoth](thebattleforwesnoth)
 
 [Tycoon Games](tycoon_games)
 
