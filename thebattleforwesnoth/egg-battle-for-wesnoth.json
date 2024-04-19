@@ -16,7 +16,7 @@
     "startup": "echo -e \"passwd=\\\"{{PASSWD}}\\\"\" > wesnothd.cfg; echo -e \"motd=\\\"{{MOTD}}\\\"\" >> wesnothd.cfg; .\/battleForWesnoth\/build\/wesnothd -p {{SERVER_PORT}} -c \/home\/container\/wesnothd.cfg",
     "config": {
         "files": "{}",
-        "startup": "{}",
+        "startup": "{\r\n    \"done\": \"info server:\"\r\n}",
         "logs": "{}",
         "stop": "^C"
     },
