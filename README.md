@@ -5,6 +5,8 @@
 * [Impostor Server](among_us/impostor_server)
 * [CrewLink Server](among_us/crewlink_server)
 
+[Battle For Wesnoth](battleforwesnoth)
+
 [BeamNG.drive](beamng)
 
 * [BeamMP Server](beamng/beammp)
