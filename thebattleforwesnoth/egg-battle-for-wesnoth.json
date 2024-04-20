@@ -4,13 +4,13 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-04-18T16:32:29-04:00",
+    "exported_at": "2024-04-20T10:04:36-04:00",
     "name": "The Battle for Wesnoth",
     "author": "mattman107@github.com",
     "description": "Egg for hosting a Battle for Wesnoth Server.",
     "features": null,
     "docker_images": {
-        "ghcr.io\/parkervcp\/yolks:debian": "ghcr.io\/parkervcp\/games:battleforwesnoth"
+        "ghcr.io\/parkervcp\/games:thebattleforwesnoth": "ghcr.io\/parkervcp\/games:thebattleforwesnoth"
     },
     "file_denylist": [],
     "startup": "echo -e \"passwd=\\\"{{PASSWD}}\\\"\" > wesnothd.cfg; echo -e \"motd=\\\"{{MOTD}}\\\"\" >> wesnothd.cfg; .\/battleForWesnoth\/build\/wesnothd -p {{SERVER_PORT}} -c \/home\/container\/wesnothd.cfg",
