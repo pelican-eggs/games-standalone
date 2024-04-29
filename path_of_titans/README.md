@@ -1,9 +1,5 @@
 # Path Of Titans
 
-<!--Please remove these comments and irelevent parts for the server egg your adding before summiting a PR request-->
-
-## From their [Github](https://github.com/Hendalf-DEV/eggs)
-
 ## Install notes
 This could be a little buggy or not well tested because made on the fast hand.
 
@@ -28,7 +24,6 @@ Ports required to run the server in a table format.
 
 ### Notes
 
-<!--Notes about the server ports.-->
 `7777` is the default port, but any port can be used.
 You need to assign to network port `7779` if you want to use RCON
 Also you need to open port `7778` and `7781` for the query, so it can appear on the server list.
