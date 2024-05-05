@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-04-20T10:04:36-04:00",
+    "exported_at": "2024-05-05T14:09:45-04:00",
     "name": "The Battle for Wesnoth",
     "author": "mattman107@github.com",
     "description": "Egg for hosting a Battle for Wesnoth Server.",
@@ -13,9 +13,9 @@
         "ghcr.io\/parkervcp\/games:thebattleforwesnoth": "ghcr.io\/parkervcp\/games:thebattleforwesnoth"
     },
     "file_denylist": [],
-    "startup": "echo -e \"passwd=\\\"{{PASSWD}}\\\"\" > wesnothd.cfg; echo -e \"motd=\\\"{{MOTD}}\\\"\" >> wesnothd.cfg; .\/battleForWesnoth\/build\/wesnothd -p {{SERVER_PORT}} -c \/home\/container\/wesnothd.cfg",
+    "startup": ".\/battleForWesnoth\/build\/wesnothd -p {{SERVER_PORT}} -c \/home\/container\/wesnothd.cfg",
     "config": {
-        "files": "{}",
+        "files": "{\r\n    \"wesnothd.cfg\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"passwd=\": \"passwd=\\\"{{server.build.env.PASSWD}}\\\"\",\r\n            \"motd=\": \"motd=\\\"{{server.build.env.MOTD}}\\\"\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"info server:\"\r\n}",
         "logs": "{}",
         "stop": "^C"
