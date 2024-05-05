@@ -90,7 +90,7 @@
         },
         {
             "name": "Auth Token",
-            "description": "",
+            "description": "Get your AUTH token there https://alderongames.com/oauth/hosting-token !!YOU NEED TO OWN THE GAME!!",
             "env_variable": "AG_AUTH_TOKEN",
             "default_value": "",
             "user_viewable": true,
