@@ -118,6 +118,8 @@
 * [OpenRA Red Alert](openra/openra_red_alert)
 * [OpenRA Tiberian Dawn](openra/openra_tiberian_dawn)
 
+[Path Of Titans](path_of_titans)
+
 [Red Dead Redemption](rdr)
 
 * [RedM](rdr/redm)
