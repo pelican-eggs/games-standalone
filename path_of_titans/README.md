@@ -10,6 +10,9 @@ You need to open these ports before running the server `7777, 7778, 7779, 7780, 
 If you are experienced the I could reccomend using this documentation website on the github
 [DOCS](https://github.com/Alderon-Games/pot-community-servers/wiki)
 
+Get the AUTH token at https://alderongames.com/oauth/hosting-token.
+p.s. YOU NEED TO OWN the game
+
 ## Server Ports
 
 Ports required to run the server in a table format.
