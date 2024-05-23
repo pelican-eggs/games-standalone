@@ -89,3 +89,5 @@
   * [ET: Legacy](wolfenstein_enemy_territory/etlegacy)
 * [Wine (Generic/Template Egg)](wine/generic)
 * [Xonotic](xonotic)
+* [Valheim](valheim)
+  * [Valheim Vanilla](valheim/valheim_vanilla)
