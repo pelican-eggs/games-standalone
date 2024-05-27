@@ -16,7 +16,7 @@
     "startup": ".\/openttd -D",
     "config": {
         "files": "{\r\n    \"openttd.cfg\": {\r\n        \"parser\": \"ini\",\r\n        \"find\": {\r\n            \"network.server_port\": \"{{server.build.default.port}}\",\r\n            \"network.server_name\": \"{{server.build.env.srv_name}}\",\r\n            \"network.lan_internet\": 0,\r\n            \"network.server_advertise\": \"{{server.build.env.srv_advertise}}\"\r\n        }\r\n    }\r\n}",
-        "startup": "{\r\n    \"done\": \"[net] Map generated, starting game\"\r\n}",
+        "startup": "{\r\n    \"done\": \"Map generated, starting game\"\r\n}",
         "logs": "{}",
         "stop": "exit"
     },
@@ -52,7 +52,7 @@
             "name": "OpenTTD Version",
             "description": "The version of OpenTTD i.e. 12.2",
             "env_variable": "OPENTTD_VERSION",
-            "default_value": "13.0-RC2",
+            "default_value": "14.1",
             "user_viewable": true,
             "user_editable": false,
             "rules": "required|string|max:20",
