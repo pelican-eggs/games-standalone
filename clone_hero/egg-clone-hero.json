@@ -1,12 +1,13 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2023-11-30T10:24:33+01:00",
+    "exported_at": "2024-06-01T00:17:30+00:00",
     "name": "Clone Hero",
     "author": "josdekurk@gmail.com",
+    "uuid": "dd9775b6-9a13-441e-af75-a93ba2026ed9",
     "description": "Clone Hero is a classic instrument based rhythm game for Windows, Mac, Linux, and Android. It's playable with any 5 or 6 fret guitar controller, any midi drum kit, any game controller and even your keyboard! Jam out with Drums, 5-fret Guitar, or 6-fret Guitar online or local!",
     "features": null,
     "docker_images": {
@@ -36,6 +37,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:80",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -46,6 +48,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "nullable|string|regex:\/^[a-zA-Z0-9_]+$\/",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -56,6 +59,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|in:0,1,2,3,4",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -66,6 +70,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:20",
+            "sort": null,
             "field_type": "text"
         }
     ]

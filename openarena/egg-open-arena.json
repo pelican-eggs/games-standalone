@@ -1,12 +1,13 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-04-01T13:16:40+02:00",
+    "exported_at": "2024-06-01T00:16:55+00:00",
     "name": "OpenArena",
     "author": "parker@parkervcp.com",
+    "uuid": "d0d0ae0f-90ac-493e-a0f2-cbb7762c9028",
     "description": "OpenArena is a community-produced deathmatch FPS based on GPL idTech3 technology.\r\n\r\nhttp:\/\/www.openarena.ws\/",
     "features": null,
     "docker_images": {
@@ -36,6 +37,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string",
+            "sort": null,
             "field_type": "text"
         }
     ]

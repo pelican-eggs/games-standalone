@@ -1,12 +1,13 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-04-02T14:24:51+02:00",
+    "exported_at": "2024-06-01T00:17:31+00:00",
     "name": "Clusterio",
     "author": "psychoalex@thevcbc.com",
+    "uuid": "935a6b24-0e36-45b4-9615-58c5aa153971",
     "description": "Clusterio is a clustered Factorio server manager that provides the tooling for implementing cross server interactions in Factorio. It was previously best known for implementing cross server transfer and cloud storage of items via teleporter chests. But this functionality has been pulled out of Clusterio into its own plugin for Clusterio named Subspace Storage.\r\n\r\nBy itself Clusterio doesn't change the gameplay in any way, you could even use Clusterio to manage completely vanilla Factorio servers. Plugins do the work of modding in the visible changes into the game, see the Plugins section for ready-made plugins you can install into a Clusterio cluster.",
     "features": null,
     "docker_images": {
@@ -39,6 +40,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|in:controller,host",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -49,6 +51,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|in:none,fatal,error,warn,audit,info,verbose",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -59,6 +62,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:64",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -69,6 +73,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "nullable|string|max:20",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -79,6 +84,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "nullable|string|max:64",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -89,6 +95,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "nullable|string|max:256",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -99,6 +106,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "nullable|string|max:512",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -109,6 +117,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "nullable|string|max:20",
+            "sort": null,
             "field_type": "text"
         }
     ]

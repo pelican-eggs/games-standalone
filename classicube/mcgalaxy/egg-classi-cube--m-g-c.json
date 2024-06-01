@@ -1,12 +1,13 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-01-13T21:17:09+01:00",
+    "exported_at": "2024-06-01T00:17:29+00:00",
     "name": "ClassiCube(MGC)",
     "author": "panel@qoutsy.33mail.com",
+    "uuid": "d12bf043-5835-45eb-9c35-fd7bc7e51561",
     "description": "Debian based MCGalaxy Egg.",
     "features": null,
     "docker_images": {
@@ -36,6 +37,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:20",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -46,6 +48,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:30",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -56,6 +59,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:64",
+            "sort": null,
             "field_type": "text"
         }
     ]

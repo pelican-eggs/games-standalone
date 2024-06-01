@@ -1,12 +1,13 @@
 {
-    "_comment": "DO NOT EDIT IF YOU DO NOT KNOW WHAT YOU ARE DOING!",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-04-26T06:39:41+00:00",
+    "exported_at": "2024-06-01T00:17:02+00:00",
     "name": "Path Of Titans",
     "author": "danielivanvladimir.revin@gmail.com",
+    "uuid": "7e8c45fc-5f30-4366-bfb4-aa55f10f227e",
     "description": "Path of Titans is a multiplayer dinosaur survival video game. Survive as a dinosaur in a rich ecosystem filled with intelligent AI creatures and up to 200 other players.",
     "features": null,
     "docker_images": {
@@ -36,6 +37,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:20",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -46,6 +48,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|numeric|max:200",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -56,6 +59,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:25",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -66,6 +70,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:40",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -76,6 +81,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:15",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -86,16 +92,18 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:8",
+            "sort": null,
             "field_type": "text"
         },
         {
             "name": "Auth Token",
-            "description": "Get your AUTH token there https://alderongames.com/oauth/hosting-token !!YOU NEED TO OWN THE GAME!!",
+            "description": "Get your AUTH token there https:\/\/alderongames.com\/oauth\/hosting-token !!YOU NEED TO OWN THE GAME!!",
             "env_variable": "AG_AUTH_TOKEN",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:1500",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -106,6 +114,7 @@
             "user_viewable": true,
             "user_editable": false,
             "rules": "required|numeric|max:8",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -116,6 +125,7 @@
             "user_viewable": true,
             "user_editable": false,
             "rules": "required|numeric|max:8",
+            "sort": null,
             "field_type": "text"
         }
     ]

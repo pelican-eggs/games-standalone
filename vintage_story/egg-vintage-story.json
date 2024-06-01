@@ -1,12 +1,13 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-01-19T10:09:42-05:00",
+    "exported_at": "2024-06-01T00:17:19+00:00",
     "name": "Vintage Story",
     "author": "mail@wuffy.eu",
+    "uuid": "270ab8c0-d108-4c05-a362-62d81e8063a5",
     "description": "Vintage Story is an uncompromising wilderness survival sandbox game inspired by lovecraftian horror themes. Find yourself in a ruined world reclaimed by nature and permeated by unnerving temporal disturbances. Relive the advent of human civilization, or take your own path.",
     "features": null,
     "docker_images": {
@@ -36,6 +37,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "nullable|string|max:200",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -46,6 +48,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|in:stable,unstable,pre",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -56,6 +59,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:20",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -66,6 +70,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|integer|max:256",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -76,6 +81,7 @@
             "user_viewable": true,
             "user_editable": false,
             "rules": "required|string|max:40",
+            "sort": null,
             "field_type": "text"
         }
     ]

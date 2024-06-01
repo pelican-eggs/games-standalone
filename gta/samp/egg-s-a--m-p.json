@@ -1,12 +1,13 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2023-10-19T18:53:04+02:00",
+    "exported_at": "2024-06-01T00:17:08+00:00",
     "name": "SA-MP",
     "author": "bl4ckspr4y@protonmail.com",
+    "uuid": "3fdde27f-8b7a-426e-b50b-34471e74a10b",
     "description": "SA-MP is a free Massively Multiplayer Online game mod for the PC version of Rockstar Games Grand Theft Auto: San Andreas (tm).",
     "features": null,
     "docker_images": {
@@ -36,6 +37,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:32",
+            "sort": null,
             "field_type": "text"
         },
         {
@@ -46,6 +48,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:32",
+            "sort": null,
             "field_type": "text"
         }
     ]
