@@ -1,0 +1,42 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "update_url": null,
+        "version": "PTDL_v2"
+    },
+    "exported_at": "2022-09-23T20:11:15+02:00",
+    "name": "RageCOOP",
+    "author": "josdekurk@gmail.com",
+    "description": "Drive around the interstate with your buddy, enjoy GTAs environment, make own missions and events or just chill in Grove Street! 🌐",
+    "features": null,
+    "docker_images": {
+        "ghcr.io/parkervcp/yolks:debian": "ghcr.io/parkervcp/yolks:debian"
+    },
+    "file_denylist": [],
+    "startup": "./RageCoop.Server",
+    "config": {
+        "files": "{\r\n    \"Settings.xml\": {\r\n        \"parser\": \"xml\",\r\n        \"find\": {\r\n            \"Settings.Port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "logs": "{}",
+        "startup": "{\r\n    \"done\": \"Listening for clients\"\r\n}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "container": "ghcr.io/parkervcp/installers:debian",
+            "entrypoint": "bash",
+            "script": "#!/bin/bash\r\n\r\napt update\r\napt -y install curl wget git zip unzip jq\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\n## get release info and download links\r\nLATEST_JSON=$(curl --silent \"https://api.github.com/repos/RAGECOOP/RAGECOOP-V/releases/latest\")\r\nRELEASES=$(curl --silent \"https://api.github.com/repos/RAGECOOP/RAGECOOP-V/releases\")\r\n\r\nif [ -z \"${VERSION}\" ] || [ \"${VERSION}\" == \"latest\" ]; then\r\n    DOWNLOAD_URL=$(echo ${LATEST_JSON} | jq .assets | jq -r .[].browser_download_url | grep -i RageCoop.Server-linux-x64.zip)\r\nelse\r\n    VERSION_CHECK=$(echo ${RELEASES} | jq -r --arg VERSION \"${VERSION}\" '.[] | select(.tag_name==$VERSION) | .tag_name')\r\n    if [ \"${VERSION}\" == \"${VERSION_CHECK}\" ]; then\r\n        DOWNLOAD_URL=$(echo ${RELEASES} | jq -r --arg VERSION \"${VERSION}\" '.[] | select(.tag_name==$VERSION) | .assets[].browser_download_url' | grep -i RageCoop.Server-linux-x64.zip)\r\n    else\r\n        echo -e \"defaulting to latest release\"\r\n        DOWNLOAD_URL=$(echo ${LATEST_JSON} | jq .assets | jq -r .[].browser_download_url | grep -i RageCoop.Server-linux-x64.zip)\r\n    fi\r\nfi\r\n\r\necho ${DOWNLOAD_URL}\r\nwget ${DOWNLOAD_URL} -O RageCoop.Server-linux.zip\r\nRageCoop.Server-linux.zip\r\n\r\nunzip RageCoop.Server-linux.zip\r\n\r\nrm RageCoop.Server-linux.zip\r\n\r\nchmod +x RageCoop.Server\r\n\r\ncat \u003c\u003cEOF \u003e Settings.xml\r\n\u003cSettings xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"\u003e\r\n\t\u003cPort\u003e4499\u003c/Port\u003e\r\n\t\u003cMaxPlayers\u003e32\u003c/MaxPlayers\u003e\r\n\t\u003cMaxLatency\u003e500\u003c/MaxLatency\u003e\r\n\t\u003cName\u003eRAGECOOP server\u003c/Name\u003e\r\n\t\u003cWebsite\u003ehttps://ragecoop.online/\u003c/Website\u003e\r\n\t\u003cDescription\u003eRAGECOOP server\u003c/Description\u003e\r\n\t\u003cGameMode\u003eFreeRoam\u003c/GameMode\u003e\r\n\t\u003cLanguage\u003eEnglish\u003c/Language\u003e\r\n\t\u003cWelcomeMessage\u003eWelcome on this server :)\u003c/WelcomeMessage\u003e\r\n\t\u003cAnnounceSelf\u003efalse\u003c/AnnounceSelf\u003e\r\n\t\u003cMasterServer\u003ehttps://masterserver.ragecoop.online/\u003c/MasterServer\u003e\r\n\t\u003cLogLevel\u003e0\u003c/LogLevel\u003e\r\n\t\u003cNpcStreamingDistance\u003e500\u003c/NpcStreamingDistance\u003e\r\n\t\u003cPlayerStreamingDistance\u003e-1\u003c/PlayerStreamingDistance\u003e\r\n\t\u003cWeatherTimeSync\u003etrue\u003c/WeatherTimeSync\u003e\r\n\t\u003cAllowedUsernameChars\u003eABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-_\u003c/AllowedUsernameChars\u003e\r\n\t\u003cUseP2P\u003efalse\u003c/UseP2P\u003e\r\n\t\u003cUseZeroTier\u003efalse\u003c/UseZeroTier\u003e\r\n\t\u003cUseVoice\u003efalse\u003c/UseVoice\u003e\r\n\t\u003cZeroTierNetworkID\u003e8056c2e21c000001\u003c/ZeroTierNetworkID\u003e\r\n\t\u003cAutoUpdate\u003efalse\u003c/AutoUpdate\u003e\r\n\t\u003cKickGodMode\u003efalse\u003c/KickGodMode\u003e\r\n\t\u003cKickSpamming\u003etrue\u003c/KickSpamming\u003e\r\n\u003c/Settings\u003e\r\nEOF\r\n\r\necho \"done\""
+        }
+    },
+    "variables": [
+        {
+            "name": "Version",
+            "description": "The version you want of RAGECOOP-V\r\n\r\nExample: latest, nightly , 1.5.3",
+            "env_variable": "VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        }
+    ]
+}
