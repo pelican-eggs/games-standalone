@@ -1,0 +1,92 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "update_url": null,
+        "version": "PTDL_v2"
+    },
+    "exported_at": "2024-06-01T00:17:31+00:00",
+    "name": "Crewlink server",
+    "author": "panel@oxtroit.com",
+    "description": "An egg designed to allow support for Proximity Chat in Among Us using CrewLink Server",
+    "features": null,
+    "docker_images": {
+        "ghcr.io/parkervcp/yolks:nodejs_16": "ghcr.io/parkervcp/yolks:nodejs_16"
+    },
+    "file_denylist": [],
+    "startup": "yarn start",
+    "config": {
+        "files": "{}",
+        "logs": "{}",
+        "startup": "{\r\n    \"done\": \"\u003cinfo\u003e CrewLink Server started\"\r\n}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "container": "node:16-bookworm",
+            "entrypoint": "bash",
+            "script": "#!/bin/bash\r\n# Server Files: /mnt/server\r\napt update\r\napt install -y git\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\nINSTALL_REPO=\"https://github.com/ottomated/crewlink-server.git\"\r\necho -e Install repo set to ${INSTALL_REPO}\r\necho -e \"/mnt/server is empty.\\ncloning files from repo\"\r\necho -e \"running 'git clone --single-branch --branch ${BRANCH} ${INSTALL_REPO} .'\"\r\ngit clone --single-branch --branch ${BRANCH} ${INSTALL_REPO} .\r\n\r\nif [ -f /mnt/server/package.json ]; then\r\n    /usr/local/bin/yarn install\r\nfi\r\n\r\necho -e \"install complete\"\r\nexit 0"
+        }
+    },
+    "variables": [
+        {
+            "name": "Github branch",
+            "description": "Set this to 'devel' if you wanna run a develop server.",
+            "env_variable": "BRANCH",
+            "default_value": "master",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Domain",
+            "description": "Domain of your server or ip of your server",
+            "env_variable": "ADDRESS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:50",
+            "field_type": "text"
+        },
+        {
+            "name": "Server name",
+            "description": "Specifiy the name of your Crewlink server",
+            "env_variable": "NAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:75",
+            "field_type": "text"
+        },
+        {
+            "name": "Use HTTPS",
+            "description": "Enables https. You must place privkey.pem and fullchain.pem in your CWD.",
+            "env_variable": "HTTPS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Path to SSL",
+            "description": "Alternate path to SSL certificates.",
+            "env_variable": "SSLPATH",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:250",
+            "field_type": "text"
+        },
+        {
+            "name": "Port",
+            "description": "Choose the port your server should run on",
+            "env_variable": "PORT",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        }
+    ]
+}
