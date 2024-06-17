@@ -1,12 +1,13 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2022-10-26T17:21:51+02:00",
+    "exported_at": "2024-06-01T00:17:21+00:00",
     "name": "LeagueSandbox",
     "author": "domi@imagine.team",
+    "uuid": "3eeeca1c-51ef-427e-8227-cfec30f49c78",
     "description": "A simple egg to run LeagueSandbox server in pterodactyl",
     "features": null,
     "docker_images": {
