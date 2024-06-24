@@ -4,9 +4,10 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-06-24T10:54:48+02:00",
+    "exported_at": "2024-06-24T08:55:54+00:00",
     "name": "Nazi Zombies: Portable",
     "author": "jordanadamsbusiness@outlook.com",
+    "uuid": "8569960f-865d-40ad-bdb0-aff8368f1e5a",
     "description": "NZ:P (Nazi Zombies: Portable) is based off of the FTEQW (Fore Thought Engine Quake World). This egg is specifically made for use with NZ:P (just downloads assets and QuakeC from NZ:P repositories) but there is nothing stopping you from using it as a general FTEQW egg given the NZ:P fork of FTEQW only added fog to the client (and added SDL which caused issues with arguments being eaten preventing dedicated flag from being read) which is why upstream FTEQW is used.",
     "features": null,
     "docker_images": {
@@ -29,6 +30,7 @@
     },
     "variables": [
         {
+            "sort": null,
             "name": "Protocol",
             "description": "NZ:P Native Clients - `NZP-REBOOT`.\r\nNZ:P Web Clients - `NZP-REBOOT-WEB`.\r\n\r\nHit your \"`\/~\" key on your keyboard, this will open console, then you will type `connect ip:port` for native clients, for web clients you would type `connect ws:\/\/ip:port`. In addition, you MUST be on the HTTP version of the website you are playing the web client on, otherwise the browser will block the request",
             "env_variable": "PROTOCOL",
@@ -39,6 +41,7 @@
             "field_type": "text"
         },
         {
+            "sort": null,
             "name": "Tickrate",
             "description": "Think of this like fps, the default value is 1 frame per 45 ms (0.045 seconds) which is ~22 fps, 30 fps is ~33.3 ms, 60 fps is ~16.6ms, the reason the tickrate is low is due to zombies being bandwidth heavy (especially in the higher rounds), take caution when changing this, but if you up the tickrate, it may fix physics bugs like zombies getting stuck on terrain.",
             "env_variable": "TICKRATE",
@@ -49,6 +52,7 @@
             "field_type": "text"
         },
         {
+            "sort": null,
             "name": "Map",
             "description": "The map to load, you can find a list via `listmaps`, default map is ndu otherwise known as \"Nacht der Untoten\"",
             "env_variable": "MAP",
@@ -59,6 +63,7 @@
             "field_type": "text"
         },
         {
+            "sort": null,
             "name": "Additional Game Arguments",
             "description": "`+cvar value` is the format for changing the cvars",
             "env_variable": "GAME_ARGS",
