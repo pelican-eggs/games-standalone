@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-06-01T00:17:26+00:00",
+    "exported_at": "2024-07-01T08:27:45+00:00",
     "name": "Among Us - Impostor Server",
     "author": "eggs@goover.dev",
     "uuid": "0693efe8-b3a5-44ec-a3af-3c4d8a4aa431",
@@ -18,7 +18,7 @@
     "file_denylist": [],
     "startup": ".\/Impostor.Server",
     "config": {
-        "files": "{\r\n    \"config.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"Server.PublicPort\": \"{{server.build.default.port}}\",\r\n            \"Server.ListenPort\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "files": "{\r\n    \"config.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"Server.PublicPort\": \"{{server.allocations.default.port}}\",\r\n            \"Server.ListenPort\": \"{{server.allocations.default.port}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"Matchmaker is listening on\"\r\n}",
         "logs": "{}",
         "stop": "^^C"
@@ -32,6 +32,7 @@
     },
     "variables": [
         {
+            "sort": null,
             "name": "Download Version",
             "description": "Version to Download. Leave latest for the latest release.\r\n\r\nFind all releases at https:\/\/github.com\/Impostor\/Impostor\/releases\r\nNote: versions start with a v, example: v1.8.0",
             "env_variable": "VERSION",
@@ -39,7 +40,6 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:30",
-            "sort": null,
             "field_type": "text"
         }
     ]
