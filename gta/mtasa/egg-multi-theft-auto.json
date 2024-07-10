@@ -31,7 +31,7 @@
     "variables": [
         {
             "name": "SERVER_WEBPORT",
-            "description": "The http port for web resource.\r\nThis Port needs to be the {{SERVER_PORT}}+3.",
+            "description": "The http port for web resource.\r\nThis Port needs to be the {{SERVER_PORT}}+2.",
             "env_variable": "SERVER_WEBPORT",
             "default_value": "22005",
             "user_viewable": true,
