@@ -1,30 +1,30 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "update_url": null,
-        "version": "PTDL_v2"
+        "version": "PTDL_v2",
+        "update_url": null
     },
-    "exported_at": "2024-06-01T00:17:09+00:00",
+    "exported_at": "2024-08-14T20:05:17+02:00",
     "name": "Spacestation 14",
     "author": "josdekurk@gmail.com",
     "description": "Space Station 14 tells the story of an ordinary shift on a space station gone wrong. Immerse yourself into your role, tinker with detailed systems, and survive the chaos in this round-based multiplayer role playing game.",
-    "features": null,
+    "features": [],
     "docker_images": {
-        "Dotnet 8": "ghcr.io/parkervcp/yolks:dotnet_8"
+        "Dotnet 8": "ghcr.io\/parkervcp\/yolks:dotnet_8"
     },
     "file_denylist": [],
-    "startup": "./Robust.Server",
+    "startup": ".\/Robust.Server",
     "config": {
         "files": "{\r\n    \"server_config.toml\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"port\": \"port = {{server.build.default.port}}\",\r\n            \"hostname\": \"hostname = \\\"{{server.build.env.SERVER_NAME}}\\\"\",\r\n            \"tickrate\": \"tickrate = {{server.build.env.SERVER_TICK}}\",\r\n            \"max_connections\": \"max_connections = {{server.build.env.SERVER_MAX_PLAYERS}}\"\r\n        }\r\n    }\r\n}",
-        "logs": "{}",
         "startup": "{\r\n    \"done\": \"Server Version\"\r\n}",
+        "logs": "{}",
         "stop": "^C"
     },
     "scripts": {
         "installation": {
-            "container": "ghcr.io/parkervcp/installers:debian",
-            "entrypoint": "bash",
-            "script": "#!/bin/bash\r\n\r\nV=$(curl -sSL https://central.spacestation14.io/builds/wizards/builds.html | grep \"The version is\"  | sed -n 's/.*\u003cspan class=\"versionNumber\"\u003e\\([^\u003c]*\\)\u003c\\/span\u003e.*/\\1/p')\r\nARCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] \u0026\u0026 echo \"linux-x64\" || echo \"linux-arm64\")\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\necho \"Running: curl -sSL -o server_linux.zip https://cdn.centcomm.spacestation14.com/builds/wizards/builds/${V}/SS14.Server_${ARCH}.zip\"\r\ncurl -sSL -o server_linux.zip \"https://cdn.centcomm.spacestation14.com/builds/wizards/builds/${V}/SS14.Server_${ARCH}.zip\"\r\nunzip -o server_linux.zip\r\nrm server_linux.zip\r\n\r\nchmod +x Robust.Server\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\""
+            "script": "#!\/bin\/bash\r\n\r\nARCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] && echo \"x64\" || echo \"arm64\")\r\nV=$(curl -sSL https:\/\/wizards.cdn.spacestation14.com\/fork\/wizards | grep \".Server_linux\" | grep -i ${ARCH} | head -1 | awk '{print $2}' | sed 's\/^href=\"\/\/;s\/\">Linux\/\/')\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\necho \"Running: curl -sSL -o server_linux.zip https:\/\/wizards.cdn.spacestation14.com\/${V}\"\r\ncurl -sSL -o server_linux.zip \"https:\/\/wizards.cdn.spacestation14.com\/${V}\"\r\nunzip -o server_linux.zip\r\nrm server_linux.zip\r\n\r\nchmod +x Robust.Server\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
+            "container": "ghcr.io\/parkervcp\/installers:debian",
+            "entrypoint": "bash"
         }
     },
     "variables": [
