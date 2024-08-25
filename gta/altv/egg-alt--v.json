@@ -4,19 +4,19 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-06-01T00:17:23+00:00",
+    "exported_at": "2024-08-25T08:48:50+00:00",
     "name": "alt:V",
     "author": "parker@parkervcp.com",
     "uuid": "25408807-f3c9-47d0-bed1-1d3f071b869e",
     "description": "alt:V Multiplayer a third-party multiplayer modification for Grand Theft Auto: V",
-    "features": null,
+    "features": [],
     "docker_images": {
-        "ALT:V": "ghcr.io\/parkervcp\/games:altv"
+        "ALT-V": "ghcr.io\/parkervcp\/games:altv"
     },
     "file_denylist": [],
     "startup": ".\/altv-server",
     "config": {
-        "files": "{\r\n    \"server.toml\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"host:\": \"host: 0.0.0.0\",\r\n            \"port:\": \"port: {{server.build.default.port}}\",\r\n            \"password:\": \"password: {{server.build.env.PASSWORD}}\",\r\n            \"description:\": \"description: {{server.build.env.SERVER_DESC}}\"\r\n        }\r\n    }\r\n}",
+        "files": "{\n    \"server.toml\": {\n        \"parser\": \"file\",\n        \"find\": {\n            \"host\": \"host = '0.0.0.0'\",\n            \"port\": \"port = '{{server.build.default.port}}'\",\n            \"password\": \"password = '{{server.build.env.PASSWORD}}'\",\n            \"description\": \"description = '{{server.build.env.SERVER_DESC}}'\"\n        }\n    }\n}",
         "startup": "{\r\n    \"done\": \"Server started\"\r\n}",
         "logs": "{}",
         "stop": "quit"
@@ -30,6 +30,7 @@
     },
     "variables": [
         {
+            "sort": 1,
             "name": "ld lib path",
             "description": "Needed to load modules correctly. Best left at default.",
             "env_variable": "LD_LIBRARY_PATH",
@@ -37,10 +38,10 @@
             "user_viewable": false,
             "user_editable": false,
             "rules": "required|string|max:20",
-            "sort": null,
             "field_type": "text"
         },
         {
+            "sort": 2,
             "name": "Release Branch",
             "description": "The supported versions are release, rc, dev (default: release).\r\nIf you don't know what you are doing leave it on release",
             "env_variable": "BUILD",
@@ -48,10 +49,10 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|in:release,rc,dev",
-            "sort": null,
             "field_type": "text"
         },
         {
+            "sort": 3,
             "name": "Server Password",
             "description": "The password to join the server",
             "env_variable": "PASSWORD",
@@ -59,10 +60,10 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "nullable|string|min:6",
-            "sort": null,
             "field_type": "text"
         },
         {
+            "sort": 4,
             "name": "Server Description",
             "description": "Description for the server.",
             "env_variable": "SERVER_DESC",
@@ -70,7 +71,6 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string",
-            "sort": null,
             "field_type": "text"
         }
     ]
