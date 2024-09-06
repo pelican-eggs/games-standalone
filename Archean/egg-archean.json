@@ -10,7 +10,7 @@
     "description": null,
     "features": null,
     "docker_images": {
-        "ghcr.io\/catsz\/archean_pterodactyl:latest": "ghcr.io\/catsz\/archean_pterodactyl:latest"
+        "ghcr.io\/catsz\/archean_pterodactyl:latest": "ghcr.io/parkervcp/yolks:ubuntu"
     },
     "file_denylist": [],
     "startup": "cd .\/Archean-server-alpha && .\/Archean server",
