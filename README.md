@@ -21,7 +21,7 @@
 * [Among Us](among_us)
   * [Impostor Server](among_us/impostor_server)
   * [CrewLink Server](among_us/crewlink_server)
-* [Archean] (Archean)
+* [Archean](Archean)
 * [BeamNG.drive](beamng)
   * [BeamMP Server](beamng/beammp)
   * [KissMP](beamng/kissmp)
