@@ -333,6 +333,7 @@
 * [Mindustry](mindustry)
 * [Minetest](minetest)
 * [Medal of Honor: Allied Assault](mohaa)
+* [Nazi Zombies: Portable](nazi_zombies_portable)
 * [Neverwinter Nights: Enhanced Edition](neverwinter_nights_ee)
 * [OpenArena](openarena)
 * [OpenRA](openra)
