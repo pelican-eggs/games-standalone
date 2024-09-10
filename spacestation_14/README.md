@@ -1,9 +1,12 @@
 # Spacestation 14
 
-## From their [Site](https://spacestation14.io/)
+## From their [Site](https://spacestation14.com/)
 
 ## [Documentation](https://docs.spacestation14.io/en/getting-started/hosting)
 
+## Console input is broken and crashes the server
+
+It is a known bug that the console imput does not work and crashes the server.
 
 ## Minimum RAM warning
 
