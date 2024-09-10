@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-08-14T20:05:17+02:00",
+    "exported_at": "2024-09-10T16:25:49+00:00",
     "name": "Spacestation 14",
     "author": "josdekurk@gmail.com",
     "uuid": "ef79fd90-64e9-4387-b862-af0042ed2d28",
@@ -23,7 +23,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n\r\nARCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] && echo \"x64\" || echo \"arm64\")\r\nV=$(curl -sSL https:\/\/wizards.cdn.spacestation14.com\/fork\/wizards | grep \".Server_linux\" | grep -i ${ARCH} | head -1 | awk '{print $2}' | sed 's\/^href=\"\/\/;s\/\">Linux\/\/')\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\necho \"Running: curl -sSL -o server_linux.zip https:\/\/wizards.cdn.spacestation14.com\/${V}\"\r\ncurl -sSL -o server_linux.zip \"https:\/\/wizards.cdn.spacestation14.com\/${V}\"\r\nunzip -o server_linux.zip\r\nrm server_linux.zip\r\n\r\nchmod +x Robust.Server\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
+            "script": "#!\/bin\/bash\r\n\r\nARCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] && echo \"x64\" || echo \"arm64\")\r\nV=$(curl -sSL https:\/\/wizards.cdn.spacestation14.com\/fork\/wizards | grep \".Server_linux\" | grep -i ${ARCH} | head -1 | awk '{print $2}' | sed 's\/^href=\"\/\/;s\/\">Linux\/\/')\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\necho \"Running: curl -sSL -o server_linux.zip https:\/\/wizards.cdn.spacestation14.com${V}\"\r\ncurl -sSL -o server_linux.zip \"https:\/\/wizards.cdn.spacestation14.com${V}\"\r\nunzip -o server_linux.zip\r\nrm server_linux.zip\r\n\r\nchmod +x Robust.Server\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
             "container": "ghcr.io\/parkervcp\/installers:debian",
             "entrypoint": "bash"
         }
