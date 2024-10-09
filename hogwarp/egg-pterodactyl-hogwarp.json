@@ -4,7 +4,7 @@
         "update_url": null,
         "version": "PTDL_v2"
     },
-    "exported_at": "2024-09-07T22:35:53-04:00",
+    "exported_at": "2024-10-09T21:30:32+00:00",
     "name": "Hogwarp",
     "author": "imkringle@proton.me",
     "description": "A Pterodactyl egg for the Hogwarts Legacy mod Hogwarp - For more info see their Nexus: https://www.nexusmods.com/hogwartslegacy/mods/1378",
@@ -15,7 +15,7 @@
     "file_denylist": [],
     "startup": "export WINEDLLOVERRIDES=\"mscoree=n,b;mshtml=n,b\"; wine HogWarpServer.exe",
     "config": {
-        "files": "{\r\n    \"config.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"ApiKey\": \"{{env.API_KEY}}\",\r\n            \"Name\": \"{{env.SERV_NAME}}\",\r\n            \"Port\": \"{{server.build.default.port}}\",\r\n            \"Description\": \"{{env.SERV_DESC}}\",\r\n            \"MaxPlayer\": \"{{env.MAX_PLAYERS}}\",\r\n            \"IconUrl\": \"{{env.SERV_ICON}}\"\r\n        }\r\n    },\r\n    \"dotnet.runtimeconfig.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"runtimeOptions.framework.version\": \"{{env.DOTNET_VERS}}\"\r\n        }\r\n    }\r\n}",
+        "files": "{\r\n    \"config.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"ApiKey\": \"{{env.API_KEY}}\",\r\n            \"Name\": \"{{env.SERV_NAME}}\",\r\n            \"Port\": \"{{server.build.default.port}}\",\r\n            \"Description\": \"{{env.SERV_DESC}}\",\r\n            \"MaxPlayer\": \"{{env.MAX_PLAYERS}}\",\r\n            \"IconUrl\": \"{{env.SERV_ICON}}\"\r\n        }\r\n    }\r\n}",
         "logs": "{}",
         "startup": "{\r\n    \"done\": \"Server started on port \"\r\n}",
         "stop": "^^C"
@@ -116,16 +116,6 @@
             "user_viewable": false,
             "user_editable": false,
             "rules": "nullable",
-            "field_type": "text"
-        },
-        {
-            "name": "Dotnet Version",
-            "description": "Currently Winetricks is out of date on .Net, this is a workaround",
-            "env_variable": "DOTNET_VERS",
-            "default_value": "8.0.2",
-            "user_viewable": false,
-            "user_editable": false,
-            "rules": "required|string",
             "field_type": "text"
         }
     ]
