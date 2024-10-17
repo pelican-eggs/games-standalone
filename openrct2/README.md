@@ -1,7 +1,7 @@
 # OpenRCT2
-***Note:** OpenRCT2 only recently (Jan. 2022) updated to support non-interactive Docker environments, and development is ongoing to improve it. Please understand future updates may be unstable, or this Egg may update in the future to accommodate changes.*
-___
+
 ### Authors / Contributors
+
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
@@ -36,16 +36,23 @@ ___
 <!-- prettier-ignore-end -->
 
 ___
+
 ### Game Description
+
 From OpenRCT2's [Website](https://openrct2.io/):
+
 > OpenRCT2 is an open-source re-implementation of RollerCoaster Tycoon 2 (RCT2), expanding the game with new features, fixing bugs and raising game limits. The gameplay revolves around building and maintaining an amusement park containing attractions, shops and facilities. The player must try to make a profit and maintain a good park reputation whilst keeping the guests happy. OpenRCT2 allows for both scenario and sandbox play. Scenarios require the player to complete a certain objective in a set time limit whilst sandbox allows the player to build a more flexible park with optionally no restrictions or finance.
-___
-### Server Ports
-| Port | Default (TCP) |
-|---------|---------|
-| Game | 11753 |
 
 ___
+
+### Server Ports
+
+| Port | Default | Protocol |
+|---------|---------|---------|
+| **Primary** | 11753 | TCP |
+
+___
+
 ### Installation/System Requirements
 
 |  | Minimum |
@@ -56,17 +63,29 @@ ___
 | RCT2 Files | **Not required** |
 
 ___
+
 ### Save Files
+
 Save files and autosaves are located in this directory:
 ```
 /home/container/ServerData/save/
 ```
 If the "Load Latest Autosave" startup variable is enabled, and the `autosave/` directory exists, the server will load the latest autosave instead of the specified Save File.
+
 ___
+
+### Updating the Server
+
+Assuming you have "OpenRCT2 Version" set to `latest` or `develop`, you can simply reinstall the server to get the latest server files. Saves, configs, logs, etc. in `/home/container/ServerData/` will not be modified/deleted.
+
 ### Console Commands
+
 Until support for console commands to interactive programs gets added to Pterodactyl, entering commands via the panel's console do nothing (reference issue [pterodactyl/panel#3712](https://github.com/pterodactyl/panel/issues/3712)).
+
 ___
+
 ### Becoming an Admin on the Server
+
 Unfortunately, because console commands currently do not register, becoming the first admin on the server takes some steps, listed below:
 1. Ensure the "Log Server Actions" startup variable is set to "true".
 2. Start the server and join it with the client you want to make an admin.
@@ -75,8 +94,11 @@ Unfortunately, because console commands currently do not register, becoming the 
 5. Reboot the server, re-join it, and you should be an admin!
 
 After becoming an admin, you can use the in-game users management window to add additional admins (or groups) more easily if you wish.
+
 ___
+
 ### Known Issues
+
 The following are known issues that are unique to running OpenRCT2 on Pterodactyl, but likely can only be fixed by further development/updates from OpenRCT2.
 - Configuring a password on the server disallows non-admin clients from entering in a password in their client to connect; it just disconnects them. Admin clients can still join normally. (reference issue [OpenRCT2/OpenRCT2#16396](https://github.com/OpenRCT2/OpenRCT2/issues/16396))
 - You may rarely run into the server crashing on start due to a "Floating point exception(core dumped)" error. If this occurs to you, please help with OpenRCT2 development by doing the following:
