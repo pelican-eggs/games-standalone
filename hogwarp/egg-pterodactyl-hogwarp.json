@@ -1,13 +1,13 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "update_url": null,
-        "version": "PTDL_v2"
+        "version": "PTDL_v2",
+        "update_url": null
     },
-    "exported_at": "2024-10-09T21:30:32+00:00",
+    "exported_at": "2024-10-20T20:24:42+02:00",
     "name": "Hogwarp",
     "author": "imkringle@proton.me",
-    "description": "A Pterodactyl egg for the Hogwarts Legacy mod Hogwarp - For more info see their Nexus: https://www.nexusmods.com/hogwartslegacy/mods/1378",
+    "description": "A Pterodactyl egg for the Hogwarts Legacy mod Hogwarp - For more info see their Nexus: https:\/\/www.nexusmods.com\/hogwartslegacy\/mods\/1378",
     "features": null,
     "docker_images": {
         "ghcr.io\/parkervcp\/yolks:wine_latest": "ghcr.io\/parkervcp\/yolks:wine_latest"
@@ -16,15 +16,15 @@
     "startup": "export WINEDLLOVERRIDES=\"mscoree=n,b;mshtml=n,b\"; wine HogWarpServer.exe",
     "config": {
         "files": "{\r\n    \"config.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"ApiKey\": \"{{env.API_KEY}}\",\r\n            \"Name\": \"{{env.SERV_NAME}}\",\r\n            \"Port\": \"{{server.build.default.port}}\",\r\n            \"Description\": \"{{env.SERV_DESC}}\",\r\n            \"MaxPlayer\": \"{{env.MAX_PLAYERS}}\",\r\n            \"IconUrl\": \"{{env.SERV_ICON}}\"\r\n        }\r\n    }\r\n}",
-        "logs": "{}",
         "startup": "{\r\n    \"done\": \"Server started on port \"\r\n}",
+        "logs": "{}",
         "stop": "^^C"
     },
     "scripts": {
         "installation": {
-            "container": "ghcr.io/parkervcp/installers:debian",
-            "entrypoint": "bash",
             "script": "#Hogwarp Install Script\r\n\r\napt update -y\r\napt install -y curl file unzip\r\n\r\nif [ ! -d \/mnt\/server ]; then\r\n    mkdir -p \/mnt\/server\/\r\nfi\r\n\r\ncd \/mnt\/server\/\r\nARCHIVE_NAME=\"Hogwarp.zip\"\r\n\r\n# Validate link\r\nif [ ! -z \"${DOWNLOAD_URL}\" ]; then \r\n    if curl --output \/dev\/null --silent --head --fail ${DOWNLOAD_URL}; then\r\n        echo -e \"link is valid. setting download link to ${DOWNLOAD_URL}\"\r\n        DOWNLOAD_LINK=${DOWNLOAD_URL}\r\n    else        \r\n        echo -e \"link is invalid closing out\"\r\n        exit 2\r\n    fi\r\nfi\r\n\r\ncurl -sSL ${DOWNLOAD_LINK} -o $ARCHIVE_NAME\r\n\r\n# Unpack Server zip\r\n# Backup and restore logic for config.json\r\nif [ -f \/mnt\/server\/config.json ]; then\r\n    mv \/mnt\/server\/config.json \/mnt\/server\/config-backup.json\r\n    unzip -o $ARCHIVE_NAME -d \/mnt\/server\r\n    rm -f \/mnt\/server\/config.json\r\n    mv \/mnt\/server\/config-backup.json \/mnt\/server\/config.json\r\nelse\r\n    unzip -o $ARCHIVE_NAME -d \/mnt\/server\r\nfi\r\n\r\n#Create the Plugins folder\r\nmkdir -p \/mnt\/server\/plugins\/\r\n\r\n\r\n## Install End\r\necho \"-----------------------------------------\"\r\necho \"Hogwarp Is Installed!\"\r\necho \"-----------------------------------------\"",
+            "container": "ghcr.io\/parkervcp\/installers:debian",
+            "entrypoint": "bash"
         }
     },
     "variables": [
@@ -40,7 +40,7 @@
         },
         {
             "name": "Hogwarp API Key",
-            "description": "A API required to boot - https://presence.hogwarp.com/login\r\n- If not set on install it will fail. Set API Key then Reinstall Files",
+            "description": "A API required to boot - https:\/\/presence.hogwarp.com\/login\r\n- If not set on install it will fail. Set API Key then Reinstall Files",
             "env_variable": "API_KEY",
             "default_value": "CHANGEME",
             "user_viewable": true,
@@ -70,7 +70,7 @@
         },
         {
             "name": "Max Players",
-            "description": "Max players for a server, this depends on your Patreon level for Hogwarp\r\nhttps://www.patreon.com/tiltedphoques - ( 4, 8, 16, No Limit ) In that order.",
+            "description": "Max players for a server, this depends on your Patreon level for Hogwarp\r\nhttps:\/\/www.patreon.com\/tiltedphoques - ( 4, 8, 16, No Limit ) In that order.",
             "env_variable": "MAX_PLAYERS",
             "default_value": "4",
             "user_viewable": true,
