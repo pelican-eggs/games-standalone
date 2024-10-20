@@ -1,30 +1,30 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "update_url": null,
-        "version": "PTDL_v2"
+        "version": "PTDL_v2",
+        "update_url": null
     },
-    "exported_at": "2024-06-01T00:16:49+00:00",
+    "exported_at": "2024-10-20T20:24:42+02:00",
     "name": "Hogwarp",
     "author": "imkringle@proton.me",
-    "description": "A Pterodactyl egg for the Hogwarts Legacy mod Hogwarp - For more info see their Nexus: https://www.nexusmods.com/hogwartslegacy/mods/1378",
+    "description": "A Pterodactyl egg for the Hogwarts Legacy mod Hogwarp - For more info see their Nexus: https:\/\/www.nexusmods.com\/hogwartslegacy\/mods\/1378",
     "features": null,
     "docker_images": {
-        "ghcr.io/parkervcp/yolks:wine_staging": "ghcr.io/parkervcp/yolks:wine_staging"
+        "ghcr.io\/parkervcp\/yolks:wine_latest": "ghcr.io\/parkervcp\/yolks:wine_latest"
     },
     "file_denylist": [],
     "startup": "export WINEDLLOVERRIDES=\"mscoree=n,b;mshtml=n,b\"; wine HogWarpServer.exe",
     "config": {
         "files": "{\r\n    \"config.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"ApiKey\": \"{{env.API_KEY}}\",\r\n            \"Name\": \"{{env.SERV_NAME}}\",\r\n            \"Port\": \"{{server.build.default.port}}\",\r\n            \"Description\": \"{{env.SERV_DESC}}\",\r\n            \"MaxPlayer\": \"{{env.MAX_PLAYERS}}\",\r\n            \"IconUrl\": \"{{env.SERV_ICON}}\"\r\n        }\r\n    }\r\n}",
-        "logs": "{}",
         "startup": "{\r\n    \"done\": \"Server started on port \"\r\n}",
+        "logs": "{}",
         "stop": "^^C"
     },
     "scripts": {
         "installation": {
-            "container": "ghcr.io/parkervcp/installers:debian",
-            "entrypoint": "bash",
-            "script": "#Hogwarp Install\r\napt update -y\r\napt install -y curl file unzip\r\n\r\nif [ ! -d /mnt/server ]; then\r\n    mkdir -p /mnt/server/\r\nfi\r\n\r\ncd /mnt/server/\r\n\r\n# Validate link\r\nif [ ! -z \"${DOWNLOAD_URL}\" ]; then \r\n    if curl --output /dev/null --silent --head --fail ${DOWNLOAD_URL}; then\r\n        echo -e \"link is valid. setting download link to ${DOWNLOAD_URL}\"\r\n        DOWNLOAD_LINK=${DOWNLOAD_URL}\r\n    else        \r\n        echo -e \"link is invalid closing out\"\r\n        exit 2\r\n    fi\r\nfi\r\n\r\ncurl -sSL ${DOWNLOAD_LINK} -o ${DOWNLOAD_LINK##*/}\r\n\r\n# Unpack Server zip\r\nFILETYPE=$(file -F ',' ${DOWNLOAD_LINK##*/} | cut -d',' -f2 | cut -d' ' -f2)\r\n\r\nif [ \"$FILETYPE\" == \"gzip\" ]; then\r\n    tar xzvf ${DOWNLOAD_LINK##*/}\r\nelif [ \"$FILETYPE\" == \"Zip\" ]; then\r\n    unzip ${DOWNLOAD_LINK##*/}\r\nelif [ \"$FILETYPE\" == \"XZ\" ]; then\r\n    tar xvf ${DOWNLOAD_LINK##*/}\r\nelse\r\n    echo -e \"unknown filetype. Exiting\"\r\n    exit 2 \r\nfi\r\n\r\ncd /mnt/server/\r\n\r\n#Create the Plugins folder\r\nmkdir plugins/\r\n\r\n# Check for a config.json, if it is missing; create it\r\nTARGET_FILE=\"config.json\"\r\n\r\nif test -f \"$TARGET_FILE\"; then\r\n    echo \"$TARGET_FILE exists. Skipping config install\"\r\nelse\r\n    echo \"$TARGET_FILE does not exist. Installing!\"\r\n    curl -sSL -o config.json https://pteropaste.com/hy2d48dbhtdd/\r\n    echo \"$TARGET_FILE has been installed\"\r\nfi\r\n\r\n\r\n## Install End\r\necho \"-----------------------------------------\"\r\necho \"Hogwarp Is Installed!\"\r\necho \"-----------------------------------------\""
+            "script": "#Hogwarp Install Script\r\n\r\napt update -y\r\napt install -y curl file unzip\r\n\r\nif [ ! -d \/mnt\/server ]; then\r\n    mkdir -p \/mnt\/server\/\r\nfi\r\n\r\ncd \/mnt\/server\/\r\nARCHIVE_NAME=\"Hogwarp.zip\"\r\n\r\n# Validate link\r\nif [ ! -z \"${DOWNLOAD_URL}\" ]; then \r\n    if curl --output \/dev\/null --silent --head --fail ${DOWNLOAD_URL}; then\r\n        echo -e \"link is valid. setting download link to ${DOWNLOAD_URL}\"\r\n        DOWNLOAD_LINK=${DOWNLOAD_URL}\r\n    else        \r\n        echo -e \"link is invalid closing out\"\r\n        exit 2\r\n    fi\r\nfi\r\n\r\ncurl -sSL ${DOWNLOAD_LINK} -o $ARCHIVE_NAME\r\n\r\n# Unpack Server zip\r\n# Backup and restore logic for config.json\r\nif [ -f \/mnt\/server\/config.json ]; then\r\n    mv \/mnt\/server\/config.json \/mnt\/server\/config-backup.json\r\n    unzip -o $ARCHIVE_NAME -d \/mnt\/server\r\n    rm -f \/mnt\/server\/config.json\r\n    mv \/mnt\/server\/config-backup.json \/mnt\/server\/config.json\r\nelse\r\n    unzip -o $ARCHIVE_NAME -d \/mnt\/server\r\nfi\r\n\r\n#Create the Plugins folder\r\nmkdir -p \/mnt\/server\/plugins\/\r\n\r\n\r\n## Install End\r\necho \"-----------------------------------------\"\r\necho \"Hogwarp Is Installed!\"\r\necho \"-----------------------------------------\"",
+            "container": "ghcr.io\/parkervcp\/installers:debian",
+            "entrypoint": "bash"
         }
     },
     "variables": [
@@ -32,7 +32,7 @@
             "name": "Wine Tricks",
             "description": "",
             "env_variable": "WINETRICKS_RUN",
-            "default_value": "dotnet7",
+            "default_value": "dotnet8",
             "user_viewable": false,
             "user_editable": false,
             "rules": "nullable|string",
@@ -40,7 +40,7 @@
         },
         {
             "name": "Hogwarp API Key",
-            "description": "A API required to boot - https://presence.hogwarp.com/login\r\n- If not set on install it will fail. Set API Key then Reinstall Files",
+            "description": "A API required to boot - https:\/\/presence.hogwarp.com\/login\r\n- If not set on install it will fail. Set API Key then Reinstall Files",
             "env_variable": "API_KEY",
             "default_value": "CHANGEME",
             "user_viewable": true,
@@ -70,7 +70,7 @@
         },
         {
             "name": "Max Players",
-            "description": "Max players for a server, this depends on your Patreon level for Hogwarp\r\nhttps://www.patreon.com/tiltedphoques - ( 4, 8, 16, No Limit ) In that order.",
+            "description": "Max players for a server, this depends on your Patreon level for Hogwarp\r\nhttps:\/\/www.patreon.com\/tiltedphoques - ( 4, 8, 16, No Limit ) In that order.",
             "env_variable": "MAX_PLAYERS",
             "default_value": "4",
             "user_viewable": true,
@@ -100,12 +100,12 @@
         },
         {
             "name": "Download URL",
-            "description": "URL to pull the files from\r\n- Files can be found in their Discord (https://discord.com/invite/hogwarp). Default URL will pull from there as well\r\n- These files can be outdated! Be sure to check for an update in the event it has a version mismatch with the client.",
+            "description": "URL to pull the files from - By default this is blank. Files can be found in Discord!",
             "env_variable": "DOWNLOAD_URL",
-            "default_value": "https://cdn.discordapp.com/attachments/1076580539751993444/1118295980597575810/Server.zip",
+            "default_value": "",
             "user_viewable": false,
             "user_editable": false,
-            "rules": "required|string",
+            "rules": "nullable|string",
             "field_type": "text"
         },
         {
