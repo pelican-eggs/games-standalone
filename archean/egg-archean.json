@@ -67,8 +67,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": [
-                "required",
-                "in:0,1"
+                "boolean"
             ],
             "field_type": "text"
         },
@@ -96,6 +95,7 @@
             "user_editable": true,
             "rules": [
                 "string",
+                "nullable",
                 "not_regex:\/\\\/\/"
             ],
             "field_type": "text"
@@ -166,6 +166,7 @@
             "user_editable": true,
             "rules": [
                 "string",
+                "nullable",
                 "not_regex:\/\\\/\/"
             ],
             "field_type": "text"
