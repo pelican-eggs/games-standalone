@@ -1,0 +1,174 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-10-21T00:55:52+00:00",
+    "name": "Archean",
+    "author": "tueem@tomatentum.net",
+    "uuid": "01555bd3-155f-4ab6-b63d-c8bed0a3585f",
+    "description": "Archean invites you to unleash your creativity alone or with friends in a creative sandbox mode.Design and build vehicles, bases, rockets, space stations and much more using customizable modular blocks.Create unique configurations using components, program their behavior and explore an environment free of constraints.\\nTest your builds, refine your designs and defy the laws of physics.Archean is a game in development focused on engineering and build.",
+    "features": [],
+    "docker_images": {
+        "Ubuntu": "ghcr.io\/pelican-eggs\/yolks:ubuntu"
+    },
+    "file_denylist": [],
+    "startup": ".\/archean_start.sh",
+    "config": {
+        "files": "{}",
+        "startup": "{\n\"done\": \"Server started\"\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\n\nmv \/Archean-server-alpha \/mnt\/server\/Archean-server-alpha\n\napt update -y\napt install -y curl\ncurl -o \/mnt\/server\/archean_start.sh https:\/\/git.tomatentum.net\/tueem\/archean-server-pelican\/raw\/branch\/master\/archean_start.sh\nchmod -R 755 \/mnt\/server\/\n\necho ******************************************\necho Installation Completed\necho ******************************************",
+            "container": "xenon3d\/archean-server-alpha",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "sort": 1,
+            "name": "Server Name",
+            "description": "The servers name that is, among others, displayed on the public server page.",
+            "env_variable": "SERVER_NAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "not_regex:\/\\\/\/"
+            ],
+            "field_type": "text"
+        },
+        {
+            "sort": 2,
+            "name": "Game Mode",
+            "description": "Changes the servers game mode between adventure and creative.",
+            "env_variable": "GAME_MODE",
+            "default_value": "adventure",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "in:creative,adventure"
+            ],
+            "field_type": "text"
+        },
+        {
+            "sort": 3,
+            "name": "Online Mode",
+            "description": "Whether the server is publicly discoverable or not.",
+            "env_variable": "ONLINE_MODE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "in:0,1"
+            ],
+            "field_type": "text"
+        },
+        {
+            "sort": 4,
+            "name": "Max Players",
+            "description": "The maximum amount of players that can join the server at one time.",
+            "env_variable": "MAX_PLAYERS",
+            "default_value": "4",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "integer"
+            ],
+            "field_type": "text"
+        },
+        {
+            "sort": 5,
+            "name": "Password",
+            "description": "The Password players need to enter to join the server",
+            "env_variable": "PASSWORD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "string",
+                "not_regex:\/\\\/\/"
+            ],
+            "field_type": "text"
+        },
+        {
+            "sort": 6,
+            "name": "Spawn Planet",
+            "description": "The Planet players will initially spawn on.",
+            "env_variable": "SPAWN_PLANET",
+            "default_value": "earth",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "in:earth,moon"
+            ],
+            "field_type": "text"
+        },
+        {
+            "sort": 7,
+            "name": "Autosave Interval",
+            "description": "Time between automatic server saves",
+            "env_variable": "AUTOSAVE_INTERVAL",
+            "default_value": "30",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "integer"
+            ],
+            "field_type": "text"
+        },
+        {
+            "sort": 9,
+            "name": "[ADVANCED] Updates per Second",
+            "description": "This setting should only be changed by advanced users.\nChanges the amount of times the server updates per second.",
+            "env_variable": "UPDATES_PER_SECOND",
+            "default_value": "25",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "integer"
+            ],
+            "field_type": "text"
+        },
+        {
+            "sort": 10,
+            "name": "[ADVANCED] Physics steps per update",
+            "description": "This setting should only be changed by advanced users.\nChanges the amount of times the physics get calculated per game update.",
+            "env_variable": "PHYSICS_UPDATES_PER_UPDATE",
+            "default_value": "8",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "integer"
+            ],
+            "field_type": "text"
+        },
+        {
+            "sort": 8,
+            "name": "Admins",
+            "description": "A line-seperated list of steamids from users that should get admin privileges.\nVisit https:\/\/steamid.io to get a steamid.",
+            "env_variable": "ADMINS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "string",
+                "not_regex:\/\\\/\/"
+            ],
+            "field_type": "text"
+        }
+    ]
+}
