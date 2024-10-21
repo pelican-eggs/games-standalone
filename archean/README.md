@@ -7,11 +7,10 @@ Test your builds, refine your designs and defy the laws of physics.Archean is a 
 ## Installation/System Requirements
 |  | Bare Minimum | Recommended |
 |---------|---------|---------|
-| Processor | Almost any proccessor will work | -|
-| RAM | 100 MiB | 256 MiB |
-| Storage | 70 MiB | 1024 MiB |
-| Network | Any reasonable speed |- |
-| Game Ownership | Not needed | The game is free, and server doesn't need the game to work. |   
+| Processor | Any mid/high-end should work | -|
+| RAM | 2GB | 8 GB |
+| Storage | 700 MB | 2 GB |
+| Network | Depends on your patience :P |- |
 
 ## Server Ports
 
