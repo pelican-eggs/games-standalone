@@ -4,20 +4,20 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-06-01T00:17:01+00:00",
-    "name": "OpenTTD Server",
+    "exported_at": "2024-10-21T19:12:22+00:00",
+    "name": "OpenTTD",
     "author": "admin@justmyrandomstuff.com",
     "uuid": "878470b2-369e-4629-95db-7e5fe0eafb99",
     "description": "OpenTTD is an open source simulation game based upon the popular Microprose game \"Transport Tycoon Deluxe\", written by Chris Sawyer. It attempts to mimic the original game as closely as possible while extending it with new features.\r\n\r\nOpenTTD is modelled after the original Transport Tycoon game by Chris Sawyer and enhances the game experience dramatically. Many features were inspired by TTDPatch while others are original.",
-    "features": null,
+    "features": [],
     "docker_images": {
         "ghcr.io\/parkervcp\/yolks:debian": "ghcr.io\/parkervcp\/yolks:debian"
     },
     "file_denylist": [],
     "startup": ".\/openttd -D",
     "config": {
-        "files": "{\r\n    \"openttd.cfg\": {\r\n        \"parser\": \"ini\",\r\n        \"find\": {\r\n            \"network.server_port\": \"{{server.build.default.port}}\",\r\n            \"network.server_name\": \"{{server.build.env.srv_name}}\",\r\n            \"network.lan_internet\": 0,\r\n            \"network.server_advertise\": \"{{server.build.env.srv_advertise}}\"\r\n        }\r\n    }\r\n}",
-        "startup": "{\r\n    \"done\": \"[net] Map generated, starting game\"\r\n}",
+        "files": "{\r\n    \"openttd.cfg\": {\r\n        \"parser\": \"ini\",\r\n        \"find\": {\r\n            \"network.server_port\": \"{{server.allocations.default.port}}\",\r\n            \"network.server_name\": \"{{server.environment.srv_name}}\",\r\n            \"network.lan_internet\": 0,\r\n            \"network.server_advertise\": \"{{server.environment.srv_advertise}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\n    \"done\": \"Map generated, starting game\"\n}",
         "logs": "{}",
         "stop": "exit"
     },
@@ -36,8 +36,12 @@
             "default_value": "OpenTTD Server",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:20",
-            "sort": null,
+            "rules": [
+                "required",
+                "string",
+                "max:20"
+            ],
+            "sort": 1,
             "field_type": "text"
         },
         {
@@ -47,8 +51,12 @@
             "default_value": "true",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|in:true,false",
-            "sort": null,
+            "rules": [
+                "required",
+                "string",
+                "in:true,false"
+            ],
+            "sort": 2,
             "field_type": "text"
         },
         {
@@ -58,8 +66,12 @@
             "default_value": "13.0-RC2",
             "user_viewable": true,
             "user_editable": false,
-            "rules": "required|string|max:20",
-            "sort": null,
+            "rules": [
+                "required",
+                "string",
+                "max:20"
+            ],
+            "sort": 3,
             "field_type": "text"
         },
         {
@@ -69,8 +81,12 @@
             "default_value": "7.1",
             "user_viewable": true,
             "user_editable": false,
-            "rules": "required|string|max:20",
-            "sort": null,
+            "rules": [
+                "required",
+                "string",
+                "max:20"
+            ],
+            "sort": 4,
             "field_type": "text"
         }
     ]
