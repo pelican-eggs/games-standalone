@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-10-21T00:55:52+00:00",
+    "exported_at": "2024-10-21T19:27:09+00:00",
     "name": "Archean",
     "author": "tueem@tomatentum.net",
     "uuid": "01555bd3-155f-4ab6-b63d-c8bed0a3585f",
@@ -14,17 +14,17 @@
         "Ubuntu": "ghcr.io\/pelican-eggs\/yolks:ubuntu"
     },
     "file_denylist": [],
-    "startup": ".\/archean_start.sh",
+    "startup": "echo \"$ADMINS\" > \"Archean-data\/server\/admins.txt\" && cd Archean-server-alpha && .\/Archean server",
     "config": {
-        "files": "{}",
+        "files": "{\n\t\"Archean-data\/server\/server.ini\": {\n\t\t\"parser\": \"ini\",\n\t\t\"find\": {\n\t\t\t\"server.server_public_name\": \"{{server.environment.SERVER_NAME}}\",\n\t\t\t\"server.game_mode\": \"{{server.environment.GAME_MODE}}\",\n\t\t\t\"server.server_online\": \"{{server.environment.ONLINE_MODE}}\",\n\t\t\t\"server.max_simultaneous_players\": \"{{server.environment.MAX_PLAYERS}}\",\n\t\t\t\"server.password\": \"{{server.environment.PASSWORD}}\",\n\t\t\t\"networking.listen_port\": \"{{server.allocations.default.port}}\",\n\t\t\t\"game.spawn\": \"{{server.environment.SPAWN_PLANET}}\",\n\t\t\t\"game.world\": \"{{server.environment.WORLD_NAME}}\",\n\t\t\t\"game.auto_save_interval_seconds\": \"{{server.environment.AUTOSAVE_INTERVAL}}\",\n\t\t\t\"game.updates_per_second\": \"{{server.environment.UPDATES_PER_SECOND}}\",\n\t\t\t\"game.physics_steps_per_update\": \"{{server.environment.PHYSICS_UPDATES_PER_UPDATE}}\"\n\t\t}\n\t}\n}",
         "startup": "{\n\"done\": \"Server started\"\n}",
         "logs": "{}",
         "stop": "^C"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\n\nmv \/Archean-server-alpha \/mnt\/server\/Archean-server-alpha\n\napt update -y\napt install -y curl\ncurl -o \/mnt\/server\/archean_start.sh https:\/\/git.tomatentum.net\/tueem\/archean-server-pelican\/raw\/branch\/master\/archean_start.sh\nchmod -R 755 \/mnt\/server\/\n\necho ******************************************\necho Installation Completed\necho ******************************************",
-            "container": "xenon3d\/archean-server-alpha",
+            "script": "#!\/bin\/bash\n\ncd \/mnt\/server\ngit clone --single-branch https:\/\/github.com\/batcholi\/Archean_game_linux.git Archean-server-alpha\/\ncurl -o \"Archean-data\/server\/server.ini\" --create-dirs https:\/\/git.tomatentum.net\/tueem\/archean-server-pelican\/raw\/branch\/master\/server.ini\n\necho ******************************************\necho Installation Completed\necho ******************************************",
+            "container": "ghcr.io\/pelican-eggs\/installers:debian",
             "entrypoint": "bash"
         }
     },
@@ -47,14 +47,14 @@
         {
             "sort": 2,
             "name": "Game Mode",
-            "description": "Changes the servers game mode between adventure and creative.",
+            "description": "Changes the servers game mode between adventure and creative.\n0 = creative\n1 = adventure",
             "env_variable": "GAME_MODE",
-            "default_value": "adventure",
+            "default_value": "1",
             "user_viewable": true,
             "user_editable": true,
             "rules": [
                 "required",
-                "in:creative,adventure"
+                "in:0,1"
             ],
             "field_type": "text"
         },
@@ -67,8 +67,7 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": [
-                "required",
-                "in:0,1"
+                "boolean"
             ],
             "field_type": "text"
         },
@@ -96,6 +95,7 @@
             "user_editable": true,
             "rules": [
                 "string",
+                "nullable",
                 "not_regex:\/\\\/\/"
             ],
             "field_type": "text"
@@ -129,7 +129,7 @@
             "field_type": "text"
         },
         {
-            "sort": 9,
+            "sort": 10,
             "name": "[ADVANCED] Updates per Second",
             "description": "This setting should only be changed by advanced users.\nChanges the amount of times the server updates per second.",
             "env_variable": "UPDATES_PER_SECOND",
@@ -143,7 +143,7 @@
             "field_type": "text"
         },
         {
-            "sort": 10,
+            "sort": 11,
             "name": "[ADVANCED] Physics steps per update",
             "description": "This setting should only be changed by advanced users.\nChanges the amount of times the physics get calculated per game update.",
             "env_variable": "PHYSICS_UPDATES_PER_UPDATE",
@@ -157,7 +157,7 @@
             "field_type": "text"
         },
         {
-            "sort": 8,
+            "sort": 9,
             "name": "Admins",
             "description": "A line-seperated list of steamids from users that should get admin privileges.\nVisit https:\/\/steamid.io to get a steamid.",
             "env_variable": "ADMINS",
@@ -166,7 +166,22 @@
             "user_editable": true,
             "rules": [
                 "string",
+                "nullable",
                 "not_regex:\/\\\/\/"
+            ],
+            "field_type": "text"
+        },
+        {
+            "sort": 8,
+            "name": "World name",
+            "description": "The name of the world directory to use.",
+            "env_variable": "WORLD_NAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "string",
+                "nullable"
             ],
             "field_type": "text"
         }
