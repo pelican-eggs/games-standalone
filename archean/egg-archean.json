@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-10-21T19:32:56+00:00",
+    "exported_at": "2024-10-22T00:24:21+00:00",
     "name": "Archean",
     "author": "tueem@tomatentum.net",
     "uuid": "01555bd3-155f-4ab6-b63d-c8bed0a3585f",
@@ -39,8 +39,7 @@
             "user_editable": true,
             "rules": [
                 "required",
-                "string",
-                "not_regex:\/\\\/\/"
+                "string"
             ],
             "field_type": "text"
         },
@@ -95,8 +94,7 @@
             "user_editable": true,
             "rules": [
                 "string",
-                "nullable",
-                "not_regex:\/\\\/\/"
+                "nullable"
             ],
             "field_type": "text"
         },
@@ -166,8 +164,7 @@
             "user_editable": true,
             "rules": [
                 "string",
-                "nullable",
-                "not_regex:\/\\\/\/"
+                "nullable"
             ],
             "field_type": "text"
         },
