@@ -23,7 +23,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\n\ncd \/mnt\/server\ngit clone --single-branch https:\/\/github.com\/batcholi\/Archean_game_linux.git Archean-server-alpha\/\ncurl -o \"Archean-data\/server\/server.ini\" --create-dirs https:\/\/raw.githubusercontent.com\/pelican-eggs\/games-standalone\/refs\/heads\/main\/Archean\/server.ini\n\necho ******************************************\necho Installation Completed\necho ******************************************",
+            "script": "#!\/bin\/bash\n\ncd \/mnt\/server\ngit clone --single-branch https:\/\/github.com\/batcholi\/Archean_game_linux.git Archean-server-alpha\/\ncurl -o \"Archean-data\/server\/server.ini\" --create-dirs https:\/\/raw.githubusercontent.com\/pelican-eggs\/games-standalone\/refs\/heads\/main\/archean\/server.ini\n\necho ******************************************\necho Installation Completed\necho ******************************************",
             "container": "ghcr.io\/pelican-eggs\/installers:debian",
             "entrypoint": "bash"
         }
