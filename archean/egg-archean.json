@@ -1,0 +1,201 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PLCN_v1",
+        "update_url": "https:\/\/raw.githubusercontent.com\/pelican-eggs\/games-standalone\/blob\/main\/archean\/egg-archean.json"
+    },
+    "exported_at": "2024-11-02T08:25:16+00:00",
+    "name": "Archean",
+    "author": "tueem@tomatentum.net",
+    "uuid": "01555bd3-155f-4ab6-b63d-c8bed0a3585f",
+    "description": "Archean invites you to unleash your creativity alone or with friends in a creative sandbox mode.Design and build vehicles, bases, rockets, space stations and much more using customizable modular blocks.Create unique configurations using components, program their behavior and explore an environment free of constraints.\\nTest your builds, refine your designs and defy the laws of physics.Archean is a game in development focused on engineering and build.",
+    "features": [],
+    "docker_images": {
+        "Ubuntu": "ghcr.io\/pelican-eggs\/yolks:ubuntu"
+    },
+    "file_denylist": [],
+    "startup": "echo \"$ADMINS\" > \"archean-data\/server\/admins.txt\"; cd \/home\/container\/archean-server\/; .\/Archean server",
+    "config": {
+        "files": "{\n\t\"archean-data\/server\/server.ini\": {\n\t\t\"parser\": \"ini\",\n\t\t\"find\": {\n\t\t\t\"server.server_public_name\": \"{{server.environment.SERVER_NAME}}\",\n\t\t\t\"server.game_mode\": \"{{server.environment.GAME_MODE}}\",\n\t\t\t\"server.server_online\": \"{{server.environment.ONLINE_MODE}}\",\n\t\t\t\"server.max_simultaneous_players\": \"{{server.environment.MAX_PLAYERS}}\",\n\t\t\t\"server.password\": \"{{server.environment.PASSWORD}}\",\n\t\t\t\"networking.listen_port\": \"{{server.allocations.default.port}}\",\n\t\t\t\"game.spawn\": \"{{server.environment.SPAWN_PLANET}}\",\n\t\t\t\"game.world\": \"{{server.environment.WORLD_NAME}}\",\n\t\t\t\"game.auto_save_interval_seconds\": \"{{server.environment.AUTOSAVE_INTERVAL}}\",\n\t\t\t\"game.updates_per_second\": \"{{server.environment.UPDATES_PER_SECOND}}\",\n\t\t\t\"game.physics_steps_per_update\": \"{{server.environment.PHYSICS_UPDATES_PER_UPDATE}}\"\n\t\t}\n\t}\n}",
+        "startup": "{\n\"done\": \"Server started\"\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\n\ncd \/mnt\/server\n\n## add git ending if it's not on the address\nif [[ ${GIT_ADDRESS} != *.git ]]; then\n    GIT_ADDRESS=${GIT_ADDRESS}.git\nfi\n\n## pull git bot repo with update functionality\nif [ \"$(ls -A \/mnt\/server\/archean-server)\" ]; then\n    echo -e \"\/mnt\/server\/archean-server directory is not empty.\"\n    cd archean-server\/\n    if [ -d .git ]; then\n        echo -e \".git directory exists\"\n        if [ -f .git\/config ]; then\n            echo -e \"loading info from git config\"\n            ORIGIN=$(git config --get remote.origin.url)\n        else\n            echo -e \"files found with no git config\"\n            echo -e \"closing out without touching things to not break anything\"\n            exit 10\n        fi\n    fi\n\n    if [ \"${ORIGIN}\" == \"${GIT_ADDRESS}\" ]; then\n        echo \"pulling latest from github\"\n        git pull\n    fi\nelse\n    echo -e \"\/mnt\/server\/archean-server is empty.\\ncloning files into repo\"\n    if [ -z ${BRANCH} ]; then\n        echo -e \"cloning default branch\"\n        git clone --single-branch ${GIT_ADDRESS} archean-server\/\n    else\n        echo -e \"cloning ${BRANCH}'\"\n        git clone --single-branch --branch ${BRANCH} ${GIT_ADDRESS} archean-server\/\n    fi\nfi\n\ncurl -o \"archean-data\/server\/server.ini\" --create-dirs https:\/\/raw.githubusercontent.com\/pelican-eggs\/games-standalone\/refs\/heads\/main\/archean\/server.ini\n\necho ******************************************\necho Installation Completed\necho ******************************************",
+            "container": "ghcr.io\/pelican-eggs\/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "sort": 1,
+            "name": "Server Name",
+            "description": "The servers name that is, among others, displayed on the public server page.",
+            "env_variable": "SERVER_NAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string"
+            ]
+        },
+        {
+            "sort": 2,
+            "name": "Game Mode",
+            "description": "Changes the servers game mode between adventure and creative.\n0 = creative\n1 = adventure",
+            "env_variable": "GAME_MODE",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "in:0,1"
+            ]
+        },
+        {
+            "sort": 3,
+            "name": "Online Mode",
+            "description": "Whether the server is publicly discoverable or not.",
+            "env_variable": "ONLINE_MODE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "boolean"
+            ]
+        },
+        {
+            "sort": 4,
+            "name": "Max Players",
+            "description": "The maximum amount of players that can join the server at one time.",
+            "env_variable": "MAX_PLAYERS",
+            "default_value": "4",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "integer"
+            ]
+        },
+        {
+            "sort": 5,
+            "name": "Password",
+            "description": "The Password players need to enter to join the server",
+            "env_variable": "PASSWORD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "string",
+                "nullable"
+            ]
+        },
+        {
+            "sort": 6,
+            "name": "Spawn Planet",
+            "description": "The Planet players will initially spawn on.",
+            "env_variable": "SPAWN_PLANET",
+            "default_value": "earth",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "in:earth,moon"
+            ]
+        },
+        {
+            "sort": 7,
+            "name": "Autosave Interval",
+            "description": "Time between automatic server saves",
+            "env_variable": "AUTOSAVE_INTERVAL",
+            "default_value": "30",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "integer"
+            ]
+        },
+        {
+            "sort": 10,
+            "name": "[ADVANCED] Updates per Second",
+            "description": "This setting should only be changed by advanced users.\nChanges the amount of times the server updates per second.",
+            "env_variable": "UPDATES_PER_SECOND",
+            "default_value": "25",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "integer"
+            ]
+        },
+        {
+            "sort": 11,
+            "name": "[ADVANCED] Physics steps per update",
+            "description": "This setting should only be changed by advanced users.\nChanges the amount of times the physics get calculated per game update.",
+            "env_variable": "PHYSICS_UPDATES_PER_UPDATE",
+            "default_value": "8",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "integer"
+            ]
+        },
+        {
+            "sort": 9,
+            "name": "Admins",
+            "description": "A line-seperated list of steamids from users that should get admin privileges.\nVisit https:\/\/steamid.io to get a steamid.",
+            "env_variable": "ADMINS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "string",
+                "nullable"
+            ]
+        },
+        {
+            "sort": 8,
+            "name": "World name",
+            "description": "The name of the world directory to use.",
+            "env_variable": "WORLD_NAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "string",
+                "nullable"
+            ]
+        },
+        {
+            "sort": 12,
+            "name": "Git Address",
+            "description": "",
+            "env_variable": "GIT_ADDRESS",
+            "default_value": "https:\/\/github.com\/batcholi\/Archean_game_linux.git",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": [
+                "required",
+                "string"
+            ]
+        },
+        {
+            "sort": 13,
+            "name": "Branch",
+            "description": "",
+            "env_variable": "BRANCH",
+            "default_value": "alpha",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": [
+                "string",
+                "required"
+            ]
+        }
+    ]
+}
