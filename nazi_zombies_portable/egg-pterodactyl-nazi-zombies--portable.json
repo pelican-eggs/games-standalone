@@ -4,16 +4,16 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-11-02T12:55:48-04:00",
+    "exported_at": "2024-11-03T13:12:47-05:00",
     "name": "Nazi Zombies: Portable",
     "author": "jordanadamsbusiness@outlook.com",
     "description": "NZ:P (Nazi Zombies: Portable) is based off of the FTEQW (Fore Thought Engine Quake World). This egg is specifically made for use with NZ:P (just downloads assets and QuakeC from NZ:P repositories) but there is nothing stopping you from using it as a general FTEQW egg given the NZ:P fork of FTEQW only added fog to the client (and added SDL which caused issues with arguments being eaten preventing dedicated flag from being read) which is why upstream FTEQW is used.",
     "features": null,
     "docker_images": {
-        "ghcr.io\/parkervcp\/yolks:debian": "ghcr.io\/parkervcp\/yolks:debian"
+        "ghcr.io\/parkervcp\/yolks:ubuntu": "ghcr.io\/parkervcp\/yolks:ubuntu"
     },
     "file_denylist": [],
-    "startup": ".\/fteqw-sv -dedicated +sv_port {{SERVER_PORT}} +sv_port_tcp {{SERVER_PORT}} +com_protocolname {{PROTOCOL}} +sv_mintic {{TICKRATE}} +map {{MAP}} {{GAME_ARGS}}",
+    "startup": ".\/fteqw-sv64 -dedicated +sv_port {{SERVER_PORT}} +sv_port_tcp {{SERVER_PORT}} +com_protocolname {{PROTOCOL}} +sv_mintic {{TICKRATE}} +map {{MAP}} {{GAME_ARGS}}",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"======== Nazi Zombies Portable Initialized ========\"\r\n}",
@@ -22,9 +22,9 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n# Nazi Zombies: Portable (NZ:P) Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n\r\n# FTEQW (Engine) - Building from source due to GLIBC being too new on linux release\r\ngit clone https:\/\/github.com\/fte-team\/fteqw\r\napt install -y make build-essential zlib1g-dev\r\nmake -C fteqw\/engine sv-rel\r\ncp fteqw\/engine\/release\/fteqw-sv \/mnt\/server\/\r\n\r\n# Assets\r\nASSETS_LATEST_VERSION=$(curl -L -s -H 'Accept: application\/json' https:\/\/github.com\/nzp-team\/assets\/releases\/latest | jq -r '.tag_name')\r\nwget \"https:\/\/github.com\/nzp-team\/assets\/releases\/download\/$ASSETS_LATEST_VERSION\/pc-nzp-assets.zip\"\r\nunzip -o pc-nzp-assets.zip -d \/mnt\/server\r\n\r\n# QuakeC\r\nQUAKEC_LATEST_VERSION=$(curl -L -s -H 'Accept: application\/json' https:\/\/github.com\/nzp-team\/quakec\/releases\/latest | jq -r '.tag_name')\r\nwget \"https:\/\/github.com\/nzp-team\/quakec\/releases\/download\/$QUAKEC_LATEST_VERSION\/fte-nzp-qc.zip\"\r\nwget \"https:\/\/github.com\/nzp-team\/quakec\/releases\/download\/$QUAKEC_LATEST_VERSION\/standard-nzp-qc.zip\"\r\nunzip -o fte-nzp-qc.zip -d \/mnt\/server\/nzp\r\nunzip -o standard-nzp-qc.zip -d \/mnt\/server\/nzp",
-            "container": "ghcr.io\/parkervcp\/installers:debian",
-            "entrypoint": "bash"
+            "script": "#!\/bin\/ash\r\n# Nazi Zombies: Portable (NZ:P) Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n\r\n# FTEQW (Engine)\r\nwget https:\/\/www.fteqw.org\/dl\/fteqw_linux64.zip\r\nunzip -o fteqw_linux64.zip -d \/mnt\/server\r\n\r\n# Assets\r\nASSETS_LATEST_VERSION=$(curl -L -s -H 'Accept: application\/json' https:\/\/github.com\/nzp-team\/assets\/releases\/latest | jq -r '.tag_name')\r\nwget \"https:\/\/github.com\/nzp-team\/assets\/releases\/download\/$ASSETS_LATEST_VERSION\/pc-nzp-assets.zip\"\r\nunzip -o pc-nzp-assets.zip -d \/mnt\/server\r\n\r\n# QuakeC\r\nQUAKEC_LATEST_VERSION=$(curl -L -s -H 'Accept: application\/json' https:\/\/github.com\/nzp-team\/quakec\/releases\/latest | jq -r '.tag_name')\r\nwget \"https:\/\/github.com\/nzp-team\/quakec\/releases\/download\/$QUAKEC_LATEST_VERSION\/fte-nzp-qc.zip\"\r\nwget \"https:\/\/github.com\/nzp-team\/quakec\/releases\/download\/$QUAKEC_LATEST_VERSION\/standard-nzp-qc.zip\"\r\nunzip -o fte-nzp-qc.zip -d \/mnt\/server\/nzp\r\nunzip -o standard-nzp-qc.zip -d \/mnt\/server\/nzp",
+            "container": "ghcr.io\/parkervcp\/installers:alpine",
+            "entrypoint": "ash"
         }
     },
     "variables": [
