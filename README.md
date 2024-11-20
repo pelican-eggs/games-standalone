@@ -1,4 +1,4 @@
-﻿# Game Eggs (Standalone)
+# Game Eggs (Standalone)
 
 #### This is a collection of Eggs for game servers that are standalone in their installation (ie. don't require 3rd party tools like SteamCMD, etc).
 
@@ -84,6 +84,7 @@
   * [tModLoader](terraria/tmodloader)
   * [TShock](terraria/tshock)
   * [Vanilla](terraria/vanilla)
+* [The Battle For Wesnoth](thebattleforwesnoth)
 * [Urban Terror](urbanterror)
 * [Veloren](veloren)
 * [Vintage Story](vintage_story)

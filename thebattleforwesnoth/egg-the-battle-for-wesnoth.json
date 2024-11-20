@@ -1,0 +1,75 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PLCN_v1",
+        "update_url": null
+    },
+    "exported_at": "2024-11-20T09:59:56+00:00",
+    "name": "The Battle for Wesnoth",
+    "author": "mattman107@github.com",
+    "uuid": "a90188c8-c70d-4c51-a049-5b6869903db0",
+    "description": "Egg for hosting a Battle for Wesnoth Server.",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/parkervcp\/games:thebattleforwesnoth": "ghcr.io\/parkervcp\/games:thebattleforwesnoth"
+    },
+    "file_denylist": [],
+    "startup": ".\/battleForWesnoth\/build\/wesnothd -p {{SERVER_PORT}} -c \/home\/container\/wesnothd.cfg",
+    "config": {
+        "files": "{\r\n    \"wesnothd.cfg\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"passwd=\": \"passwd=\\\"{{server.environment.PASSWD}}\\\"\",\r\n            \"motd=\": \"motd=\\\"{{server.environment.MOTD}}\\\"\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"info server:\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n\r\n# Install build tools\r\necho \"deb http:\/\/deb.debian.org\/debian bullseye-backports main\" >> \/etc\/apt\/sources.list && \\\r\napt-get update && apt-get -y full-upgrade && \\\r\n    apt-get install -y libboost-filesystem-dev libboost-iostreams-dev libboost-locale-dev libboost-random-dev libboost-regex-dev libboost-program-options-dev libboost-system-dev libboost-coroutine-dev libboost-graph-dev \\\r\n    libsdl2-dev libcurl4-openssl-dev libcairo2-dev libvorbis-dev libbz2-dev zlib1g-dev libssl-dev libcrypto++-dev openssl cmake g++ libsdl2-image-dev libsdl2-mixer-dev libsdl-pango-dev\r\n\r\n\r\nif [ ! -d \"\/mnt\/server\/battleForWesnoth\" ]; then\r\n    \r\n    #clone code repo\r\n    git clone --recurse-submodules --single-branch --branch ${BRANCH} https:\/\/github.com\/wesnoth\/wesnoth \/mnt\/server\/battleForWesnoth\r\n    \r\n    # go into the stk-code directory\r\n    cd \/mnt\/server\/battleForWesnoth\r\n    \r\n    # create the build directory\r\n    mkdir build\r\n    \r\n    mkdir \/mnt\/server\/wesnothd\r\n    touch \/mnt\/server\/wesnothd.cfg\r\nelse\r\n    git config --global --add safe.directory \/mnt\/server\/battleForWesnoth\r\n    #update existing stuff\r\n    cd \/mnt\/server\/battleForWesnoth\r\n    git pull\r\n    git submodule update --init --recursive\r\n\r\n\r\nfi\r\n\r\n#build the server\r\ncd build\r\ncmake ..\/ -DCMAKE_BUILD_TYPE=Release\r\nsed -i 's\/ENABLE_GAME:BOOL=ON\/ENABLE_GAME:BOOL=OFF\/' \/mnt\/server\/battleForWesnoth\/build\/CMakeCache.txt\r\nsed -i 's#FIFO_DIR:STRING=\/var\/run\/wesnothd#FIFO_DIR:STRING=\/home\/container\/wesnothd#' \/mnt\/server\/battleForWesnoth\/build\/CMakeCache.txt\r\nmake\r\nchmod +x .\/wesnothd",
+            "container": "ghcr.io\/parkervcp\/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "sort": null,
+            "name": "Branch",
+            "description": "The Github Branch to choose from. I recommend checking what version of the game you have installed.",
+            "env_variable": "BRANCH",
+            "default_value": "1.18",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:50"
+            ]
+        },
+        {
+            "sort": null,
+            "name": "Admin Password",
+            "description": "Admin Password for server admin commands.",
+            "env_variable": "PASSWD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:20"
+            ]
+        },
+        {
+            "sort": null,
+            "name": "Message of the Day",
+            "description": "A message that will display when a user joins the server.",
+            "env_variable": "MOTD",
+            "default_value": "Welcome to the Pterodactyl Server!",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:100"
+            ]
+        }
+    ]
+}
