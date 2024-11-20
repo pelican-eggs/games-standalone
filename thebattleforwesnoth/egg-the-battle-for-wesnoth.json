@@ -1,12 +1,13 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
+        "version": "PLCN_v1",
         "update_url": null
     },
-    "exported_at": "2024-05-05T14:09:45-04:00",
+    "exported_at": "2024-11-20T09:59:56+00:00",
     "name": "The Battle for Wesnoth",
     "author": "mattman107@github.com",
+    "uuid": "a90188c8-c70d-4c51-a049-5b6869903db0",
     "description": "Egg for hosting a Battle for Wesnoth Server.",
     "features": null,
     "docker_images": {
@@ -15,7 +16,7 @@
     "file_denylist": [],
     "startup": ".\/battleForWesnoth\/build\/wesnothd -p {{SERVER_PORT}} -c \/home\/container\/wesnothd.cfg",
     "config": {
-        "files": "{\r\n    \"wesnothd.cfg\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"passwd=\": \"passwd=\\\"{{server.build.env.PASSWD}}\\\"\",\r\n            \"motd=\": \"motd=\\\"{{server.build.env.MOTD}}\\\"\"\r\n        }\r\n    }\r\n}",
+        "files": "{\r\n    \"wesnothd.cfg\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"passwd=\": \"passwd=\\\"{{server.environment.PASSWD}}\\\"\",\r\n            \"motd=\": \"motd=\\\"{{server.environment.MOTD}}\\\"\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"info server:\"\r\n}",
         "logs": "{}",
         "stop": "^C"
@@ -29,34 +30,46 @@
     },
     "variables": [
         {
+            "sort": null,
             "name": "Branch",
             "description": "The Github Branch to choose from. I recommend checking what version of the game you have installed.",
             "env_variable": "BRANCH",
             "default_value": "1.18",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:50",
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "max:50"
+            ]
         },
         {
+            "sort": null,
             "name": "Admin Password",
             "description": "Admin Password for server admin commands.",
             "env_variable": "PASSWD",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:20",
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "max:20"
+            ]
         },
         {
+            "sort": null,
             "name": "Message of the Day",
             "description": "A message that will display when a user joins the server.",
             "env_variable": "MOTD",
             "default_value": "Welcome to the Pterodactyl Server!",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:100",
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "max:100"
+            ]
         }
     ]
 }
