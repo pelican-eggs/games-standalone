@@ -4,25 +4,25 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-10-21T21:46:13+02:00",
+    "exported_at": "2024-11-23T00:00:00+00:00",
     "name": "OpenTTD",
-    "author": "admin@justmyrandomstuff.com",
-    "description": "OpenTTD is an open source simulation game based upon the popular Microprose game \"Transport Tycoon Deluxe\", written by Chris Sawyer. It attempts to mimic the original game as closely as possible while extending it with new features.\r\n\r\nOpenTTD is modelled after the original Transport Tycoon game by Chris Sawyer and enhances the game experience dramatically. Many features were inspired by TTDPatch while others are original.",
+    "author": "artline86@gmailc.com",
+    "description": "OpenTTD is an open-source simulation game based on Transport Tycoon Deluxe.",
     "features": null,
     "docker_images": {
-        "ghcr.io\/parkervcp\/yolks:debian": "ghcr.io\/parkervcp\/yolks:debian"
+        "ghcr.io/parkervcp/yolks:debian": "ghcr.io/parkervcp/yolks:debian"
     },
     "file_denylist": [],
-    "startup": ".\/openttd -D",
+    "startup": "./openttd -D -c openttd.cfg",
     "config": {
-        "files": "{\r\n    \"openttd.cfg\": {\r\n        \"parser\": \"ini\",\r\n        \"find\": {\r\n            \"network.server_port\": \"{{server.build.default.port}}\",\r\n            \"network.server_name\": \"{{server.build.env.srv_name}}\",\r\n            \"network.lan_internet\": 0,\r\n            \"network.server_advertise\": \"{{server.build.env.srv_advertise}}\"\r\n        }\r\n    }\r\n}",
+        "files": "{\r\n    \"openttd.cfg\": {\r\n        \"parser\": \"ini\",\r\n        \"find\": {\r\n            \"network.server_port\": \"{{server.build.default.port}}\",\r\n            \"network.server_name\": \"{{server.build.env.srv_name}}\",\r\n            \"network.server_advertise\": \"{{server.build.env.srv_advertise}}\",\r\n            \"network.lan_internet\": 0\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"Map generated, starting game\"\r\n}",
         "logs": "{}",
         "stop": "exit"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\napk add --no-cache xz curl tar unzip\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\necho -e \"\\ncurl -SsL -o openttd-linux.tar.xz https:\/\/cdn.openttd.org\/openttd-releases\/${OPENTTD_VERSION}\/openttd-${OPENTTD_VERSION}-linux-generic-amd64.tar.xz\"\r\ncurl -SsL -o openttd-linux.tar.xz https:\/\/cdn.openttd.org\/openttd-releases\/${OPENTTD_VERSION}\/openttd-${OPENTTD_VERSION}-linux-generic-amd64.tar.xz \r\n\r\necho -e \"\\nUnpacking tar\"\r\ntar -xf openttd-linux.tar.xz --strip-components=1\r\nrm openttd-linux.tar.xz\r\nchmod +x openttd\r\n\r\necho -e \"\\nRunning curl -sSL -o opengfx.zip https:\/\/cdn.openttd.org\/opengfx-releases\/${OPENGFX_VERSION}\/opengfx-${OPENGFX_VERSION}-all.zip\"\r\ncurl -sSL -o opengfx.zip https:\/\/cdn.openttd.org\/opengfx-releases\/${OPENGFX_VERSION}\/opengfx-${OPENGFX_VERSION}-all.zip\r\nunzip opengfx.zip \r\n\r\ntar --strip-components=1 -C baseset\/ -xvf opengfx*.tar\r\nrm -fR open*zip open*tar open*gz\r\n\r\n[ -f \/home\/container\/openttd.cfg  ] || curl https:\/\/raw.githubusercontent.com\/parkervcp\/eggs\/master\/game_eggs\/tycoon_games\/openttd\/openttd.cfg > openttd.cfg\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
+            "script": "#!/bin/ash\n# Install dependencies\napk add --no-cache xz curl tar unzip jq\n\n# Create server directory\nmkdir -p /mnt/server\ncd /mnt/server\n\n# Determine OpenTTD version\nif [ \"${OPENTTD_VERSION}\" = \"latest\" ]; then\n    echo \"Fetching the latest OpenTTD version...\"\n    OPENTTD_VERSION=$(curl -s https://api.github.com/repos/OpenTTD/OpenTTD/releases/latest | jq -r .tag_name)\n    if [ -z \"$OPENTTD_VERSION\" ]; then\n        echo \"Error: Failed to fetch the latest OpenTTD version.\"\n        exit 1\n    fi\n    echo \"Detected latest OpenTTD version: $OPENTTD_VERSION\"\nfi\n\n# Determine OpenGFX version\nif [ \"${OPENGFX_VERSION}\" = \"latest\" ]; then\n    echo \"Fetching the latest OpenGFX version...\"\n    OPENGFX_VERSION=$(curl -s https://api.github.com/repos/OpenTTD/OpenGFX/releases/latest | jq -r .tag_name)\n    if [ -z \"$OPENGFX_VERSION\" ]; then\n        echo \"Error: Failed to fetch the latest OpenGFX version. Defaulting to 7.1.\"\n        OPENGFX_VERSION=\"7.1\"\n    fi\n    echo \"Detected OpenGFX version: $OPENGFX_VERSION\"\nfi\n\n# Download and unpack OpenTTD\nDOWNLOAD_URL=\"https://cdn.openttd.org/openttd-releases/${OPENTTD_VERSION}/openttd-${OPENTTD_VERSION}-linux-generic-amd64.tar.xz\"\necho \"Downloading OpenTTD from: $DOWNLOAD_URL\"\ncurl -o openttd.tar.xz -sSL $DOWNLOAD_URL\n\necho \"Unpacking OpenTTD...\"\ntar -xf openttd.tar.xz --strip-components=1\nrm openttd.tar.xz\nchmod +x openttd\n\n# Download and unpack OpenGFX\nOPENGFX_URL=\"https://cdn.openttd.org/opengfx-releases/${OPENGFX_VERSION}/opengfx-${OPENGFX_VERSION}-all.zip\"\necho \"Downloading OpenGFX from: $OPENGFX_URL\"\ncurl -o opengfx.zip -sSL $OPENGFX_URL\nunzip -o opengfx.zip\nmkdir -p /mnt/server/baseset\ntar -xvf opengfx*.tar -C /mnt/server/baseset/ --strip-components=1\n\n# Ensure baseset directory exists\nif [ ! -d /mnt/server/baseset ]; then\n    echo \"Error: Failed to create the baseset directory.\"\n    exit 1\nfi\n\n# Verify graphics set installation\nif [ ! -f /mnt/server/baseset/opengfx.obg ]; then\n    echo \"Error: Graphics set not properly installed. Please check the OpenGFX download.\"\n    exit 1\nfi\n\n# Clean up temporary files\nrm -f opengfx*.zip opengfx*.tar\n\n# Create default configuration\nif [ ! -f /mnt/server/openttd.cfg ]; then\n    echo \"Creating default configuration file...\"\n    cat <<EOL > /mnt/server/openttd.cfg\n[network]\nserver_name = OpenTTD Server\nserver_password =\nserver_port = 3979\nmax_clients = 10\nmax_companies = 5\nmax_spectators = 5\nlan_internet = 1\nEOL\nfi\n\n## Installation complete\necho \"Installation completed successfully.\"",
             "container": "alpine:latest",
             "entrypoint": "ash"
         }
@@ -30,17 +30,17 @@
     "variables": [
         {
             "name": "Server Name",
-            "description": "The name shown in the serverlist",
+            "description": "The name shown in the server list.",
             "env_variable": "srv_name",
             "default_value": "OpenTTD Server",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:20",
+            "rules": "required|string|max:100",
             "field_type": "text"
         },
         {
-            "name": "Show in masterlist?",
-            "description": "Show the server in the serverlist on the client, true or false",
+            "name": "Advertise Server",
+            "description": "Whether to advertise the server on the master server list (true/false).",
             "env_variable": "srv_advertise",
             "default_value": "true",
             "user_viewable": true,
@@ -50,21 +50,21 @@
         },
         {
             "name": "OpenTTD Version",
-            "description": "The version of OpenTTD i.e. 12.2",
+            "description": "Specify the OpenTTD version to use (e.g., 13.0, or latest).",
             "env_variable": "OPENTTD_VERSION",
-            "default_value": "13.0-RC2",
+            "default_value": "latest",
             "user_viewable": true,
-            "user_editable": false,
+            "user_editable": true,
             "rules": "required|string|max:20",
             "field_type": "text"
         },
         {
             "name": "OpenGFX Version",
-            "description": "The OpenGFX Version i.e. 7.1",
+            "description": "Specify the OpenGFX version to use (e.g., 7.1, or latest).",
             "env_variable": "OPENGFX_VERSION",
-            "default_value": "7.1",
+            "default_value": "latest",
             "user_viewable": true,
-            "user_editable": false,
+            "user_editable": true,
             "rules": "required|string|max:20",
             "field_type": "text"
         }
