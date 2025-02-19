@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-11-02T09:35:11+01:00",
+    "exported_at": "2025-02-19T20:25:53+00:00",
     "name": "Archean",
     "author": "tueem@tomatentum.net",
     "description": "Archean invites you to unleash your creativity alone or with friends in a creative sandbox mode.Design and build vehicles, bases, rockets, space stations and much more using customizable modular blocks.Create unique configurations using components, program their behavior and explore an environment free of constraints.\\nTest your builds, refine your designs and defy the laws of physics.Archean is a game in development focused on engineering and build.",
@@ -75,7 +75,7 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|nullable",
+            "rules": "required|string",
             "field_type": "text"
         },
         {
