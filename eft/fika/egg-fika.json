@@ -1,0 +1,79 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PLCN_v1",
+        "update_url": null
+    },
+    "exported_at": "2025-03-13T12:50:35+00:00",
+    "name": "Fika",
+    "author": "cocomarti0208@gmail.com",
+    "uuid": "badde6e2-3a34-4cc6-aae1-03e61170a310",
+    "description": "Project Fika is an unofficial SPT mod designed to enable co-op multiplayer gameplay with your friends in Escape from Tarkov. You can progress through quests, share items, and fight AI bots (PMCs, SCAVs, and Bosses) together.",
+    "features": [],
+    "docker_images": {
+        "ubuntu": "ghcr.io\/parkervcp\/yolks:ubuntu"
+    },
+    "file_denylist": [],
+    "startup": ".\/SPT.Server.exe",
+    "config": {
+        "files": "{\n    \"SPT_Data\/Server\/configs\/http.json\": {\n        \"parser\": \"json\",\n        \"find\": {\n            \"ip\": \"0.0.0.0\",\n            \"backendIp\": \"0.0.0.0\",\n            \"backendPort\": \"{{server.allocations.default.port}}\",\n            \"port\": \"{{server.allocations.default.port}}\"\n        }\n    }\n}",
+        "startup": "{\n    \"done\": \"Server is running, do not close while playing SPT, Happy playing!!\"\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n# FIKA Server Installation Script\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\nif [ -z \"${GITHUB_USER}\" ] && [ -z \"${GITHUB_OAUTH_TOKEN}\" ] ; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    echo -e \"user and oauth token set\"\r\n    alias curl='curl -u ${GITHUB_USER}:${GITHUB_OAUTH_TOKEN} '\r\nfi\r\n\r\n## Get FIKA coop mod release info and download links\r\nFIKA_LATEST_JSON=$(curl -s \"https:\/\/api.github.com\/repos\/cocorico8\/Fika-Server\/releases\/latest\")\r\nFIKA_RELEASES=$(curl -s \"https:\/\/api.github.com\/repos\/cocorico8\/Fika-Server\/releases\")\r\n\r\n\r\nif [ -z \"${FIKA_VERSION}\" ] || [ \"${FIKA_VERSION}\" == \"latest\" ]; then\r\n    FIKA_DOWNLOAD_URL=$(echo ${FIKA_LATEST_JSON} | jq -r '.assets[].browser_download_url' | grep -i linux)\r\nelse\r\n    VERSION_CHECK=$(echo ${FIKA_RELEASES} | jq -r --arg VERSION v\"${FIKA_VERSION}\" '.[] | select(.tag_name==$VERSION) | .tag_name')\r\n    if [ v\"${FIKA_VERSION}\" == \"${VERSION_CHECK}\" ]; then\r\n        FIKA_DOWNLOAD_URL=$(echo ${FIKA_RELEASES} | jq -r --arg VERSION v\"${FIKA_VERSION}\" '.[] | select(.tag_name==$VERSION) | .assets[].browser_download_url' | grep -i linux)\r\n    else\r\n        echo -e \"Release not found, defaulting to latest release\"\r\n        FIKA_DOWNLOAD_URL=$(echo ${FIKA_LATEST_JSON} | jq -r '.assets[].browser_download_url' | grep -i linux)\r\n    fi\r\nfi\r\n\r\nwget ${FIKA_DOWNLOAD_URL} -O ${FIKA_NAME}\r\ntar -xvzf ${FIKA_NAME}\r\nrm ${FIKA_NAME}",
+            "container": "ghcr.io\/parkervcp\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "FIKA version",
+            "description": "Version of the FIKA mod for the server. Use \"latest\" for latest release, or the github release\/tag\/hash.",
+            "env_variable": "FIKA_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string"
+            ],
+            "sort": 1
+        },
+        {
+            "name": "FIKA Mod asset name",
+            "description": "FIKA mod release file's asset name.",
+            "env_variable": "FIKA_NAME",
+            "default_value": "fika-server.tar.gz",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": [
+                "required",
+                "string"
+            ],
+            "sort": 2
+        },
+        {
+            "name": "Github Username",
+            "description": "Optional, a Github username used to avoid Github API rate limit.",
+            "env_variable": "GITHUB_USER",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": true,
+            "rules": [],
+            "sort": 3
+        },
+        {
+            "name": "Github OAuth token",
+            "description": "Optional, A Github OAuth token to use to avoid API rate limit.",
+            "env_variable": "GITHUB_OAUTH_TOKEN",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": true,
+            "rules": [],
+            "sort": 4
+        }
+    ]
+}
