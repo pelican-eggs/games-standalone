@@ -36,6 +36,8 @@
 * [Doom](doom)
   * [Zandronum](doom/zandronum)
 * [Escape from Tarkov (Singleplayer)](eft)
+  * [SIT](eft/sit)
+  * [SPT](/eft/spt)
 * [Factorio](factorio)
   * [Vanilla](factorio/factorio)
   * [ModUpdate](factorio/factorio-modupdate)
