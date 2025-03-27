@@ -1,15 +1,15 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
+        "version": "PLCN_v1",
         "update_url": null
     },
-    "exported_at": "2024-06-01T00:17:28+00:00",
+    "exported_at": "2025-02-19T20:55:13+00:00",
     "name": "AssaultCube",
     "author": "holeintheseat@gmail.com",
     "uuid": "5a75a672-5ffc-4b78-9989-9356a3e56754",
     "description": "AssaultCube is a FREE, multiplayer, first-person shooter game, based on the CUBE engine.\r\n\r\nTaking place in realistic environments, with fast, arcade gameplay, it's addictive and fun!",
-    "features": null,
+    "features": [],
     "docker_images": {
         "Debian": "ghcr.io\/parkervcp\/yolks:debian"
     },
@@ -36,9 +36,12 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "nullable|required|string|max:64",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "nullable",
+                "string",
+                "max:64"
+            ],
+            "sort": 1
         },
         {
             "name": "Server Description",
@@ -47,9 +50,12 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "nullable|string|max:512",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "nullable",
+                "string",
+                "max:512"
+            ],
+            "sort": 2
         },
         {
             "name": "Message of the Day",
@@ -58,9 +64,12 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "nullable|string|max:512",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "nullable",
+                "string",
+                "max:512"
+            ],
+            "sort": 3
         },
         {
             "name": "Max Players",
@@ -69,9 +78,13 @@
             "default_value": "16",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|integer|max:16",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "integer",
+                "max:16"
+            ],
+            "sort": 4
         },
         {
             "name": "Admin Password",
@@ -80,9 +93,12 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:512|min:5",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "between:5,512"
+            ],
+            "sort": 5
         },
         {
             "name": "Player Password",
@@ -91,9 +107,12 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "nullable|string|max:512",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "nullable",
+                "string",
+                "max:512"
+            ],
+            "sort": 6
         },
         {
             "name": "Master Server",
@@ -102,9 +121,12 @@
             "default_value": "ms.cubers.net",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:512",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "max:512"
+            ],
+            "sort": 7
         },
         {
             "name": "Version",
@@ -113,9 +135,12 @@
             "default_value": "latest",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:20",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "max:20"
+            ],
+            "sort": 8
         }
     ]
 }
