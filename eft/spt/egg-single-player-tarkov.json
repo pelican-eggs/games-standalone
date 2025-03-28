@@ -4,14 +4,14 @@
         "version": "PLCN_v1",
         "update_url": null
     },
-    "exported_at": "2025-03-26T12:27:44+00:00",
+    "exported_at": "2025-03-28T09:21:25+00:00",
     "name": "Single Player Tarkov",
     "author": "cocomarti0208@gmail.com",
     "uuid": "badde6e2-3a34-4cc6-aae1-03e61170a310",
-    "description": "Single Player Tarkov (SPT) transforms your Escape From Tarkov (EFT) client into a fully offline experience\u2014no more server downtime, cheaters, or forced PvP. Enjoy realistic raids, quest progression, and steady character development on your own terms.",
+    "description": "Single Player Tarkov (SPT) transforms your Escape From Tarkov (EFT) client into a fully offline experience.\nNo more server downtime, cheaters, or forced PvP. Enjoy realistic raids, quest progression, and steady character development on your own terms.",
     "features": [],
     "docker_images": {
-        "ubuntu": "ghcr.io\/parkervcp\/yolks:ubuntu"
+        "ghcr.io\/parkervcp\/yolks:ubuntu": "ghcr.io\/parkervcp\/yolks:ubuntu"
     },
     "file_denylist": [],
     "startup": ".\/SPT.Server.exe",
@@ -23,9 +23,9 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\n# SPT Server Installation Script\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\napk update && apk add 7zip jq\r\n\r\nif [ -z \"${GITHUB_USER}\" ] && [ -z \"${GITHUB_OAUTH_TOKEN}\" ] ; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    echo -e \"user and oauth token set\"\r\n    alias curl='curl -u ${GITHUB_USER}:${GITHUB_OAUTH_TOKEN} '\r\nfi\r\n\r\n## Get SPT server release info and download links\r\nSPT_LATEST_JSON=$(curl -s \"https:\/\/api.github.com\/repos\/cocorico8\/build-linux\/releases\/latest\")\r\nSPT_RELEASES=$(curl -s \"https:\/\/api.github.com\/repos\/cocorico8\/build-linux\/releases\")\r\n\r\n\r\nif [ -z \"${SPT_VERSION}\" ] || [ \"${SPT_VERSION}\" == \"latest\" ]; then\r\n    SPT_DOWNLOAD_URL=$(echo ${SPT_LATEST_JSON} | jq -r '.assets[].browser_download_url')\r\nelse\r\n    VERSION_CHECK=$(echo ${SPT_RELEASES} | jq -r --arg VERSION \"${SPT_VERSION}\" '.[] | select(.tag_name==$VERSION) | .tag_name')\r\n    if [ \"${SPT_VERSION}\" == \"${VERSION_CHECK}\" ]; then\r\n        SPT_DOWNLOAD_URL=$(echo ${SPT_RELEASES} | jq -r --arg VERSION \"${SPT_VERSION}\" '.[] | select(.tag_name==$VERSION) | .assets[].browser_download_url')\r\n    else\r\n        echo -e \"Release not found, defaulting to latest release\"\r\n        SPT_DOWNLOAD_URL=$(echo ${SPT_LATEST_JSON} | jq -r '.assets[].browser_download_url')\r\n    fi\r\nfi\r\n\r\nwget ${SPT_DOWNLOAD_URL} -O ${SPT_NAME}\r\n7z x -y ${SPT_NAME}\r\nrm ${SPT_NAME}\r\nchmod +x SPT.Server.exe",
+            "script": "#!\/bin\/ash\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\napk update && apk add -q 7zip\r\n\r\nif [ -z \"${GITHUB_USER}\" ] && [ -z \"${GITHUB_OAUTH_TOKEN}\" ] ; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    echo -e \"user and oauth token set\"\r\n    alias curl='curl -u ${GITHUB_USER}:${GITHUB_OAUTH_TOKEN} '\r\nfi\r\n\r\nLATEST_JSON=$(curl -s \"https:\/\/api.github.com\/repos\/cocorico8\/build-linux\/releases\/latest\")\r\nRELEASES=$(curl -s \"https:\/\/api.github.com\/repos\/cocorico8\/build-linux\/releases\")\r\n\r\n\r\nif [ -z \"${SPT_VERSION}\" ] || [ \"${SPT_VERSION}\" == \"latest\" ]; then\r\n    DOWNLOAD_URL=$(echo ${LATEST_JSON} | jq -r '.assets[].browser_download_url')\r\nelse\r\n    VERSION_CHECK=$(echo ${RELEASES} | jq -r --arg VERSION \"${SPT_VERSION}\" '.[] | select(.tag_name==$VERSION) | .tag_name')\r\n    if [ \"${SPT_VERSION}\" == \"${VERSION_CHECK}\" ]; then\r\n        DOWNLOAD_URL=$(echo ${RELEASES} | jq -r --arg VERSION \"${SPT_VERSION}\" '.[] | select(.tag_name==$VERSION) | .assets[].browser_download_url')\r\n    else\r\n        echo -e \"Release not found, defaulting to latest release\"\r\n        DOWNLOAD_URL=$(echo ${LATEST_JSON} | jq -r '.assets[].browser_download_url')\r\n    fi\r\nfi\r\n\r\nwget ${DOWNLOAD_URL} -O ${SPT_NAME}\r\n7z x -y ${SPT_NAME}\r\nrm ${SPT_NAME}\r\nchmod +x SPT.Server.exe",
             "container": "ghcr.io\/parkervcp\/installers:alpine",
-            "entrypoint": "1"
+            "entrypoint": "ash"
         }
     },
     "variables": [
@@ -43,7 +43,7 @@
             "sort": 1
         },
         {
-            "name": "SPT Mod asset name",
+            "name": "SPT asset name",
             "description": "SPT mod release file's asset name.",
             "env_variable": "SPT_NAME",
             "default_value": "SPT-server.7z",
