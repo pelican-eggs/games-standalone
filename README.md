@@ -35,7 +35,7 @@
 * [DDRaceNetwork](ddracenetwork)
 * [Doom](doom)
   * [Zandronum](doom/zandronum)
-* [Escape from Tarkov](eft)
+* [Escape From Tarkov](eft)
   * [Single Player Tarkov](/eft/spt)
   * [Stay In Tarkov](eft/sit)
 * [Factorio](factorio)
