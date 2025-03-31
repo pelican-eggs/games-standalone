@@ -4,17 +4,18 @@
         "version": "PLCN_v1",
         "update_url": null
     },
-    "exported_at": "2025-03-28T09:21:25+00:00",
+    "exported_at": "2025-03-31T12:54:08+00:00",
     "name": "Single Player Tarkov",
     "author": "cocomarti0208@gmail.com",
     "uuid": "badde6e2-3a34-4cc6-aae1-03e61170a310",
     "description": "Single Player Tarkov (SPT) transforms your Escape From Tarkov (EFT) client into a fully offline experience.\nNo more server downtime, cheaters, or forced PvP. Enjoy realistic raids, quest progression, and steady character development on your own terms.",
     "features": [],
     "docker_images": {
-        "ghcr.io\/parkervcp\/yolks:ubuntu": "ghcr.io\/parkervcp\/yolks:ubuntu"
+        "ubuntu": "ghcr.io\/parkervcp\/yolks:ubuntu",
+        "wine": "ghcr.io\/parkervcp\/yolks:wine_latest"
     },
     "file_denylist": [],
-    "startup": ".\/SPT.Server.exe",
+    "startup": "{{IS_WINE}} .\/SPT.Server.exe",
     "config": {
         "files": "{\n    \"SPT_Data\/Server\/configs\/http.json\": {\n        \"parser\": \"json\",\n        \"find\": {\n            \"ip\": \"0.0.0.0\",\n            \"backendIp\": \"0.0.0.0\",\n            \"backendPort\": \"{{server.allocations.default.port}}\",\n            \"port\": \"{{server.allocations.default.port}}\"\n        }\n    }\n}",
         "startup": "{\n    \"done\": \"Server is running\"\n}",
@@ -23,7 +24,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\napk update && apk add -q 7zip\r\n\r\nif [ -z \"${GITHUB_USER}\" ] && [ -z \"${GITHUB_OAUTH_TOKEN}\" ] ; then\r\n    echo -e \"using anon api call\"\r\nelse\r\n    echo -e \"user and oauth token set\"\r\n    alias curl='curl -u ${GITHUB_USER}:${GITHUB_OAUTH_TOKEN} '\r\nfi\r\n\r\nLATEST_JSON=$(curl -s \"https:\/\/api.github.com\/repos\/cocorico8\/build-linux\/releases\/latest\")\r\nRELEASES=$(curl -s \"https:\/\/api.github.com\/repos\/cocorico8\/build-linux\/releases\")\r\n\r\n\r\nif [ -z \"${SPT_VERSION}\" ] || [ \"${SPT_VERSION}\" == \"latest\" ]; then\r\n    DOWNLOAD_URL=$(echo ${LATEST_JSON} | jq -r '.assets[].browser_download_url')\r\nelse\r\n    VERSION_CHECK=$(echo ${RELEASES} | jq -r --arg VERSION \"${SPT_VERSION}\" '.[] | select(.tag_name==$VERSION) | .tag_name')\r\n    if [ \"${SPT_VERSION}\" == \"${VERSION_CHECK}\" ]; then\r\n        DOWNLOAD_URL=$(echo ${RELEASES} | jq -r --arg VERSION \"${SPT_VERSION}\" '.[] | select(.tag_name==$VERSION) | .assets[].browser_download_url')\r\n    else\r\n        echo -e \"Release not found, defaulting to latest release\"\r\n        DOWNLOAD_URL=$(echo ${LATEST_JSON} | jq -r '.assets[].browser_download_url')\r\n    fi\r\nfi\r\n\r\nwget ${DOWNLOAD_URL} -O ${SPT_NAME}\r\n7z x -y ${SPT_NAME}\r\nrm ${SPT_NAME}\r\nchmod +x SPT.Server.exe",
+            "script": "#!\/bin\/ash\r\nset -euo pipefail  # Exit on error, undefined variables, and pipeline failures\r\n\r\n# Initialize directorie\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server || exit 1\r\n\r\napk update && apk add -q 7zip jq\r\n\r\n# Error handling function\r\nhandle_error() {\r\n    echo \"ERROR: Installation failed on line $1\"\r\n    exit 1\r\n}\r\n\r\ntrap 'handle_error $LINENO' ERR\r\n\r\n# GitHub API configuration\r\nREPO_API=\"https:\/\/api.github.com\/repos\/cocorico8\/build-linux\"\r\nAUTH=\"\"\r\nif [ -n \"${GITHUB_USER:-}\" ] && [ -n \"${GITHUB_OAUTH_TOKEN:-}\" ]; then\r\n    echo \"Using authenticated GitHub API calls\"\r\n    AUTH=\"-u ${GITHUB_USER}:${GITHUB_OAUTH_TOKEN}\"\r\nfi\r\n\r\n# Fetch GitHub data function\r\nfetch_github_data() {\r\n    local endpoint=\"$1\"\r\n    curl -s $AUTH \"${REPO_API}\/${endpoint}\"\r\n}\r\n\r\n# Get download URL function\r\nget_download_url() {\r\n    local version=\"$1\"\r\n    local asset_type=\"$2\"\r\n    \r\n    if [ \"$version\" = \"latest\" ]; then\r\n        fetch_github_data \"releases\/latest\" | \\\r\n        jq -r --arg type \"$asset_type\" \\\r\n        '.assets[] | select(.name | test($type; \"i\")) | .browser_download_url'\r\n    else\r\n        fetch_github_data \"releases\" | \\\r\n        jq -r --arg version \"$version\" --arg type \"$asset_type\" \\\r\n        '.[] | select(.tag_name == $version) | .assets[] | select(.name | test($type; \"i\")) | .browser_download_url'\r\n    fi\r\n}\r\n\r\n# Determine asset type\r\nASSET_TYPE=\"linux\"\r\nif [ -n \"${IS_WINE:-}\" ]; then\r\n    ASSET_TYPE=\"windows\"\r\nfi\r\n\r\n# Determine version\r\nVERSION=\"${SPT_VERSION:-latest}\"\r\nif [ \"$VERSION\" != \"latest\" ]; then\r\n    # Validate version exists\r\n    if ! fetch_github_data \"releases\" | jq -e --arg version \"$VERSION\" '.[] | select(.tag_name == $version)' > \/dev\/null; then\r\n        echo \"Warning: Version $VERSION not found, falling back to latest\"\r\n        VERSION=\"latest\"\r\n    fi\r\nfi\r\n\r\n# Get download URL\r\nDOWNLOAD_URL=$(get_download_url \"$VERSION\" \"$ASSET_TYPE\")\r\n\r\n# Validate URL before proceeding\r\nif [ -z \"$DOWNLOAD_URL\" ]; then\r\n    echo \"ERROR: No download URL found for $ASSET_TYPE asset\"\r\n    exit 1\r\nfi\r\n\r\n# Download and extract\r\necho \"Downloading ${SPT_NAME:-asset} from $DOWNLOAD_URL\"\r\nwget --show-progress -q -O \"${SPT_NAME:-package.7z}\" \"$DOWNLOAD_URL\"\r\n\r\necho \"Extracting files...\"\r\n7z x -y \"${SPT_NAME:-package.7z}\"\r\nrm -f \"${SPT_NAME:-package.7z}\"\r\n\r\n# Set permissions\r\nif [ -f \"SPT.Server.exe\" ]; then\r\n    chmod +x \"SPT.Server.exe\"\r\nelse\r\n    echo \"Warning: SPT.Server.exe not found after extraction\"\r\nfi\r\n\r\necho \"Installation completed successfully\"",
             "container": "ghcr.io\/parkervcp\/installers:alpine",
             "entrypoint": "ash"
         }
@@ -74,6 +75,18 @@
             "user_editable": true,
             "rules": [],
             "sort": 4
+        },
+        {
+            "name": "Wine",
+            "description": "If the server should download and run the windows version in case the user need mods that run only on windows like platform. To use this variable you need to change the Docker Image to wine.",
+            "env_variable": "IS_WINE",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "in:,wine"
+            ],
+            "sort": 5
         }
     ]
 }
