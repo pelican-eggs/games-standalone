@@ -4,6 +4,10 @@
 
 SPT is a modding framework for Escape From Tarkov. 
 
+## Known issues
+
+When starting the server without wine, some mods can throw an error about them not finding a module, you can resolve this by going into `/user/mods/modfolder/src/mod.js` and looking through the file, you need to find the import string, it could look something like that `const ConfigTypes_1 = require("C:/snapshot/project/obj/models/enums/ConfigTypes")`, in this case you would need to get rid of `C:` like that `const ConfigTypes_1 = require("/snapshot/project/obj/models/enums/ConfigTypes")`.
+
 ## Server Ports
 
 You should let the ip in the config file "SPT_Data/Server/configs/http.json" be 0.0.0.0 else you will have an error with ports.
