@@ -4,7 +4,7 @@
         "version": "PLCN_v1",
         "update_url": null
     },
-    "exported_at": "2025-03-31T12:54:08+00:00",
+    "exported_at": "2025-04-04T03:09:27+00:00",
     "name": "Single Player Tarkov",
     "author": "cocomarti0208@gmail.com",
     "uuid": "badde6e2-3a34-4cc6-aae1-03e61170a310",
@@ -24,7 +24,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\nset -euo pipefail  # Exit on error, undefined variables, and pipeline failures\r\n\r\n# Initialize directorie\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server || exit 1\r\n\r\napk update && apk add -q 7zip jq\r\n\r\n# Error handling function\r\nhandle_error() {\r\n    echo \"ERROR: Installation failed on line $1\"\r\n    exit 1\r\n}\r\n\r\ntrap 'handle_error $LINENO' ERR\r\n\r\n# GitHub API configuration\r\nREPO_API=\"https:\/\/api.github.com\/repos\/cocorico8\/build-linux\"\r\nAUTH=\"\"\r\nif [ -n \"${GITHUB_USER:-}\" ] && [ -n \"${GITHUB_OAUTH_TOKEN:-}\" ]; then\r\n    echo \"Using authenticated GitHub API calls\"\r\n    AUTH=\"-u ${GITHUB_USER}:${GITHUB_OAUTH_TOKEN}\"\r\nfi\r\n\r\n# Fetch GitHub data function\r\nfetch_github_data() {\r\n    local endpoint=\"$1\"\r\n    curl -s $AUTH \"${REPO_API}\/${endpoint}\"\r\n}\r\n\r\n# Get download URL function\r\nget_download_url() {\r\n    local version=\"$1\"\r\n    local asset_type=\"$2\"\r\n    \r\n    if [ \"$version\" = \"latest\" ]; then\r\n        fetch_github_data \"releases\/latest\" | \\\r\n        jq -r --arg type \"$asset_type\" \\\r\n        '.assets[] | select(.name | test($type; \"i\")) | .browser_download_url'\r\n    else\r\n        fetch_github_data \"releases\" | \\\r\n        jq -r --arg version \"$version\" --arg type \"$asset_type\" \\\r\n        '.[] | select(.tag_name == $version) | .assets[] | select(.name | test($type; \"i\")) | .browser_download_url'\r\n    fi\r\n}\r\n\r\n# Determine asset type\r\nASSET_TYPE=\"linux\"\r\nif [ -n \"${IS_WINE:-}\" ]; then\r\n    ASSET_TYPE=\"windows\"\r\nfi\r\n\r\n# Determine version\r\nVERSION=\"${SPT_VERSION:-latest}\"\r\nif [ \"$VERSION\" != \"latest\" ]; then\r\n    # Validate version exists\r\n    if ! fetch_github_data \"releases\" | jq -e --arg version \"$VERSION\" '.[] | select(.tag_name == $version)' > \/dev\/null; then\r\n        echo \"Warning: Version $VERSION not found, falling back to latest\"\r\n        VERSION=\"latest\"\r\n    fi\r\nfi\r\n\r\n# Get download URL\r\nDOWNLOAD_URL=$(get_download_url \"$VERSION\" \"$ASSET_TYPE\")\r\n\r\n# Validate URL before proceeding\r\nif [ -z \"$DOWNLOAD_URL\" ]; then\r\n    echo \"ERROR: No download URL found for $ASSET_TYPE asset\"\r\n    exit 1\r\nfi\r\n\r\n# Download and extract\r\necho \"Downloading ${SPT_NAME:-asset} from $DOWNLOAD_URL\"\r\nwget --show-progress -q -O \"${SPT_NAME:-package.7z}\" \"$DOWNLOAD_URL\"\r\n\r\necho \"Extracting files...\"\r\n7z x -y \"${SPT_NAME:-package.7z}\"\r\nrm -f \"${SPT_NAME:-package.7z}\"\r\n\r\n# Set permissions\r\nif [ -f \"SPT.Server.exe\" ]; then\r\n    chmod +x \"SPT.Server.exe\"\r\nelse\r\n    echo \"Warning: SPT.Server.exe not found after extraction\"\r\nfi\r\n\r\necho \"Installation completed successfully\"",
+            "script": "#!\/bin\/ash\r\nset -euo pipefail  # Exit on error, undefined variables, and pipeline failures\r\n\r\n# Initialize directorie\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server || exit 1\r\n\r\n# Error handling function\r\nhandle_error() {\r\n    echo \"ERROR: Installation failed on line $1\"\r\n    exit 1\r\n}\r\n\r\ntrap 'handle_error $LINENO' ERR\r\n\r\n# GitHub API configuration\r\nREPO_API=\"https:\/\/api.github.com\/repos\/AirryCo\/spt-server-ci\"\r\nAUTH=\"\"\r\nif [ -n \"${GITHUB_USER:-}\" ] && [ -n \"${GITHUB_OAUTH_TOKEN:-}\" ]; then\r\n    echo \"Using authenticated GitHub API calls\"\r\n    AUTH=\"-u ${GITHUB_USER}:${GITHUB_OAUTH_TOKEN}\"\r\nfi\r\n\r\n# Fetch GitHub data function\r\nfetch_github_data() {\r\n    local endpoint=\"$1\"\r\n    curl -s $AUTH \"${REPO_API}\/${endpoint}\"\r\n}\r\n\r\n# Get download URL function\r\nget_download_url() {\r\n    local version=\"$1\"\r\n    local asset_type=\"$2\"\r\n    local fika=\"$3\"\r\n    \r\n    if [ \"$version\" = \"latest\" ]; then\r\n        fetch_github_data \"releases\/latest\" | \\\r\n        jq -r --arg type \"$asset_type\" --arg fika \"$fika\" \\\r\n        '.assets[] | select(.name | test($type; \"i\")) | \r\n        select(if $fika == \"true\" then \r\n            (.name | test(\"-fika\"; \"i\")) \r\n        else \r\n            (.name | test(\"-fika\"; \"i\") | not) \r\n        end) | .browser_download_url'\r\n    else\r\n        fetch_github_data \"releases\" | \\\r\n        jq -r --arg version \"$version\" --arg type \"$asset_type\" --arg fika \"$fika\" \\\r\n        '.[] | select(.tag_name == $version) | .assets[] | \r\n        select(.name | test($type; \"i\")) | \r\n        select(if $fika == \"true\" then \r\n            (.name | test(\"-fika\"; \"i\")) \r\n        else \r\n            (.name | test(\"-fika\"; \"i\") | not) \r\n        end) | .browser_download_url'\r\n    fi\r\n}\r\n\r\n# Determine asset type (linux\/windows)\r\nASSET_TYPE=\"linux\"\r\nif [ -n \"${IS_WINE:-}\" ]; then\r\n    ASSET_TYPE=\"win\"\r\nfi\r\n\r\n# Determine version\r\nVERSION=\"${SPT_VERSION:-latest}\"\r\nif [ \"$VERSION\" != \"latest\" ]; then\r\n    # Validate version exists\r\n    if ! fetch_github_data \"releases\" | jq -e --arg version \"$VERSION\" '.[] | select(.tag_name == $version)' > \/dev\/null; then\r\n        echo \"Warning: Version $VERSION not found, falling back to latest\"\r\n        VERSION=\"latest\"\r\n    fi\r\nfi\r\n\r\n# Get download URL\r\nDOWNLOAD_URL=$(get_download_url \"$VERSION\" \"$ASSET_TYPE\" \"$FIKA\")\r\n\r\n# Validate URL before proceeding\r\nif [ -z \"$DOWNLOAD_URL\" ]; then\r\n    echo \"ERROR: No download URL found for $ASSET_TYPE asset\"\r\n    exit 1\r\nfi\r\n\r\n# Download and extract\r\necho \"Downloading ${SPT_NAME:-asset} from $DOWNLOAD_URL\"\r\nwget --show-progress -q -O \"${SPT_NAME:-package.zip}\" \"$DOWNLOAD_URL\"\r\n\r\necho \"Extracting files...\"\r\nunzip -o \"${SPT_NAME:-package.zip}\"\r\nrm -f \"${SPT_NAME:-package.zip}\"\r\n\r\nif [ \"$ASSET_TYPE\" = \"linux\" ]; then \r\n    mv SPT.Server SPT.Server.exe\r\nfi\r\n\r\n# Set permissions\r\nif [ -f \"SPT.Server.exe\" ]; then\r\n    chmod +x \"SPT.Server.exe\"\r\nelse\r\n    echo \"Warning: SPT.Server.exe not found after extraction\"\r\nfi\r\n\r\necho \"Installation completed successfully\"",
             "container": "ghcr.io\/parkervcp\/installers:alpine",
             "entrypoint": "ash"
         }
@@ -32,7 +32,7 @@
     "variables": [
         {
             "name": "SPT version",
-            "description": "Version of the SPT mod for the server. Use \"latest\" for latest release, or the github release\/tag\/hash.",
+            "description": "Version of the SPT mod for the server. Use \"latest\" for latest release, or the github release\/tag\/hash. Require a server reinstall to modify the version.",
             "env_variable": "SPT_VERSION",
             "default_value": "latest",
             "user_viewable": true,
@@ -78,7 +78,7 @@
         },
         {
             "name": "Wine",
-            "description": "If the server should download and run the windows version in case the user need mods that run only on windows like platform. To use this variable you need to change the Docker Image to wine.",
+            "description": "If the server should download and run the windows version in case the user need mods that run only on windows like platform. To use this variable you need to change the Docker Image to wine and reinstall the server.",
             "env_variable": "IS_WINE",
             "default_value": "",
             "user_viewable": true,
@@ -87,6 +87,19 @@
                 "in:,wine"
             ],
             "sort": 5
+        },
+        {
+            "name": "Fika",
+            "description": "Decide whether or not to install SPT with FIKA preinstalled. Require a server reinstall to use.",
+            "env_variable": "FIKA",
+            "default_value": "false",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "in:true,false"
+            ],
+            "sort": 6
         }
     ]
 }
