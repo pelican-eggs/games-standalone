@@ -1,13 +1,12 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-06-01T00:17:07+00:00",
+    "exported_at": "2025-05-02T12:57:49-04:00",
     "name": "Rimworld Together",
     "author": "josdekurk@gmail.com",
-    "uuid": "4b632935-06cf-494c-9d97-23dc499677ce",
     "description": "A community driven multiplayer mod, for Rimworld.",
     "features": null,
     "docker_images": {
@@ -16,14 +15,14 @@
     "file_denylist": [],
     "startup": ".\/GameServer",
     "config": {
-        "files": "{\r\n    \"Core\/ServerConfig.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"IP\": \"0.0.0.0\",\r\n            \"Port\": \"{{server.build.default.port}}\",\r\n            \"MaxPlayers\": \"{{server.build.env.MAX_PLAYERS}}\",\r\n            \"verboseLogs\": \"{{server.build.env.VERBOSE}}\"\r\n        }\r\n    }\r\n}",
+        "files": "{\r\n    \"Configs\/ServerConfig.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"IP\": \"0.0.0.0\",\r\n            \"Port\": \"{{server.build.default.port}}\",\r\n            \"MaxPlayers\": \"{{server.build.env.MAX_PLAYERS}}\",\r\n            \"verboseLogs\": \"{{server.build.env.VERBOSE}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"Server launched\"\r\n}",
         "logs": "{}",
         "stop": "quit"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n\r\n## get release info and download links\r\nLATEST_JSON=$(curl -L --silent \"https:\/\/api.github.com\/repos\/RimworldTogether\/Rimworld-Together\/releases\/latest\")\r\nRELEASES=$(curl -L --silent \"https:\/\/api.github.com\/repos\/RimworldTogether\/Rimworld-Together\/releases\")\r\nMATCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] && echo \"Linux-x64 \" || echo \"Linux-ARM-x64\")\r\n\r\nif [ -z \"${VERSION}\" ] || [ \"${VERSION}\" == \"latest\" ]; then\r\n    DOWNLOAD_URL=$(echo ${LATEST_JSON} | jq .assets | jq -r .[].browser_download_url | grep -i ${MATCH})\r\nelse\r\n    VERSION_CHECK=$(echo ${RELEASES} | jq -r --arg VERSION \"${VERSION}\" '.[] | select(.tag_name==$VERSION) | .tag_name')\r\n    if [ \"${VERSION}\" == \"${VERSION_CHECK}\" ]; then\r\n        DOWNLOAD_URL=$(echo ${RELEASES} | jq -r --arg VERSION \"${VERSION}\" '.[] | select(.tag_name==$VERSION) | .assets[].browser_download_url' | grep -i ${MATCH})\r\n    else\r\n        echo -e \"defaulting to latest release\"\r\n        DOWNLOAD_URL=$(echo ${LATEST_JSON} | jq .assets | jq -r .[].browser_download_url)\r\n    fi\r\nfi\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\ncurl -sSL -o server.zip ${DOWNLOAD_URL}\r\nunzip -o server.zip\r\nrm server.zip\r\nchmod +x GameServer\r\n\r\n\r\nif [ -f \"\/mnt\/server\/Core\/ServerConfig.json\" ]; then\r\n    echo \"Config file exits\"\r\nelse \r\n    mkdir -p \/mnt\/server\/Core\r\n    echo \"{\\\"IP\\\":\\\"0.0.0.0\\\",\\\"Port\\\":$SERVER_PORT,\\\"MaxPlayers\\\":$MAX_PLAYERS,\\\"verboseLogs\\\":$VERBOSE}\" | jq . > \/mnt\/server\/Core\/ServerConfig.json\r\nfi\r\n\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
+            "script": "#!\/usr\/bin\/env bash\r\nset -euo pipefail\r\n\r\n# 1. Definir vari\u00e1veis de reposit\u00f3rio\r\nOWNER=\"RimWorldTogether\"\r\nREPO=\"Rimworld-Together\"\r\n\r\n# 2. Detectar arquitetura\r\nARCH=$(uname -m)\r\ncase \"$ARCH\" in\r\n  x86_64)   MATCH=\"linux-x64\" ;;\r\n  aarch64)  MATCH=\"linux-arm64\" ;;\r\n  arm)      MATCH=\"linux-arm\" ;;\r\n  *)        echo \"Arquitetura '$ARCH' n\u00e3o suportada\"; exit 1 ;;\r\nesac\r\n\r\n# 3. Coletar dados da API\r\nif [[ -z \"${VERSION:-}\" ]] || [[ \"${VERSION}\" == \"latest\" ]]; then\r\n    # \u00daltimo release\r\n    JSON=$(curl -sSL \"https:\/\/api.github.com\/repos\/$OWNER\/$REPO\/releases\/latest\")\r\nelse\r\n    # Todos os releases (para verificar se a tag existe)\r\n    ALL=$(curl -sSL \"https:\/\/api.github.com\/repos\/$OWNER\/$REPO\/releases\")\r\n    # Verifica exist\u00eancia da tag\r\n    TAG_EXISTS=$(echo \"$ALL\" | jq -r --arg V \"$VERSION\" '.[] | select(.tag_name==$V) | .tag_name')\r\n    if [[ -z \"$TAG_EXISTS\" ]]; then\r\n        echo \"Tag '$VERSION' n\u00e3o encontrada; usando latest\"\r\n        JSON=$(curl -sSL \"https:\/\/api.github.com\/repos\/$OWNER\/$REPO\/releases\/latest\")\r\n    else\r\n        JSON=$(echo \"$ALL\" | jq -r --arg V \"$VERSION\" '.[] | select(.tag_name==$V)')\r\n    fi\r\nfi\r\n\r\n# 4. Extrair URL de download do asset correto\r\nDOWNLOAD_URL=$(echo \"$JSON\" \\\r\n  | jq -r '.assets[].browser_download_url' \\\r\n  | grep -i \"$MATCH\")\r\n\r\nif [[ -z \"$DOWNLOAD_URL\" ]]; then\r\n    echo \"Nenhum asset encontrado para arquitetura '$MATCH'\"\r\n    exit 1\r\nfi\r\n\r\n# 5. Preparar diret\u00f3rio e baixar\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\necho \"Baixando: $DOWNLOAD_URL\"\r\ncurl -sSL -o server.zip \"$DOWNLOAD_URL\"\r\nunzip -o server.zip\r\nrm server.zip\r\n\r\n# 6. Ajustar permiss\u00f5es\r\nchmod +x GameServer\r\n\r\n# 7. Gerar configura\u00e7\u00e3o se necess\u00e1rio\r\nCONFIG=\"\/mnt\/server\/Configs\/ServerConfig.json\"\r\nif [[ -f \"$CONFIG\" ]]; then\r\n    echo \"Config file exists\"\r\nelse\r\n    mkdir -p \/mnt\/server\/Configs\r\n\r\n    # Usa jq -n para criar o JSON a partir de vari\u00e1veis de ambiente\r\n    jq -n \\\r\n      --argjson port \"${SERVER_PORT:-0}\" \\\r\n      --argjson maxPlayers \"${MAX_PLAYERS:-0}\" \\\r\n      --argjson verboseLogs \"${VERBOSE:-false}\" \\\r\n      '{\r\n        Port: $port,\r\n        MaxPlayers: $maxPlayers,\r\n        verboseLogs: $verboseLogs\r\n      }' > \"$CONFIG\"\r\n\r\n    echo \"Config file criado em $CONFIG\"\r\nfi\r\n\r\n\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
             "container": "ghcr.io\/parkervcp\/installers:debian",
             "entrypoint": "bash"
         }
@@ -37,7 +36,6 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:20",
-            "sort": null,
             "field_type": "text"
         },
         {
@@ -48,7 +46,6 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|numeric|between:1,150",
-            "sort": null,
             "field_type": "text"
         },
         {
@@ -59,7 +56,6 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|in:false,true",
-            "sort": null,
             "field_type": "text"
         }
     ]
