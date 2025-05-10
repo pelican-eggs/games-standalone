@@ -1,15 +1,16 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
+        "version": "PLCN_v1",
         "update_url": null
     },
-    "exported_at": "2024-07-11T19:55:05+02:00",
+    "exported_at": "2025-05-10T18:07:42+00:00",
     "name": "Multi Theft Auto",
     "author": "info@six-gaming.com",
     "uuid": "8c6e8e0c-dabb-4b90-afab-075619b93b9a",
     "description": "What more could you want? Multi Theft Auto provides the best online Grand Theft Auto experience there is. Read on to find out more.",
-    "features": null,
+    "tags": [],
+    "features": [],
     "docker_images": {
         "ghcr.io\/parkervcp\/games:mta": "ghcr.io\/parkervcp\/games:mta"
     },
@@ -30,15 +31,27 @@
     },
     "variables": [
         {
+            "sort": 2,
+            "name": "LD_PRELOAD",
+            "description": "",
+            "env_variable": "LD_PRELOAD",
+            "default_value": "\/usr\/lib\/x86_64-linux-gnu\/libzstd.so",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": []
+        },
+        {
+            "sort": 1,
             "name": "SERVER_WEBPORT",
             "description": "The http port for web resource.\r\nThis Port needs to be the {{SERVER_PORT}}+2.",
             "env_variable": "SERVER_WEBPORT",
             "default_value": "22005",
             "user_viewable": true,
             "user_editable": false,
-            "rules": "required|numeric",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "numeric"
+            ]
         }
     ]
 }
