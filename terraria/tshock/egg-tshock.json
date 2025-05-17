@@ -4,7 +4,7 @@
         "version": "PLCN_v1",
         "update_url": "https:\/\/raw.githubusercontent.com\/pelican-eggs\/games-standalone\/refs\/heads\/main\/terraria\/tshock\/egg-tshock.json"
     },
-    "exported_at": "2025-05-17T14:58:23+00:00",
+    "exported_at": "2025-05-17T21:42:14+00:00",
     "name": "TShock",
     "author": "parker@parkervcp.com",
     "uuid": "abebe204-ef9f-4498-a009-e5a50ed7fffb",
@@ -19,7 +19,7 @@
         "Mono (For TShock version 4)": "ghcr.io\/parkervcp\/yolks:mono_latest"
     },
     "file_denylist": [],
-    "startup": "SERVER_ARGS=\"-ip 0.0.0.0 -port {{SERVER_PORT}} -maxplayers {{MAX_PLAYERS}} -world {{WORLD_NAME}}.wld -autocreate {{WORLD_SIZE}}\"; if [ -f TShock.Server ]; then .\/TShock.Server \"$SERVER_ARGS\"; else mono TerrariaServer.exe \"$SERVER_ARGS\"; fi\n",
+    "startup": "SERVER_ARGS=\"-ip 0.0.0.0 -port {{SERVER_PORT}} -maxplayers {{MAX_PLAYERS}} -world {{WORLD_NAME}}.wld -autocreate {{WORLD_SIZE}}\"; if [ -f TShock.Server ]; then .\/TShock.Server $SERVER_ARGS; else mono TerrariaServer.exe $SERVER_ARGS; fi",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"Type 'help' for a list of commands\"\r\n}",
