@@ -2,20 +2,24 @@
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
         "version": "PLCN_v1",
-        "update_url": null
+        "update_url": "https:\/\/raw.githubusercontent.com\/pelican-eggs\/games-standalone\/refs\/heads\/main\/terraria\/tshock\/egg-tshock.json"
     },
-    "exported_at": "2025-05-16T21:32:03+00:00",
-    "name": "tshock",
+    "exported_at": "2025-05-17T14:58:23+00:00",
+    "name": "TShock",
     "author": "parker@parkervcp.com",
     "uuid": "abebe204-ef9f-4498-a009-e5a50ed7fffb",
     "description": "The t-shock modded terraria server.\r\n\r\nhttps:\/\/tshock.co\/",
-    "tags": [],
+    "tags": [
+        "Terraria"
+    ],
     "features": [],
     "docker_images": {
-        "Dotnet 6": "ghcr.io\/parkervcp\/yolks:dotnet_6"
+        "Dotnet 6 (For TShock version 5) ": "ghcr.io\/parkervcp\/yolks:dotnet_6",
+        "Dotnet 9 (For TShock version 6 and above)": "ghcr.io\/parkervcp\/yolks:dotnet_9",
+        "Mono (For TShock version 4)": "ghcr.io\/parkervcp\/yolks:mono_latest"
     },
     "file_denylist": [],
-    "startup": ".\/TShock.Server -ip 0.0.0.0 -port {{SERVER_PORT}} -maxplayers {{MAX_PLAYERS}} -world {{WORLD_NAME}}.wld -autocreate {{WORLD_SIZE}}",
+    "startup": "SERVER_ARGS=\"-ip 0.0.0.0 -port {{SERVER_PORT}} -maxplayers {{MAX_PLAYERS}} -world {{WORLD_NAME}}.wld -autocreate {{WORLD_SIZE}}\"; if [ -f TShock.Server ]; then .\/TShock.Server \"$SERVER_ARGS\"; else mono TerrariaServer.exe \"$SERVER_ARGS\"; fi\n",
     "config": {
         "files": "{}",
         "startup": "{\r\n    \"done\": \"Type 'help' for a list of commands\"\r\n}",
@@ -24,7 +28,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n# Vanilla tModloader Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n## install packages to get version and download links\r\napt update\r\napt install -y curl wget jq file unzip\r\n\r\n## get release info and download links\r\nLATEST_JSON=$(curl --silent \"https:\/\/api.github.com\/repos\/Pryaxis\/TShock\/releases\/latest\")\r\nRELEASES=$(curl --silent \"https:\/\/api.github.com\/repos\/Pryaxis\/TShock\/releases\")\r\n\r\nif [[ \"$TSHOCK_VERSION\" == \"v5.0.0\" ]] || [[ \"$TSHOCK_VERSION\" == \"v5.1.0\" ]] || [[ \"$TSHOCK_VERSION\" == \"v5.1.1\" ]] || [[ \"$TSHOCK_VERSION\" == \"v5.1.2\" ]] || [[ \"$TSHOCK_VERSION\" == \"v5.1.3\" ]] || [[ \"$TSHOCK_VERSION\" == \"v5.2.0\" ]]; then\r\n  MATCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] && echo \"linux-x64\" || echo \"linux-arm64\")\r\nelse\r\n  MATCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] && echo \"linux-amd64\" || echo \"linux-arm64\")\r\nfi\r\n\r\necho ${MATCH}\r\n\r\nif [ -z \"$TSHOCK_VERSION\" ] || [ \"$TSHOCK_VERSION\" == \"latest\" ]; then\r\n    DOWNLOAD_LINK=$(echo $LATEST_JSON | jq .assets | jq -r .[].browser_download_url | grep -i ${MATCH} | head -1 )\r\nelse\r\n    VERSION_CHECK=$(echo $RELEASES | jq -r --arg VERSION \"$TSHOCK_VERSION\" '.[] | select(.tag_name==$VERSION) | .tag_name')\r\n    if [ \"$TSHOCK_VERSION\" == \"$VERSION_CHECK\" ]; then\r\n        DOWNLOAD_LINK=$(echo $RELEASES | jq -r --arg VERSION \"$TSHOCK_VERSION\" '.[] | select(.tag_name==$VERSION) | .assets[].browser_download_url' |  grep -i ${MATCH} | head -1 )\r\n    else\r\n        echo -e \"defaulting to latest release\"\r\n        DOWNLOAD_LINK=$(echo $LATEST_JSON | jq .assets | jq -r .[].browser_download_url | grep -i ${MATCH} | head -1)\r\n    fi\r\nfi\r\n\r\n## mkdir and cd to \/mnt\/server\/\r\nmkdir -p \/mnt\/server\r\n\r\ncd \/mnt\/server\r\n\r\n## download release\r\necho -e \"running: wget $DOWNLOAD_LINK\"\r\nwget $DOWNLOAD_LINK -O TShock.zip\r\n\r\nunzip -o TShock.zip\r\n\r\ntar xvf TShock-*.tar\r\n\r\nrm TShock.zip TShock-*.tar\r\n\r\nchmod +x TShock.Server\r\n\r\necho -e \"install complete\"",
+            "script": "#!\/bin\/bash\r\n# TShock Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n## install packages to get version and download links\r\napt update\r\napt install -y curl wget jq file unzip\r\n\r\n## get release info and download links\r\nLATEST_JSON=$(curl --silent \"https:\/\/api.github.com\/repos\/Pryaxis\/TShock\/releases\/latest\" | jq 'del(.body)')\r\nRELEASES=$(curl --silent \"https:\/\/api.github.com\/repos\/Pryaxis\/TShock\/releases\" | jq '.[] | del(.body)')\r\n\r\nif [[ \"${TSHOCK_VERSION:0:2}\" == \"v4\" ]]; then\r\n    DOWNLOAD_LINK=$(echo ${RELEASES} | jq -r --arg VERSION \"${TSHOCK_VERSION}\" '.assets |  .[].browser_download_url | select(contains($VERSION))')\r\nelif [ -z \"$TSHOCK_VERSION\" ] || [ \"$TSHOCK_VERSION\" == \"latest\" ]; then\r\n    if [[ $(uname -m) == \"x86_64\" ]]; then\r\n        DOWNLOAD_LINK=$(echo ${LATEST_JSON} | jq -r '.assets | .[].browser_download_url | select(contains(\"linux\")) | select((contains(\"amd64\") or contains(\"x64\")))')\r\n    elif [[ $(uname -m) == \"aarch64\" ]]; then\r\n        DOWNLOAD_LINK=$(echo ${LATEST_JSON} | jq -r '.assets |  .[].browser_download_url | select(contains(\"linux\")) | select(contains(\"arm64\"))')\r\n    else\r\n        echo \"unrecognized architecture\"\r\n        exit 1\r\n    fi\r\nelse\r\n    if [[ $(uname -m) == \"x86_64\" ]]; then\r\n        DOWNLOAD_LINK=$(echo ${RELEASES} | jq -r --arg VERSION \"${TSHOCK_VERSION}\" '.assets | .[].browser_download_url | select(contains($VERSION)) | select(contains(\"linux\")) | select((contains(\"amd64\") or contains(\"x64\")))')\r\n    elif [[ $(uname -m) == \"aarch64\" ]]; then\r\n        DOWNLOAD_LINK=$(echo ${RELEASES} | jq -r --arg VERSION \"${TSHOCK_VERSION}\"  '.assets |  .[].browser_download_url | select(contains($VERSION)) | select(contains(\"linux\")) | select(contains(\"arm64\"))')\r\n    else\r\n        echo \"unrecognized architecture\"\r\n        exit 1\r\n    fi\r\nfi\r\n\r\n## mkdir and cd to \/mnt\/server\/\r\nmkdir -p \/mnt\/server\r\n\r\ncd \/mnt\/server\r\n\r\n## download release\r\necho -e \"running: wget $DOWNLOAD_LINK\"\r\nwget $DOWNLOAD_LINK -O TShock.zip\r\n\r\nif [ -f TShock.zip ]; then\r\n    unzip -o TShock.zip\r\nelse\r\n    echo \"No Zip File Found\"\r\n    exit 1\r\nfi\r\n\r\nif [[ \"${TSHOCK_VERSION:0:2}\" == \"v4\" ]]; then\r\n    rm TShock.zip\r\n    chmod +x TerrariaServer.exe\r\nelif [ -z \"$TSHOCK_VERSION\" ] || [ \"$TSHOCK_VERSION\" == \"latest\" ]; then\r\n    if [ -f \"$(ls TShock-*.tar 2>\/dev\/null | head -n 1)\" ]; then\r\n        tar xvf TShock-*.tar\r\n        rm TShock.zip TShock-*.tar\r\n        chmod +x TShock.Server\r\n    else\r\n        echo \"No Tar File Found\"\r\n        exit 1\r\n    fi\r\nfi\r\n\r\necho -e \"install complete\"",
             "container": "ghcr.io\/parkervcp\/installers:debian",
             "entrypoint": "\/bin\/bash"
         }
