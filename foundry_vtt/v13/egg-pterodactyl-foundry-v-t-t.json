@@ -14,7 +14,7 @@
         "ghcr.io\/parkervcp\/yolks:nodejs_20": "ghcr.io\/parkervcp\/yolks:nodejs_20"
     },
     "file_denylist": [],
-    "startup": "node ./app/resources/app/main.js --dataPath=\"/home/container/data\"",
+    "startup": "node ./app/main.js --dataPath=\"/home/container/data\"",
     "config": {
         "files": "{\r\n    \"data\/Config\/options.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"port\": \"{{server.build.default.port}}\",\r\n            \"language\": \"{{server.build.env.FOUNDRY_LANGUAGE}}\",\r\n            \"updateChannel\": \"{{server.build.env.UPDATE_CHANNEL}}\",\r\n            \"world\": \"{{server.build.env.WORLD_NAME}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"Server started and listening on port\"\r\n}",
