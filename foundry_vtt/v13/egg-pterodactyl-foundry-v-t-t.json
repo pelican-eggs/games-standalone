@@ -30,7 +30,7 @@
     "variables": [
         {
             "name": "Timed URL",
-            "description": "This is required to download the foundry files. Available in your https://foundryvtt.com/ profile after you've purchased a license. This link generally lasts for about 5 minutes.",
+            "description": "This is required to download the foundry files. Available in your https://foundryvtt.com/ profile after you've purchased a license. This link generally lasts for about 5 minutes. Make sure to select \"Node.js\", not \"Linux\" as the operating system.",
             "env_variable": "TIMED_URL",
             "default_value": "",
             "user_viewable": true,
@@ -60,7 +60,7 @@
         },
         {
             "name": "World Name",
-            "description": "The name of the world in Foundry, which is initially loaded.",
+            "description": "The name of the world in Foundry, which is initially loaded. Leave empty to start into the setup screen.",
             "env_variable": "WORLD_NAME",
             "default_value": "",
             "user_viewable": true,
