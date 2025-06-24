@@ -64,8 +64,8 @@
             "field_type": "text"
         },
         {
-            "name": "World Name",
-            "description": "The name of the world in Foundry, which is initially loaded. Leave empty to start into the setup screen.",
+            "name": "Startup World ID",
+            "description": "The ID of the world in Foundry, which is initially loaded. Leave empty to start into the setup screen.",
             "env_variable": "WORLD_NAME",
             "default_value": "",
             "user_viewable": true,
