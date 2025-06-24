@@ -5,9 +5,9 @@
         "update_url": null
     },
     "exported_at": "2024-06-01T00:16:48+00:00",
-    "name": "Foundry VTT",
+    "name": "Foundry VTT (v13)",
     "author": "pterodactyl@demi.cloud",
-    "uuid": "ce000ebf-dc6b-45ee-823d-b802005aaceb",
+    "uuid": "a2dd8e9e-5820-4670-ab9a-110d3ab5b2ce",
     "description": "Foundry VTT is a standalone application built for experiencing multiplayer tabletop RPGs using a feature-rich and modern self-hosted application where your players connect directly through the browser.",
     "features": null,
     "docker_images": {
