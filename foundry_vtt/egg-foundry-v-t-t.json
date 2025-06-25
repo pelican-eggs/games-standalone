@@ -1,14 +1,15 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
+        "version": "PLCN_v1",
         "update_url": null
     },
-    "exported_at": "2024-06-01T00:16:48+00:00",
+    "exported_at": "2025-06-25T09:48:42+00:00",
     "name": "Foundry VTT",
     "author": "pterodactyl@demi.cloud",
     "uuid": "ce000ebf-dc6b-45ee-823d-b802005aaceb",
     "description": "Foundry VTT is a standalone application built for experiencing multiplayer tabletop RPGs using a feature-rich and modern self-hosted application where your players connect directly through the browser.",
+    "tags": [],
     "features": null,
     "docker_images": {
         "ghcr.io\/parkervcp\/yolks:nodejs_18": "ghcr.io\/parkervcp\/yolks:nodejs_18"
@@ -16,7 +17,7 @@
     "file_denylist": [],
     "startup": "node .\/app\/resources\/app\/main.js --dataPath=\"\/home\/container\/data\"",
     "config": {
-        "files": "{\r\n    \"data\/Config\/options.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"port\": \"{{server.build.default.port}}\",\r\n            \"language\": \"{{server.build.env.FOUNDRY_LANGUAGE}}\",\r\n            \"updateChannel\": \"{{server.build.env.UPDATE_CHANNEL}}\"\r\n        }\r\n    }\r\n}",
+        "files": "{\r\n    \"data\/Config\/options.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"port\": \"{{server.allocations.default.port}}\",\r\n            \"language\": \"{{server.environment.FOUNDRY_LANGUAGE}}\",\r\n            \"updateChannel\": \"{{server.environment.UPDATE_CHANNEL}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"Server started and listening on port\"\r\n}",
         "logs": "{}",
         "stop": "^C"
@@ -30,26 +31,30 @@
     },
     "variables": [
         {
-            "name": "Timed URL",
-            "description": "This is required to download the foundry files. Available in your https:\/\/foundryvtt.com\/ profile after you've purchased a license. This link generally lasts for about 5 minutes.",
-            "env_variable": "TIMED_URL",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|url",
-            "sort": null,
-            "field_type": "text"
-        },
-        {
             "name": "Language",
             "description": "As may be expected, this setting configures the localization of the program and can be leveraged by localization modules to ensure that the interface is translated to the language of your choosing wherever possible.",
             "env_variable": "FOUNDRY_LANGUAGE",
             "default_value": "en.core",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "string|max:20",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "string",
+                "max:20"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Timed URL",
+            "description": "This is required to download the foundry files. Available in your https:\/\/foundryvtt.com\/ profile after you've purchased a license. This link generally lasts for about 5 minutes.",
+            "env_variable": "TIMED_URL",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "url"
+            ],
+            "sort": null
         },
         {
             "name": "Update Channel",
@@ -58,9 +63,11 @@
             "default_value": "release",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "string|max:256",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "string",
+                "max:256"
+            ],
+            "sort": null
         }
     ]
 }
