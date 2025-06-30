@@ -11,16 +11,16 @@
                 <img src="https://avatars.githubusercontent.com/u/4533989" width="50px;" alt=""/><br /><sub><b>Red-Thirten</b></sub>
             </a>
             <br />
-            <a href="https://github.com/parkervcp/eggs/commits?author=redthirten" title="Codes">💻</a>
-            <a href="https://github.com/parkervcp/eggs/commits?author=redthirten" title="Maintains">🔨</a>
+            <a href="https://github.com/pelican-eggs/games-standalone/commits?author=redthirten" title="Codes">💻</a>
+            <a href="https://github.com/pelican-eggs/games-standalone/commits?author=redthirten" title="Maintains">🔨</a>
         </td>
         <td align="center">
             <a href="https://github.com/parkervcp">
                 <img src="https://avatars.githubusercontent.com/u/1207679" width="50px;" alt=""/><br /><sub><b>parkervcp</b></sub>
             </a>
             <br />
-            <a href="https://github.com/parkervcp/eggs/commits?author=parkervcp" title="Codes">💻</a>
-            <a href="https://github.com/parkervcp/eggs/commits?author=parkervcp" title="Contributor">💡</a>
+            <a href="https://github.com/pelican-eggs/games-standalone/commits?author=parkervcp" title="Codes">💻</a>
+            <a href="https://github.com/pelican-eggs/games-standalone/commits?author=parkervcp" title="Contributor">💡</a>
         </td>
         <td align="center">
             <a href="https://github.com/janisozaur">
