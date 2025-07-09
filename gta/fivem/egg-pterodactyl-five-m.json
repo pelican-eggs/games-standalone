@@ -32,7 +32,7 @@
             "name": "fivem license",
             "description": "Required to start the service. Get your keys at https:\/\/keymaster.fivem.net\/",
             "env_variable": "FIVEM_LICENSE",
-            "default_value": "FIVEM LICENSE",
+            "default_value": "",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:33",
