@@ -39,7 +39,7 @@ The last update to the egg changes the server to use txadmin to run. On first st
 With latest update see [txAdmin Github](https://github.com/citizenfx/txAdmin/blob/master/docs/env-config.md) some things changed.
 For now this is added:
 - TXHOST_TXA_PORT (Value can be changed by user)
-- TXHOST_GAME_NAME (Value can be changed by user)
+- TXHOST_GAME_NAME (Value can be changed by admin)
 - TXHOST_DATA_PATH (hardcoded to /home/container/txData)
 > [!NOTE]
 > WHen using TXHOST_GAME_NAME : changing Fivem to Redm or visaversa , a reinstall is needed !
