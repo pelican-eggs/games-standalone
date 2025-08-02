@@ -87,6 +87,7 @@
 * [The Battle For Wesnoth](thebattleforwesnoth)
 * [Urban Terror](urbanterror)
 * [Veloren](veloren)
+* [Venice Unleashed](venice_unleashed)
 * [Vintage Story](vintage_story)
 * [Wolfenstein: Enemy Territory](wolfenstein_enemy_territory)
   * [ET: Legacy](wolfenstein_enemy_territory/etlegacy)
