@@ -1,30 +1,32 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
     "meta": {
-        "update_url": null,
-        "version": "PTDL_v2"
+        "version": "PTDL_v2",
+        "update_url": null
     },
-    "exported_at": "2024-06-01T00:17:15+00:00",
+    "exported_at": "2025-08-10T09:04:18+00:00",
     "name": "tshock",
     "author": "parker@parkervcp.com",
-    "description": "The t-shock modded terraria server.\r\n\r\nhttps://tshock.co/",
-    "features": null,
+    "description": "The t-shock modded terraria server.\r\n\r\nhttps:\/\/tshock.co\/",
+    "tags": [],
+    "features": [],
     "docker_images": {
-        "Dotnet 6": "ghcr.io/parkervcp/yolks:dotnet_6"
+        "Dotnet 6": "ghcr.io\/parkervcp\/yolks:dotnet_6",
+        "Dotnet 9": "ghcr.io\/parkervcp\/yolks:dotnet_9"
     },
     "file_denylist": [],
-    "startup": "./TShock.Server -ip 0.0.0.0 -port {{SERVER_PORT}} -maxplayers {{MAX_PLAYERS}} -world {{WORLD_NAME}}.wld -autocreate {{WORLD_SIZE}}",
+    "startup": ".\/TShock.Server -ip 0.0.0.0 -port {{SERVER_PORT}} -maxplayers {{MAX_PLAYERS}} -world {{WORLD_NAME}}.wld -autocreate {{WORLD_SIZE}}",
     "config": {
         "files": "{}",
-        "logs": "{}",
         "startup": "{\r\n    \"done\": \"Type 'help' for a list of commands\"\r\n}",
+        "logs": "{}",
         "stop": "exit"
     },
     "scripts": {
         "installation": {
-            "container": "ghcr.io/parkervcp/installers:debian",
-            "entrypoint": "/bin/bash",
-            "script": "#!/bin/bash\r\n# Vanilla tModloader Installation Script\r\n#\r\n# Server Files: /mnt/server\r\n## install packages to get version and download links\r\napt update\r\napt install -y curl wget jq file unzip\r\n\r\n## get release info and download links\r\nLATEST_JSON=$(curl --silent \"https://api.github.com/repos/Pryaxis/TShock/releases/latest\")\r\nRELEASES=$(curl --silent \"https://api.github.com/repos/Pryaxis/TShock/releases\")\r\nMATCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] \u0026\u0026 echo \"linux-x64\" || echo \"linux-arm64\")\r\n\r\necho ${MATCH}\r\n\r\nif [ -z \"$TSHOCK_VERSION\" ] || [ \"$TSHOCK_VERSION\" == \"latest\" ]; then\r\n    DOWNLOAD_LINK=$(echo $LATEST_JSON | jq .assets | jq -r .[].browser_download_url | grep -i ${MATCH} | head -1 )\r\nelse\r\n    VERSION_CHECK=$(echo $RELEASES | jq -r --arg VERSION \"$TSHOCK_VERSION\" '.[] | select(.tag_name==$VERSION) | .tag_name')\r\n    if [ \"$TSHOCK_VERSION\" == \"$VERSION_CHECK\" ]; then\r\n        DOWNLOAD_LINK=$(echo $RELEASES | jq -r --arg VERSION \"$TSHOCK_VERSION\" '.[] | select(.tag_name==$VERSION) | .assets[].browser_download_url' |  grep -i ${MATCH} | head -1 )\r\n    else\r\n        echo -e \"defaulting to latest release\"\r\n        DOWNLOAD_LINK=$(echo $LATEST_JSON | jq .assets | jq -r .[].browser_download_url | grep -i ${MATCH} | head -1)\r\n    fi\r\nfi\r\n\r\n## mkdir and cd to /mnt/server/\r\nmkdir -p /mnt/server\r\n\r\ncd /mnt/server\r\n\r\n## download release\r\necho -e \"running: wget $DOWNLOAD_LINK\"\r\nwget $DOWNLOAD_LINK -O TShock.zip\r\n\r\nunzip -o TShock.zip\r\n\r\ntar xvf TShock-*.tar\r\n\r\nrm TShock.zip TShock-*.tar\r\n\r\nchmod +x TShock.Server\r\n\r\necho -e \"install complete\""
+            "script": "#!\/bin\/bash\r\n# Vanilla tModloader Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\n## install packages to get version and download links\r\n\r\n## get release info and download links\r\nLATEST_JSON=$(curl --silent \"https:\/\/api.github.com\/repos\/Pryaxis\/TShock\/releases\/latest\")\r\nRELEASES=$(curl --silent \"https:\/\/api.github.com\/repos\/Pryaxis\/TShock\/releases\")\r\nMATCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] && echo \"linux-amd64\" || echo \"linux-arm64\")\r\n\r\necho ${MATCH}\r\n\r\nif [ -z \"$TSHOCK_VERSION\" ] || [ \"$TSHOCK_VERSION\" == \"latest\" ]; then\r\n    DOWNLOAD_LINK=$(echo $LATEST_JSON | jq .assets | jq -r .[].browser_download_url | grep -i ${MATCH} | head -1 )\r\nelse\r\n    VERSION_CHECK=$(echo $RELEASES | jq -r --arg VERSION \"$TSHOCK_VERSION\" '.[] | select(.tag_name==$VERSION) | .tag_name')\r\n    if [ \"$TSHOCK_VERSION\" == \"$VERSION_CHECK\" ]; then\r\n        DOWNLOAD_LINK=$(echo $RELEASES | jq -r --arg VERSION \"$TSHOCK_VERSION\" '.[] | select(.tag_name==$VERSION) | .assets[].browser_download_url' |  grep -i ${MATCH} | head -1 )\r\n    else\r\n        echo -e \"defaulting to latest release\"\r\n        DOWNLOAD_LINK=$(echo $LATEST_JSON | jq .assets | jq -r .[].browser_download_url | grep -i ${MATCH} | head -1)\r\n    fi\r\nfi\r\n\r\n## mkdir and cd to \/mnt\/server\/\r\nmkdir -p \/mnt\/server\r\n\r\ncd \/mnt\/server\r\n\r\n## download release\r\necho -e \"running: wget $DOWNLOAD_LINK\"\r\ncurl -sSL $DOWNLOAD_LINK -o TShock.zip\r\n\r\nunzip -o TShock.zip\r\n\r\ntar xvf TShock-*.tar\r\n\r\nrm TShock.zip TShock-*.tar\r\n\r\nchmod +x TShock.Server\r\n\r\necho -e \"install complete\"",
+            "container": "ghcr.io\/parkervcp\/installers:debian",
+            "entrypoint": "\/bin\/bash"
         }
     },
     "variables": [
@@ -39,13 +41,13 @@
             "field_type": "text"
         },
         {
-            "name": "World Size",
-            "description": "Defines the worlds size. 3 sizes 1 (small), 2 (medium), 3 (large).",
-            "env_variable": "WORLD_SIZE",
-            "default_value": "1",
+            "name": "Tshock Version",
+            "description": "The version on tshock that will be installed. default is latest non-pre-release",
+            "env_variable": "TSHOCK_VERSION",
+            "default_value": "latest",
             "user_viewable": true,
             "user_editable": false,
-            "rules": "required|numeric|digits_between:1,3",
+            "rules": "required|string|max:20",
             "field_type": "text"
         },
         {
@@ -59,13 +61,13 @@
             "field_type": "text"
         },
         {
-            "name": "Tshock Version",
-            "description": "The version on tshock that will be installed. default is latest non-pre-release",
-            "env_variable": "TSHOCK_VERSION",
-            "default_value": "latest",
+            "name": "World Size",
+            "description": "Defines the worlds size. 3 sizes 1 (small), 2 (medium), 3 (large).",
+            "env_variable": "WORLD_SIZE",
+            "default_value": "1",
             "user_viewable": true,
             "user_editable": false,
-            "rules": "required|string|max:20",
+            "rules": "required|numeric|digits_between:1,3",
             "field_type": "text"
         }
     ]
