@@ -76,7 +76,7 @@
             "default_value": "My incredible VU server",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:240",
+            "rules": "required|string|max:63",
             "field_type": "text"
         },
         {
