@@ -92,7 +92,7 @@
             "rules": [
                 "required",
                 "string",
-                "max:240"
+                "max:63"
             ],
             "sort": 5
         },
