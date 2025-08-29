@@ -1,17 +1,19 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
+        "version": "PLCN_v1",
         "update_url": null
     },
-    "exported_at": "2024-06-01T00:17:19+00:00",
+    "exported_at": "2025-08-01T10:17:52+00:00",
     "name": "Vintage Story",
     "author": "mail@wuffy.eu",
     "uuid": "270ab8c0-d108-4c05-a362-62d81e8063a5",
     "description": "Vintage Story is an uncompromising wilderness survival sandbox game inspired by lovecraftian horror themes. Find yourself in a ruined world reclaimed by nature and permeated by unnerving temporal disturbances. Relive the advent of human civilization, or take your own path.",
-    "features": null,
+    "tags": [],
+    "features": [],
     "docker_images": {
-        "Dotnet 7": "ghcr.io\/parkervcp\/yolks:dotnet_7"
+        "Dotnet 7": "ghcr.io\/parkervcp\/yolks:dotnet_7",
+        "Dotnet 8": "ghcr.io\/parkervcp\/yolks:dotnet_8"
     },
     "file_denylist": [],
     "startup": ".\/VintagestoryServer --dataPath .\/data --port={{SERVER_PORT}} --maxclients={{MAX_CLIENTS}} {{OPTIONS}}",
@@ -36,9 +38,12 @@
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "nullable|string|max:200",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "nullable",
+                "string",
+                "max:200"
+            ],
+            "sort": 1
         },
         {
             "name": "Release branch",
@@ -47,9 +52,12 @@
             "default_value": "stable",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|in:stable,unstable,pre",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "in:stable,unstable,pre"
+            ],
+            "sort": 2
         },
         {
             "name": "Release version",
@@ -58,9 +66,12 @@
             "default_value": "latest",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:20",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "max:20"
+            ],
+            "sort": 3
         },
         {
             "name": "Max Clients",
@@ -69,9 +80,12 @@
             "default_value": "16",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|integer|max:256",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "integer",
+                "max:256"
+            ],
+            "sort": 4
         },
         {
             "name": "Sqlite temporary files directory",
@@ -80,9 +94,12 @@
             "default_value": "\/home\/container\/data\/Backups",
             "user_viewable": true,
             "user_editable": false,
-            "rules": "required|string|max:40",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "max:40"
+            ],
+            "sort": 5
         }
     ]
 }

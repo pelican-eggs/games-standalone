@@ -20,3 +20,8 @@ Vintage Story requires a single port
 | Port    | default |
 |---------|---------|
 | Game    | 42420   |
+
+
+## Docker Image Configuration
+
+When you install a version greater or equal to 1.21.0 you will need to select the `Dotnet 8` Docker Image in the `Startup` section.
