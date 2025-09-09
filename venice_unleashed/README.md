@@ -44,7 +44,7 @@ ___
 | Accounts / Keys | A Venice Unleashed Account is required and must be linked to EA/Origin Account. Also, a server key must be generated & downloaded from Venice Unleashed [key management portal](https://veniceunleashed.net/keys). | --- |
 
 > [!WARNING]
-> If you wish to have the server publicly accessible ***and*** accessible via LAN, you must own a domain name that points to your public IP address. See [Joining the Server](#joining-the-server) for more info.
+> If you wish to have the server publicly accessible ***and*** accessible via LAN ***and*** your server is on a different subnet from your LAN client (eg. a VLAN setup), you must own a domain name that points to your public IP address. See [Joining the Server](#joining-the-server) for more info.
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 In most cases, joining the server is as easy as finding it in the server list and clicking connect.
 
-However, **if you are connecting to a server on your LAN**, the server browser will try to connect you to your public IP address, which will not work. Unfortunately, VU does not support directly connecting to an IP address; you must connect through their backend via the server's GUID. The following is a workaround for this issue:
+However, **if you are connecting to a server on your LAN from a different subnet**, the server browser will try to connect you to your public IP address, which will not work. Unfortunately, VU does not support directly connecting to an IP address; you must connect through their backend via the server's GUID. The following is a workaround for this issue:
 
 1. Configure the "[Host] Join Host" Startup Variable. The domain you set will be what the VU server list provides as the connection address to clients. If you only want LAN connections, a fake domain like `myvuserver.com` is fine.
 2. Do ***one*** of the following:
