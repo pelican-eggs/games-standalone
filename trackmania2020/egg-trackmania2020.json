@@ -4,7 +4,7 @@
         "version": "PLCN_v2",
         "update_url": null
     },
-    "exported_at": "2025-09-27T16:42:32+00:00",
+    "exported_at": "2025-09-28T14:19:00+00:00",
     "name": "Trackmania (2020)",
     "author": "pelican@stather.me",
     "uuid": "a8135398-e0cb-44fd-93fc-e84564febdb1",
@@ -24,7 +24,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!/bin/bash\r\n# Server files: /mnt/server\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\nwget http://files.v04.maniaplanet.com/server/TrackmaniaServer_Latest.zip\r\nunzip -o TrackmaniaServer_Latest.zip\r\nrm TrackmaniaServer_Latest.zip\r\nchmod 755 TrackmaniaServer\r\n\r\ncp -n UserData/Config/dedicated_cfg.default.txt UserData/Config/dedicated_cfg.xml\r\ncp -n UserData/Maps/MatchSettings/example.txt  UserData/Maps/matchsettings.xml",
+            "script": "#!/bin/bash\r\n# Server files: /mnt/server\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\nwget http://files.v04.maniaplanet.com/server/TrackmaniaServer_Latest.zip\r\nunzip -o TrackmaniaServer_Latest.zip\r\nrm TrackmaniaServer_Latest.zip\r\nchmod 755 TrackmaniaServer\r\n\r\ncp -n UserData/Config/dedicated_cfg.default.txt UserData/Config/dedicated_cfg.xml\r\ncp -n UserData/Maps/MatchSettings/example.txt  UserData/Maps/matchsettings.xml\r\necho \"Finished Installing.\"",
             "container": "ghcr.io/parkervcp/installers:debian",
             "entrypoint": "bash"
         }
