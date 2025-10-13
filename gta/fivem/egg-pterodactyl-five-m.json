@@ -4,16 +4,16 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2025-07-25T16:11:46+02:00",
+    "exported_at": "2025-10-13T20:46:30+02:00",
     "name": "FiveM",
     "author": "parker@parkervcp.com",
-    "description": "A new FiveM egg for the latest builds due to recent changes in FiveM",
+    "description": "A new FiveM / Red M egg for the latest builds due to recent changes in FiveM",
     "features": null,
     "docker_images": {
         "ghcr.io\/parkervcp\/yolks:debian": "ghcr.io\/parkervcp\/yolks:debian"
     },
     "file_denylist": [],
-    "startup": "export TXHOST_TXA_PORT={{TXADMIN_PORT}} export TXHOST_GAME_NAME={{GAME_NAME}} export TXHOST_DATA_PATH=\/home\/container\/txData && $(pwd)\/alpine\/opt\/cfx-server\/ld-musl-x86_64.so.1 --library-path \"$(pwd)\/alpine\/usr\/lib\/v8\/:$(pwd)\/alpine\/lib\/:$(pwd)\/alpine\/usr\/lib\/\" -- $(pwd)\/alpine\/opt\/cfx-server\/FXServer +set citizen_dir $(pwd)\/alpine\/opt\/cfx-server\/citizen\/ +set sv_licenseKey {{FIVEM_LICENSE}} +set steam_webApiKey {{STEAM_WEBAPIKEY}} +set sv_maxplayers {{MAX_PLAYERS}} $( [ \"$TXADMIN_ENABLE\" == \"1\" ] || printf %s '+exec server.cfg' )",
+    "startup": "TXHOST_TXA_PORT={{TXADMIN_PORT}} TXHOST_GAME_NAME={{GAME_NAME}} TXHOST_DATA_PATH={{TXHOST_DATA_PATH}} $(pwd)\/alpine\/opt\/cfx-server\/ld-musl-x86_64.so.1 --library-path \"$(pwd)\/alpine\/usr\/lib\/v8\/:$(pwd)\/alpine\/lib\/:$(pwd)\/alpine\/usr\/lib\/\" -- $(pwd)\/alpine\/opt\/cfx-server\/FXServer $TXADMIN_ARGS +set citizen_dir $(pwd)\/alpine\/opt\/cfx-server\/citizen\/ +set sv_licenseKey {{FIVEM_LICENSE}} +set steam_webApiKey {{STEAM_WEBAPIKEY}} +set sv_maxplayers {{MAX_PLAYERS}} $( [ \"$TXADMIN_ENABLE\" == \"1\" ] || printf %s '+exec server.cfg' )",
     "config": {
         "files": "{\r\n    \"server.cfg\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"endpoint_add_tcp\": \"endpoint_add_tcp \\\"0.0.0.0:{{server.build.default.port}}\\\"\",\r\n            \"endpoint_add_udp\": \"endpoint_add_udp \\\"0.0.0.0:{{server.build.default.port}}\\\"\",\r\n            \"sv_hostname\": \"sv_hostname \\\"{{server.build.env.SERVER_HOSTNAME}}\\\"\",\r\n            \"set sv_licenseKey\": \"set sv_licenseKey {{server.build.env.FIVEM_LICENSE}}\",\r\n            \"set steam_webApiKey\": \"set steam_webApiKey {{server.build.env.STEAM_WEBAPIKEY}}\",\r\n            \"sv_maxclients\": \"sv_maxclients {{server.build.env.MAX_PLAYERS}}\"\r\n        }\r\n    }\r\n }",
         "startup": "{\r\n    \"done\": \"succeeded. Welcome!\"\r\n}",
@@ -30,7 +30,7 @@
     "variables": [
         {
             "name": "fivem license",
-            "description": "Required to start the service. Get your keys at https:\/\/keymaster.fivem.net\/ or https:\/\/portal.cfx.re\/",
+            "description": "Required to start the service. Get your keys at https:\/\/portal.cfx.re\/",
             "env_variable": "FIVEM_LICENSE",
             "default_value": "",
             "user_viewable": true,
@@ -104,7 +104,7 @@
             "env_variable": "TXADMIN_PORT",
             "default_value": "40120",
             "user_viewable": true,
-            "user_editable": true,
+            "user_editable": false,
             "rules": "required|string|max:20",
             "field_type": "text"
         },
@@ -126,6 +126,16 @@
             "user_viewable": false,
             "user_editable": false,
             "rules": "string|nullable",
+            "field_type": "text"
+        },
+		{
+            "name": "TXHOST DATA PATH",
+            "description": "Location for TX Admin",
+            "env_variable": "TXHOST_DATA_PATH",
+            "default_value": "\/home\/container\/txData",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string",
             "field_type": "text"
         }
     ]
