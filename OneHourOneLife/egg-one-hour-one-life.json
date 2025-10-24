@@ -1,0 +1,52 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-10-24T23:57:20+10:00",
+    "name": "One Hour One Life",
+    "author": "peter.game.servers@gmail.com",
+    "description": "Dedicated server for One Hour One Life\r\nhttp:\/\/onehouronelife.com\/",
+    "features": null,
+    "docker_images": {
+        "Debian": "ghcr.io\/parkervcp\/yolks:debian"
+    },
+    "file_denylist": [],
+    "startup": "cd OneLife\/server && .\/OneLifeServer",
+    "config": {
+        "files": "{\r\n    \"OneLife\/server\/settings\/port.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.build.default.port}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/clientPassword.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.build.env.PASSWORD}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/requireClientPassword.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.build.env.REQUIRE_PASSWORD}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/testtest.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.build.env.PASSWORD}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Listening for connection on port\"\r\n}",
+        "logs": "{}",
+        "stop": "^Z"
+    },
+    "scripts": {
+        "installation": {
+            "script": "# Update\r\napt update\r\napt install -y build-essential git\r\n\r\n# Create Server folder\r\nmkdir -p \/mnt\/server\/\r\ncd \/mnt\/server\/\r\n\r\n# Clone the server builder\r\ncurl -o serverPullAndBuildLinux.sh https:\/\/raw.githubusercontent.com\/jasonrohrer\/OneLife\/master\/server\/installYourOwnServer\/serverPullAndBuildLinux.sh\r\n\r\n# Run it\r\nchmod +x serverPullAndBuildLinux.sh\r\n.\/serverPullAndBuildLinux.sh\r\n\r\necho -e \"Install Complete\"",
+            "container": "ghcr.io\/parkervcp\/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Password",
+            "description": "",
+            "env_variable": "PASSWORD",
+            "default_value": "ohol",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        },
+        {
+            "name": "Require Password",
+            "description": "",
+            "env_variable": "REQUIRE_PASSWORD",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:0,1",
+            "field_type": "text"
+        }
+    ]
+}
