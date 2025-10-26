@@ -4,10 +4,10 @@
         "version": "PLCN_v1",
         "update_url": null
     },
-    "exported_at": "2025-10-24T23:57:20+10:00",
+    "exported_at": "2025-10-26T22:15:03+10:00",
     "name": "One Hour One Life",
     "author": "peter.game.servers@gmail.com",
-    "uuid": "da89ccb1-86e4-41e7-bfbd-80320b5cfeca",
+    "uuid": "f3b89fc7-7e7d-4451-a26d-062ed4920103",
     "description": "Dedicated server for One Hour One Life\r\nhttp:\/\/onehouronelife.com\/",
     "features": null,
     "docker_images": {
@@ -16,10 +16,10 @@
     "file_denylist": [],
     "startup": "cd OneLife\/server && .\/OneLifeServer",
     "config": {
-        "files": "{\r\n    \"OneLife\/server\/settings\/port.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.allocations.default.port}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/clientPassword.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.environment.PASSWORD}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/requireClientPassword.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.environment.REQUIRE_PASSWORD}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/testtest.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.environment.PASSWORD}}\"\r\n        }\r\n    }\r\n}",
+        "files": "{\r\n    \"OneLife\/server\/settings\/port.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.allocations.default.port}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/clientPassword.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.environment.PASSWORD}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/requireClientPassword.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.environment.REQUIRE_PASSWORD}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/serverID.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.environment.SERVER_NAME}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"Listening for connection on port\"\r\n}",
         "logs": "{}",
-        "stop": "^Z"
+        "stop": "^C"
     },
     "scripts": {
         "installation": {
@@ -55,6 +55,20 @@
                 "in:0,1"
             ],
             "sort": 2
+        },
+        {
+            "name": "Server Name",
+            "description": "",
+            "env_variable": "SERVER_NAME",
+            "default_value": "onehouronelife",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:20"
+            ],
+            "sort": 3
         }
     ]
 }
