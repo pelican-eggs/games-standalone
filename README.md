@@ -85,6 +85,7 @@
   * [TShock](terraria/tshock)
   * [Vanilla](terraria/vanilla)
 * [The Battle For Wesnoth](thebattleforwesnoth)
+* [Trackmania (2020)](trackmania2020)
 * [Urban Terror](urbanterror)
 * [Veloren](veloren)
 * [Venice Unleashed](venice_unleashed)
