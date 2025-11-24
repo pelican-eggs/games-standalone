@@ -10,13 +10,13 @@
     "description": "Foundry VTT is a standalone application built for experiencing multiplayer tabletop RPGs using a feature-rich and modern self-hosted application where your players connect directly through the browser.",
     "features": null,
     "docker_images": {
-        "ghcr.io/parkervcp/yolks:nodejs_18": "ghcr.io/parkervcp/yolks:nodejs_18"
+        "ghcr.io/parkervcp/yolks:nodejs_18": "ghcr.io/parkervcp/yolks:nodejs_18",
+        "ghcr.io\/parkervcp\/yolks:nodejs_20": "ghcr.io\/parkervcp\/yolks:nodejs_20"
     },
     "file_denylist": [],
-    "startup": "node ./app/resources/app/main.js --dataPath=\"/home/container/data\"",
+    "startup": "node ./app/main.js --dataPath=\"/home/container/data\"",
     "config": {
-        "files": "{\r\n    \"data/Config/options.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"port\": \"{{server.build.default.port}}\",\r\n            \"language\": \"{{server.build.env.FOUNDRY_LANGUAGE}}\",\r\n            \"updateChannel\": \"{{server.build.env.UPDATE_CHANNEL}}\"\r\n        }\r\n    }\r\n}",
-        "logs": "{}",
+        "files": "{\r\n    \"data\/Config\/options.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"port\": \"{{server.build.default.port}}\",\r\n            \"language\": \"{{server.build.env.FOUNDRY_LANGUAGE}}\",\r\n            \"updateChannel\": \"{{server.build.env.UPDATE_CHANNEL}}\",\r\n            \"world\": \"{{server.build.env.WORLD_NAME}}\"\r\n        }\r\n    }\r\n}",
         "startup": "{\r\n    \"done\": \"Server started and listening on port\"\r\n}",
         "stop": "^C"
     },
@@ -30,7 +30,7 @@
     "variables": [
         {
             "name": "Timed URL",
-            "description": "This is required to download the foundry files. Available in your https://foundryvtt.com/ profile after you've purchased a license. This link generally lasts for about 5 minutes.",
+            "description": "This is required to download the foundry files. Available in your https://foundryvtt.com/ profile after you've purchased a license. This link generally lasts for about 5 minutes. Make sure to select \"Node.js\", not \"Linux\" as the operating system.",
             "env_variable": "TIMED_URL",
             "default_value": "",
             "user_viewable": true,
@@ -56,6 +56,16 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "string|max:256",
+            "field_type": "text"
+        },
+        {
+            "name": "Startup World ID",
+            "description": "The ID of the world in Foundry, which is initially loaded. Leave empty to start into the setup screen.",
+            "env_variable": "WORLD_NAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string",
             "field_type": "text"
         }
     ]
