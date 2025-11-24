@@ -1,55 +1,52 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
-        "update_url": null
+        "version": "PLCN_v3",
+        "update_url": "https://raw.githubusercontent.com/pelican-eggs/games-standalone/refs/heads/main/spacestation_14/egg-spacestation14.json"
     },
-    "exported_at": "2024-09-10T16:25:49+00:00",
-    "name": "Spacestation 14",
+    "exported_at": "2025-11-24T08:29:01+00:00",
+    "name": "Space Station 14",
     "author": "josdekurk@gmail.com",
     "uuid": "ef79fd90-64e9-4387-b862-af0042ed2d28",
     "description": "Space Station 14 tells the story of an ordinary shift on a space station gone wrong. Immerse yourself into your role, tinker with detailed systems, and survive the chaos in this round-based multiplayer role playing game.",
+    "image": "data:image/png;base64,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",
+    "tags": [],
     "features": [],
     "docker_images": {
-        "Dotnet 8": "ghcr.io\/parkervcp\/yolks:dotnet_8"
+        "Dotnet 9": "ghcr.io/parkervcp/yolks:dotnet_9",
+        "Dotnet 8": "ghcr.io/parkervcp/yolks:dotnet_8"
     },
     "file_denylist": [],
-    "startup": ".\/Robust.Server",
+    "startup_commands": {
+        "Default": "./Robust.Server"
+    },
     "config": {
-        "files": "{\r\n    \"server_config.toml\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"port\": \"port = {{server.allocations.default.port}}\",\r\n            \"hostname\": \"hostname = \\\"{{server.environment.SERVER_NAME}}\\\"\",\r\n            \"tickrate\": \"tickrate = {{server.environment.SERVER_TICK}}\",\r\n            \"max_connections\": \"max_connections = {{server.environment.SERVER_MAX_PLAYERS}}\"\r\n        }\r\n    }\r\n}",
-        "startup": "{\r\n    \"done\": \"Server Version\"\r\n}",
+        "files": "{\n    \"server_config.toml\": {\n        \"parser\": \"file\",\n        \"find\": {\n            \"port\": \"port = {{server.allocations.default.port}}\",\n            \"hostname\": \"hostname = \\\"{{server.environment.SERVER_NAME}}\\\"\",\n            \"tickrate\": \"tickrate = {{server.environment.SERVER_TICK}}\",\n            \"max_connections\": \"max_connections = {{server.environment.SERVER_MAX_PLAYERS}}\",\n            \"mode\": \"mode = {{server.environment.SERVER_AUTH}\"\n        }\n    }\n}",
+        "startup": "{\n    \"done\": \"Server Version\"\n}",
         "logs": "{}",
         "stop": "^C"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n\r\nARCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] && echo \"x64\" || echo \"arm64\")\r\nV=$(curl -sSL https:\/\/wizards.cdn.spacestation14.com\/fork\/wizards | grep \".Server_linux\" | grep -i ${ARCH} | head -1 | awk '{print $2}' | sed 's\/^href=\"\/\/;s\/\">Linux\/\/')\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\necho \"Running: curl -sSL -o server_linux.zip https:\/\/wizards.cdn.spacestation14.com${V}\"\r\ncurl -sSL -o server_linux.zip \"https:\/\/wizards.cdn.spacestation14.com${V}\"\r\nunzip -o server_linux.zip\r\nrm server_linux.zip\r\n\r\nchmod +x Robust.Server\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
-            "container": "ghcr.io\/parkervcp\/installers:debian",
+            "script": "#!/bin/bash\r\n\r\nARCH=$([[ \"$(uname -m)\" == \"x86_64\" ]] && echo \"x64\" || echo \"arm64\")\r\nV=$(curl -sSL https://wizards.cdn.spacestation14.com/fork/wizards | grep \".Server_linux\" | grep -i ${ARCH} | head -1 | awk '{print $2}' | sed 's/^href=\"//;s/\">Linux//')\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\necho \"Running: curl -sSL -o server_linux.zip https://wizards.cdn.spacestation14.com${V}\"\r\ncurl -sSL -o server_linux.zip \"https://wizards.cdn.spacestation14.com${V}\"\r\nunzip -o server_linux.zip\r\nrm server_linux.zip\r\n\r\nchmod +x Robust.Server\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
+            "container": "ghcr.io/parkervcp/installers:debian",
             "entrypoint": "bash"
         }
     },
     "variables": [
         {
-            "sort": 1,
-            "name": "Server name",
-            "description": "The server hostname",
-            "env_variable": "SERVER_NAME",
-            "default_value": "MyServer",
+            "sort": 4,
+            "name": "Authentication",
+            "description": "Enforces authentication so that ALL connecting clients must have a proper account.\nPossible values here are: 0 (optional), 1 (required), 2 (disabled).\n",
+            "env_variable": "SERVER_AUTH",
+            "default_value": "1",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:48",
-            "field_type": "text"
-        },
-        {
-            "sort": 2,
-            "name": "Server tickrate",
-            "description": "The tickrate of the server. Default is 60",
-            "env_variable": "SERVER_TICK",
-            "default_value": "60",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|numeric|between:1,80",
-            "field_type": "text"
+            "rules": [
+                "required",
+                "numeric",
+                "in:0,1,2"
+            ]
         },
         {
             "sort": 3,
@@ -59,8 +56,39 @@
             "default_value": "256",
             "user_viewable": true,
             "user_editable": false,
-            "rules": "required|numeric|between:1,256",
-            "field_type": "text"
+            "rules": [
+                "required",
+                "numeric",
+                "between:1,256"
+            ]
+        },
+        {
+            "sort": 1,
+            "name": "Server name",
+            "description": "Changes the name of the server as it appears in the lobby and launcher.",
+            "env_variable": "SERVER_NAME",
+            "default_value": "MyServer",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:48"
+            ]
+        },
+        {
+            "sort": 2,
+            "name": "Server tickrate",
+            "description": "The tickrate of the server. Default is 60",
+            "env_variable": "SERVER_TICK",
+            "default_value": "60",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "numeric",
+                "between:1,80"
+            ]
         }
     ]
 }
