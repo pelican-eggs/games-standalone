@@ -1,10 +1,10 @@
 # OneHourOneLife
 
-One Hour One Life a multiplayer survival game of parenting and civilization building by Jason Rohrer
+[One Hour One Life](https://onehouronelife.com/) is a multiplayer survival game of parenting and civilization building by Jason Rohrer.
 
-## [Documentation](https://onehouronelife.com/)
+## Documentation
 
-This is open source, thanks Jason! My sister wanted to be able to run her own server, so I made her an egg.
+This is open source; more details about the server and adjustable settings can be found in the [github repo](https://github.com/jasonrohrer/OneLife/tree/master/server/installYourOwnServer).
 
 ## Install notes
 
@@ -15,6 +15,12 @@ First install will take a while because the games source code and assets will be
 |---------|---------|---------|
 | RAM | 2GiB | 2GiB |
 | Storage | 1GiB | 1GiB |
+
+## Variables
+* Port: Required to connect to the game server
+* Server Name: Customise the server name
+* Server Password: Password used to protect your server
+* Require Password: Enable password protection for the server
 
 ### Notes
 
