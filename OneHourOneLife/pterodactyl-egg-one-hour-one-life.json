@@ -4,26 +4,26 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2025-10-26T22:15:03+10:00",
+    "exported_at": "2025-12-25T10:17:06+00:00",
     "name": "One Hour One Life",
     "author": "peter.game.servers@gmail.com",
     "description": "Dedicated server for One Hour One Life\r\nhttp:\/\/onehouronelife.com\/",
     "features": null,
     "docker_images": {
-        "Debian": "ghcr.io\/parkervcp\/yolks:debian"
+        "Debian": "ghcr.io\/pelican-eggs\/yolks:debian"
     },
     "file_denylist": [],
     "startup": "cd OneLife\/server && .\/OneLifeServer",
     "config": {
-        "files": "{\r\n    \"OneLife\/server\/settings\/port.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.build.default.port}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/clientPassword.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.build.env.PASSWORD}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/requireClientPassword.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.build.env.REQUIRE_PASSWORD}}\"\r\n        }\r\n    },\r\n    \"OneLife\/server\/settings\/serverID.ini\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"\": \"{{server.build.env.SERVER_NAME}}\"\r\n        }\r\n    }\r\n}",
-        "startup": "{\r\n    \"done\": \"Listening for connection on port\"\r\n}",
+        "files": "{\n    \"OneLife\/server\/settings\/port.ini\": {\n        \"parser\": \"file\",\n        \"find\": {\n            \"\": \"{{server.build.default.port}}\"\n        }\n    },\n    \"OneLife\/server\/settings\/clientPassword.ini\": {\n        \"parser\": \"file\",\n        \"find\": {\n            \"\": \"{{server.build.env.PASSWORD}}\"\n        }\n    },\n    \"OneLife\\\/server\\\/settings\\\/requireClientPassword.ini\": {\n        \"parser\": \"file\",\n        \"find\": {\n            \"\": \"{{server.build.env.REQUIRE_PASSWORD}}\"\n        }\n    },\n    \"OneLife\\\/server\\\/settings\\\/serverID.ini\": {\n        \"parser\": \"file\",\n        \"find\": {\n            \"\": \"{{server.build.env.SERVER_NAME}}\"\n        }\n    }\n}",
+        "startup": "{\n    \"done\": \"Listening for connection on port\"\n}",
         "logs": "{}",
         "stop": "^C"
     },
     "scripts": {
         "installation": {
             "script": "# Update\r\napt update\r\napt install -y build-essential git\r\n\r\n# Create Server folder\r\nmkdir -p \/mnt\/server\/\r\ncd \/mnt\/server\/\r\n\r\n# Clone the server builder\r\ncurl -o serverPullAndBuildLinux.sh https:\/\/raw.githubusercontent.com\/jasonrohrer\/OneLife\/master\/server\/installYourOwnServer\/serverPullAndBuildLinux.sh\r\n\r\n# Run it\r\nchmod +x serverPullAndBuildLinux.sh\r\n.\/serverPullAndBuildLinux.sh\r\n\r\necho -e \"Install Complete\"",
-            "container": "ghcr.io\/parkervcp\/installers:debian",
+            "container": "ghcr.io\/pelican-eggs\/installers:debian",
             "entrypoint": "bash"
         }
     },
