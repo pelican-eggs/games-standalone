@@ -4,3 +4,7 @@ this is the install script i wrote to install hytale servers through pelican it 
 you cannot set the port as the server does not support it yet ram usage is limited by settings a limit by pelican
 
 this egg should be importable as is and start working right away
+
+| Port    | default |
+|---------|---------|
+| Game    | 5520    |
