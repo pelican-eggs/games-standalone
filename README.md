@@ -55,6 +55,7 @@
   * GTA
     * [GTAC](gta/gtac)
 * [Hogwarp](hogwarp)
+* [Hytale](https://github.com/steevLP/games-standalone/tree/main/hytale)
 * [Kerbal Space Program](ksp)
 * [League Sandbox](leaguesandbox)
 * [Los Angeles Crimes](losangelescrimes)
