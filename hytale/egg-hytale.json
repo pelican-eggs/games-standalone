@@ -1,0 +1,84 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-01-13T00:00:00+00:00",
+    "name": "Hytale",
+    "author": "support@hytale.com",
+    "description": "Hytale is a blocky sandbox game with procedurally-generated worlds. This egg runs a dedicated Hytale server with Java 25 support.",
+    "features": [
+        "steam_disk_space"
+    ],
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:java_25": "ghcr.io\/pterodactyl\/yolks:java_25"
+    },
+    "file_denylist": [],
+    "startup": "java -XX:AOTCache=HytaleServer.aot -Xms128M -Xmx{{SERVER_MEMORY}}M -jar HytaleServer.jar --assets {{ASSETS_PATH}} --bind 0.0.0.0:{{SERVER_PORT}} {{ADDITIONAL_ARGS}}",
+    "config": {
+        "files": "{\r\n    \"config.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"Port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Server is now accepting connections\"\r\n}",
+        "logs": "{}",
+        "stop": "stop"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n# Hytale Installation Script\r\nset -e\r\n\r\napt update\r\napt install -y curl unzip jq\r\n\r\ncd \/mnt\/server\r\n\r\necho \"----------------------------------------\"\r\necho \"Hytale Server Installation\"\r\necho \"----------------------------------------\"\r\n\r\n# Download Hytale Downloader\r\nif [ ! -f \"hytale-downloader\" ]; then\r\n    echo \"Downloading Hytale Downloader...\"\r\n    curl -fsSL https:\/\/downloader.hytale.com\/hytale-downloader.zip -o hytale-downloader.zip\r\n    \r\n    if [ ! -f \"hytale-downloader.zip\" ] || [ ! -s \"hytale-downloader.zip\" ]; then\r\n        echo \"ERROR: Failed to download hytale-downloader.zip\"\r\n        exit 1\r\n    fi\r\n    \r\n    echo \"Extracting Hytale Downloader...\"\r\n    unzip -q -o hytale-downloader.zip\r\n    \r\n    # Find the downloader executable (check multiple possible names)\r\n    if [ -f \"hytale-downloader\" ]; then\r\n        chmod +x hytale-downloader\r\n        echo \"Found hytale-downloader\"\r\n    elif [ -f \"hytale-downloader-linux\" ]; then\r\n        mv hytale-downloader-linux hytale-downloader\r\n        chmod +x hytale-downloader\r\n        echo \"Found and renamed hytale-downloader-linux\"\r\n    elif [ -f \"hytale-downloader-linux-amd64\" ]; then\r\n        mv hytale-downloader-linux-amd64 hytale-downloader\r\n        chmod +x hytale-downloader\r\n        echo \"Found and renamed hytale-downloader-linux-amd64\"\r\n    elif [ -f \"hytale-downloader-linux-arm64\" ]; then\r\n        mv hytale-downloader-linux-arm64 hytale-downloader\r\n        chmod +x hytale-downloader\r\n        echo \"Found and renamed hytale-downloader-linux-arm64\"\r\n    else\r\n        echo \"ERROR: hytale-downloader executable not found after extraction\"\r\n        echo \"Contents of directory:\"\r\n        ls -la\r\n        exit 1\r\n    fi\r\n    \r\n    rm -f hytale-downloader.zip\r\n    echo \"Hytale Downloader ready\"\r\nfi\r\n\r\n# Verify downloader exists and is executable\r\nif [ ! -x \"hytale-downloader\" ]; then\r\n    echo \"ERROR: hytale-downloader is not executable\"\r\n    ls -la hytale-downloader\r\n    exit 1\r\nfi\r\n\r\n# Download Server Files\r\nif [ \"${AUTO_DOWNLOAD}\" == \"1\" ]; then\r\n    echo \"Downloading Hytale Server files (patchline: ${PATCHLINE})...\"\r\n    echo \"NOTE: This requires a valid Hytale license and OAuth authentication.\"\r\n    echo \"If you see an authentication URL, you must visit it and authorize.\"\r\n    echo \"\"\r\n    \r\n    .\/hytale-downloader -download-path game.zip -patchline ${PATCHLINE} || {\r\n        echo \"\"\r\n        echo \"========================================\"\r\n        echo \"  DOWNLOAD FAILED - AUTHENTICATION REQUIRED\"\r\n        echo \"========================================\"\r\n        echo \"The Hytale Downloader requires OAuth authentication.\"\r\n        echo \"You must have a valid Hytale license to download server files.\"\r\n        echo \"\"\r\n        echo \"Alternative installation methods:\"\r\n        echo \"\"\r\n        echo \"1. Copy from Hytale Launcher installation:\"\r\n        echo \"   Windows: %appdata%\\\\Hytale\\\\install\\\\release\\\\package\\\\game\\\\latest\"\r\n        echo \"   Copy Server\/ folder contents and Assets.zip\"\r\n        echo \"\"\r\n        echo \"2. Manual download with authentication:\"\r\n        echo \"   - Download: https:\/\/downloader.hytale.com\/hytale-downloader.zip\"\r\n        echo \"   - Extract and run on your PC\"\r\n        echo \"   - Authenticate when prompted\"\r\n        echo \"   - Run: .\/hytale-downloader -download-path game.zip\"\r\n        echo \"   - Upload files to server via SFTP\"\r\n        echo \"\"\r\n        echo \"3. Set AUTO_DOWNLOAD=0 and upload manually\"\r\n        echo \"========================================\"\r\n        exit 1\r\n    }\r\n    \r\n    if [ ! -f \"game.zip\" ] || [ ! -s \"game.zip\" ]; then\r\n        echo \"ERROR: game.zip not found or empty after download\"\r\n        exit 1\r\n    fi\r\n    \r\n    echo \"Extracting server files...\"\r\n    unzip -q -o game.zip\r\n    \r\n    # Move files to correct location\r\n    if [ -d \"Server\" ]; then\r\n        echo \"Moving Server files to root...\"\r\n        mv Server\/* . 2>\/dev\/null || true\r\n        rm -rf Server\r\n    fi\r\n    \r\n    # Verify critical files exist\r\n    if [ ! -f \"HytaleServer.jar\" ]; then\r\n        echo \"ERROR: HytaleServer.jar not found after extraction\"\r\n        ls -la\r\n        exit 1\r\n    fi\r\n    \r\n    if [ ! -f \"Assets.zip\" ]; then\r\n        echo \"WARNING: Assets.zip not found. Server may fail to start.\"\r\n    fi\r\n    \r\n    rm -f game.zip\r\n    echo \"Server files installed successfully!\"\r\n    echo \"Files installed:\"\r\n    ls -lh HytaleServer.jar Assets.zip 2>\/dev\/null || ls -lh HytaleServer.jar\r\nelse\r\n    echo \"========================================\"\r\n    echo \"  MANUAL INSTALLATION REQUIRED\"\r\n    echo \"========================================\"\r\n    echo \"\"\r\n    echo \"Hytale Downloader requires OAuth authentication which\"\r\n    echo \"cannot be completed during automated installation.\"\r\n    echo \"\"\r\n    echo \"Please follow these steps:\"\r\n    echo \"\"\r\n    echo \"1. On your PC, download Hytale Downloader:\"\r\n    echo \"   https:\/\/downloader.hytale.com\/hytale-downloader.zip\"\r\n    echo \"\"\r\n    echo \"2. Extract and run the downloader:\"\r\n    echo \"   Windows: hytale-downloader-windows-amd64.exe\"\r\n    echo \"   Linux: .\/hytale-downloader-linux-amd64\"\r\n    echo \"\"\r\n    echo \"3. Authenticate when prompted (OAuth device flow)\"\r\n    echo \"\"\r\n    echo \"4. Download files:\"\r\n    echo \"   .\/hytale-downloader -download-path game.zip\"\r\n    echo \"\"\r\n    echo \"5. Extract game.zip and locate these files:\"\r\n    echo \"   - Server\/HytaleServer.jar\"\r\n    echo \"   - Assets.zip (in root of zip)\"\r\n    echo \"   - (optional) Server\/HytaleServer.aot\"\r\n    echo \"\"\r\n    echo \"6. Upload files to this server via SFTP\/File Manager:\"\r\n    echo \"   Path: \/home\/container\/\"\r\n    echo \"\"\r\n    echo \"Alternative: Copy from Hytale Launcher installation:\"\r\n    echo \"   Windows: %appdata%\\\\Hytale\\\\install\\\\release\\\\package\\\\game\\\\latest\"\r\n    echo \"   Linux: \$XDG_DATA_HOME\/Hytale\/install\/release\/package\/game\/latest\"\r\n    echo \"\"\r\n    echo \"========================================\"\r\nfi\r\n\r\necho \"\"\r\necho \"----------------------------------------\"\r\necho \"Installation Complete!\"\r\necho \"----------------------------------------\"\r\necho \"\"\r\necho \"NEXT STEPS:\"\r\necho \"1. Upload server files (see instructions above)\"\r\necho \"2. Start the server\"\r\necho \"3. Authenticate: \/auth login device\"\r\necho \"4. Visit URL and enter code\"\r\necho \"5. Server will start accepting connections\"\r\necho \"\"\r\necho \"Note: Limit of 100 servers per Hytale license\"\r\necho \"----------------------------------------\"",
+            "container": "ghcr.io\/pterodactyl\/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Server Memory",
+            "description": "The amount of RAM allocated to the server in MB. Recommended minimum: 4096MB (4GB). Increase based on player count and view distance.",
+            "env_variable": "SERVER_MEMORY",
+            "default_value": "4096",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|min:2048",
+            "field_type": "text"
+        },
+        {
+            "name": "Assets Path",
+            "description": "Path to the Assets.zip file. Default: Assets.zip in server root directory.",
+            "env_variable": "ASSETS_PATH",
+            "default_value": "Assets.zip",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Additional Arguments",
+            "description": "Additional startup arguments for the server. Example: --disable-sentry --backup --backup-frequency 60",
+            "env_variable": "ADDITIONAL_ARGS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Auto Download",
+            "description": "Automatically download server files using Hytale Downloader. Requires Hytale license and OAuth authentication during installation.",
+            "env_variable": "AUTO_DOWNLOAD",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Patchline",
+            "description": "Game version channel to download. Options: release, pre-release",
+            "env_variable": "PATCHLINE",
+            "default_value": "release",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:release,pre-release",
+            "field_type": "text"
+        }
+    ]
+}
