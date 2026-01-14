@@ -55,6 +55,7 @@
   * GTA
     * [GTAC](gta/gtac)
 * [Hogwarp](hogwarp)
+* [Hytale](hytale)
 * [Kerbal Space Program](ksp)
 * [League Sandbox](leaguesandbox)
 * [Los Angeles Crimes](losangelescrimes)
