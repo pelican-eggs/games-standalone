@@ -15,7 +15,7 @@
     "file_denylist": [
         "hytale-downloader"
     ],
-    "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar HytaleServer.jar --assets {{ASSETS_PATH}} --backup --backup-dir ${BACKUP_DIR} --backup-frequency ${BACKUP_FREQUENCY}",
+    "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar HytaleServer.jar --bind 0.0.0.0:{{SERVER_PORT}} --assets {{ASSETS_PATH}} --backup --backup-dir ${BACKUP_DIR} --backup-frequency ${BACKUP_FREQUENCY}",
     "config": {
         "files": "{}",
         "startup": "{\n    \"done\": \"Successfully created game session\"\n}",
