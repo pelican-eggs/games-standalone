@@ -29,7 +29,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "curl --output hytale-downloader.zip \"https://downloader.hytale.com/hytale-downloader.zip\"\nunzip  hytale-downloader.zip\nmv hytale-downloader-linux-amd64 /mnt/server/hytale-downloader -f\nmkdir -p /mnt/server/Backups",
+            "script": "curl --output hytale-downloader.zip \"https://downloader.hytale.com/hytale-downloader.zip\"\nunzip  hytale-downloader.zip\nmv hytale-downloader-linux-amd64 /mnt/server/hytale-downloader -f\nmkdir -p /mnt/server/Backups\nrm -r hytale-downloader.zip",
             "container": "ghcr.io/pelican-eggs/installers:debian",
             "entrypoint": "bash"
         }
