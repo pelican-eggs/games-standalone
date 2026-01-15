@@ -4,21 +4,21 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2026-01-14T19:14:04+00:00",
+    "exported_at": "2026-01-15T15:18:51+00:00",
     "name": "Hytale",
     "author": "161775222+JoanFo1456@users.noreply.github.com",
     "description": "Set out on an adventure built for both creation and play. Hytale blends the freedom of a sandbox\nwith the momentum of an RPG: explore a procedurally generated world full of dungeons, secrets, and a\nvariety of creatures, then shape it block by block.",
     "features": null,
     "docker_images": {
-        "Hytale": "ghcr.io\/goover\/games:hytale"
+        "Hytale": "ghcr.io\/pelican-eggs\/games:hytale"
     },
     "file_denylist": [
         "hytale-downloader"
     ],
-    "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar HytaleServer.jar --bind 0.0.0.0:{{SERVER_PORT}} --assets {{ASSETS_PATH}} --backup --backup-dir ${BACKUP_DIR} --backup-frequency ${BACKUP_FREQUENCY}",
+    "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar HytaleServer.jar --bind 0.0.0.0:{{SERVER_PORT}} --assets {{ASSETS_PATH}} --backup --backup-dir {{BACKUP_DIR}} --backup-frequency {{BACKUP_FREQUENCY}}",
     "config": {
         "files": "{}",
-        "startup": "{\n    \"done\": \"Successfully created game session\"\n}",
+        "startup": "{\n    \"done\": \"Hytale Server Booted!\"\n}",
         "logs": "{}",
         "stop": "stop"
     },
