@@ -1,0 +1,84 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-01-15T15:18:51+00:00",
+    "name": "Hytale",
+    "author": "161775222+JoanFo1456@users.noreply.github.com",
+    "description": "Set out on an adventure built for both creation and play. Hytale blends the freedom of a sandbox\nwith the momentum of an RPG: explore a procedurally generated world full of dungeons, secrets, and a\nvariety of creatures, then shape it block by block.",
+    "features": null,
+    "docker_images": {
+        "Hytale": "ghcr.io\/pelican-eggs\/games:hytale"
+    },
+    "file_denylist": [
+        "hytale-downloader"
+    ],
+    "startup": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar HytaleServer.jar --bind 0.0.0.0:{{SERVER_PORT}} --assets {{ASSETS_PATH}} --backup --backup-dir {{BACKUP_DIR}} --backup-frequency {{BACKUP_FREQUENCY}}",
+    "config": {
+        "files": "{}",
+        "startup": "{\n    \"done\": \"Hytale Server Booted!\"\n}",
+        "logs": "{}",
+        "stop": "stop"
+    },
+    "scripts": {
+        "installation": {
+            "script": "curl --output hytale-downloader.zip \"https:\/\/downloader.hytale.com\/hytale-downloader.zip\"\nunzip  hytale-downloader.zip\nmv hytale-downloader-linux-amd64 \/mnt\/server\/hytale-downloader -f\nmkdir -p \/mnt\/server\/Backups\nrm -r hytale-downloader.zip",
+            "container": "ghcr.io\/pelican-eggs\/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Assets Path",
+            "description": "This will tell Hytale where to search for the assets",
+            "env_variable": "ASSETS_PATH",
+            "default_value": "Assets.zip",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Auto update",
+            "description": "This will enable autoupdate for the game.",
+            "env_variable": "AUTO_UPDATE",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Backup Dir",
+            "description": "The directory where it will save the backups.",
+            "env_variable": "BACKUP_DIR",
+            "default_value": "Backups",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "string|required",
+            "field_type": "text"
+        },
+        {
+            "name": "Backup Frequency",
+            "description": "The frequency that the backups are made.",
+            "env_variable": "BACKUP_FREQUENCY",
+            "default_value": "3600",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "integer|required",
+            "field_type": "text"
+        },
+        {
+            "name": "Patchline",
+            "description": "From where to get updates",
+            "env_variable": "PATCHLINE",
+            "default_value": "release",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "in:release, pre-release|required",
+            "field_type": "text"
+        }
+    ]
+}
