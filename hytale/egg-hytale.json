@@ -4,7 +4,7 @@
         "version": "PLCN_v3",
         "update_url": null
     },
-    "exported_at": "2026-01-14T19:27:25+00:00",
+    "exported_at": "2026-01-15T15:18:51+00:00",
     "name": "Hytale",
     "author": "161775222+JoanFo1456@users.noreply.github.com",
     "uuid": "6dfb0986-d542-47a4-aea6-c89255926d64",
@@ -13,7 +13,7 @@
     "tags": [],
     "features": [],
     "docker_images": {
-        "Hytale": "ghcr.io/goover/games:hytale"
+        "Hytale": "ghcr.io/pelican-eggs/games:hytale"
     },
     "file_denylist": [
         "hytale-downloader"
@@ -23,7 +23,7 @@
     },
     "config": {
         "files": "{}",
-        "startup": "{\n    \"done\": \"Successfully created game session\"\n}",
+        "startup": "{\n    \"done\": \"Hytale Server Booted!\"\n}",
         "logs": "{}",
         "stop": "stop"
     },
