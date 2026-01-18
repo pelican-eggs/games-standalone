@@ -27,7 +27,7 @@ config:
 scripts:
   installation:
     script: |-
-      ## download Hytal downloader
+      ## download Hytale downloader
       curl --output hytale-downloader.zip "https://downloader.hytale.com/hytale-downloader.zip"
       unzip  hytale-downloader.zip
       mv hytale-downloader-linux-amd64 /mnt/server/hytale-downloader -f
