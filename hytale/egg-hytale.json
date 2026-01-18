@@ -4,7 +4,7 @@
         "version": "PLCN_v3",
         "update_url": null
     },
-    "exported_at": "2026-01-15T15:18:51+00:00",
+    "exported_at": "2026-01-18T07:33:17+00:00",
     "name": "Hytale",
     "author": "161775222+JoanFo1456@users.noreply.github.com",
     "uuid": "6dfb0986-d542-47a4-aea6-c89255926d64",
@@ -15,27 +15,26 @@
     "docker_images": {
         "Hytale": "ghcr.io/pelican-eggs/games:hytale"
     },
-    "file_denylist": [
-        "hytale-downloader"
-    ],
+    "file_denylist": [],
     "startup_commands": {
-        "Default": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar HytaleServer.jar --bind 0.0.0.0:{{SERVER_PORT}} --assets {{ASSETS_PATH}} --backup --backup-dir {{BACKUP_DIR}} --backup-frequency {{BACKUP_FREQUENCY}}"
+        "Default": "java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar HytaleServer.jar --assets {{ASSETS_PATH}} --bind 0.0.0.0:{{SERVER_PORT}} --backup --backup-dir {{BACKUP_DIR}} --backup-frequency ${BACKUP_FREQUENCY}"
     },
     "config": {
-        "files": "{}",
+        "files": "[]",
         "startup": "{\n    \"done\": \"Hytale Server Booted!\"\n}",
-        "logs": "{}",
+        "logs": "[]",
         "stop": "stop"
     },
     "scripts": {
         "installation": {
-            "script": "curl --output hytale-downloader.zip \"https://downloader.hytale.com/hytale-downloader.zip\"\nunzip  hytale-downloader.zip\nmv hytale-downloader-linux-amd64 /mnt/server/hytale-downloader -f\nmkdir -p /mnt/server/Backups\nrm -r hytale-downloader.zip",
+            "script": "## download Hytal downloader\ncurl --output hytale-downloader.zip \"https://downloader.hytale.com/hytale-downloader.zip\"\nunzip  hytale-downloader.zip\nmv hytale-downloader-linux-amd64 /mnt/server/hytale-downloader -f\n\n## create backup dir\nmkdir -p /mnt/server/backups\n\n## install end\necho \"-----------------------------------------\"\necho \"Installation completed...\"\necho \"-----------------------------------------\"",
             "container": "ghcr.io/pelican-eggs/installers:debian",
             "entrypoint": "bash"
         }
     },
     "variables": [
         {
+            "sort": 6,
             "name": "Assets Path",
             "description": "This will tell Hytale where to search for the assets",
             "env_variable": "ASSETS_PATH",
@@ -45,10 +44,10 @@
             "rules": [
                 "required",
                 "string"
-            ],
-            "sort": 2
+            ]
         },
         {
+            "sort": 1,
             "name": "Auto update",
             "description": "This will enable autoupdate for the game.",
             "env_variable": "AUTO_UPDATE",
@@ -57,47 +56,58 @@
             "user_editable": true,
             "rules": [
                 "boolean"
-            ],
-            "sort": 1
+            ]
         },
         {
+            "sort": 5,
             "name": "Backup Dir",
-            "description": "The directory where it will save the backups.",
+            "description": "",
             "env_variable": "BACKUP_DIR",
-            "default_value": "Backups",
+            "default_value": "/home/container/backups",
             "user_viewable": true,
             "user_editable": true,
             "rules": [
-                "string",
-                "required"
-            ],
-            "sort": 3
+                "required",
+                "string"
+            ]
         },
         {
+            "sort": 4,
             "name": "Backup Frequency",
-            "description": "The frequency that the backups are made.",
+            "description": "Backup interval in minutes",
             "env_variable": "BACKUP_FREQUENCY",
-            "default_value": "3600",
+            "default_value": "30",
             "user_viewable": true,
             "user_editable": true,
             "rules": [
                 "integer",
                 "required"
-            ],
-            "sort": 4
+            ]
         },
         {
+            "sort": 2,
             "name": "Patchline",
-            "description": "From where to get updates",
+            "description": "",
             "env_variable": "PATCHLINE",
             "default_value": "release",
             "user_viewable": true,
             "user_editable": true,
             "rules": [
-                "in:release, pre-release",
-                "required"
-            ],
-            "sort": 5
+                "required",
+                "in:release,pre-release"
+            ]
+        },
+        {
+            "sort": 3,
+            "name": "Install Performance Saver Plugin",
+            "description": "install Hytale Performance Saver Plugin",
+            "env_variable": "PSAVER",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "boolean"
+            ]
         }
     ]
 }
