@@ -99,7 +99,7 @@ variables:
   -
     sort: 3
     name: 'Install Performance Saver Plugin'
-    description: 'install Hytale Performance Saver Plugin'
+    description: 'Enables the Hytale Performance Saver Plugin to optimize server performance.'
     env_variable: PSAVER
     default_value: 0
     user_viewable: true
