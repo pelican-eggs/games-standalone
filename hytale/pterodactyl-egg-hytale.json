@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2026-01-18T07:33:17+00:00",
+    "exported_at": "2026-01-18T07:37:23+00:00",
     "name": "Hytale",
     "author": "161775222+JoanFo1456@users.noreply.github.com",
     "description": "Set out on an adventure built for both creation and play. Hytale blends the freedom of a sandbox\nwith the momentum of an RPG: explore a procedurally generated world full of dungeons, secrets, and a\nvariety of creatures, then shape it block by block.",
@@ -22,7 +22,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "## download Hytal downloader\ncurl --output hytale-downloader.zip \"https:\/\/downloader.hytale.com\/hytale-downloader.zip\"\nunzip  hytale-downloader.zip\nmv hytale-downloader-linux-amd64 \/mnt\/server\/hytale-downloader -f\n\n## create backup dir\nmkdir -p \/mnt\/server\/backups\n\n## install end\necho \"-----------------------------------------\"\necho \"Installation completed...\"\necho \"-----------------------------------------\"",
+            "script": "## download Hytal downloader\ncurl --output hytale-downloader.zip \"https:\/\/downloader.hytale.com\/hytale-downloader.zip\"\nunzip  hytale-downloader.zip\nmv hytale-downloader-linux-amd64 \/mnt\/server\/hytale-downloader -f\n\n## create backup dir\nmkdir -p \/mnt\/server\/Backups\n\n## install end\necho \"-----------------------------------------\"\necho \"Installation completed...\"\necho \"-----------------------------------------\"",
             "container": "ghcr.io\/pelican-eggs\/installers:debian",
             "entrypoint": "bash"
         }
@@ -52,7 +52,7 @@
             "name": "Backup Dir",
             "description": "",
             "env_variable": "BACKUP_DIR",
-            "default_value": "\/home\/container\/backups",
+            "default_value": "Backups",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string",
