@@ -4,7 +4,7 @@
         "version": "PLCN_v3",
         "update_url": null
     },
-    "exported_at": "2026-01-18T07:37:23+00:00",
+    "exported_at": "2026-01-18T15:37:16+00:00",
     "name": "Hytale",
     "author": "161775222+JoanFo1456@users.noreply.github.com",
     "uuid": "6dfb0986-d542-47a4-aea6-c89255926d64",
@@ -61,7 +61,7 @@
         {
             "sort": 5,
             "name": "Backup Dir",
-            "description": "",
+            "description": "The directory where it will save the backups.",
             "env_variable": "BACKUP_DIR",
             "default_value": "Backups",
             "user_viewable": true,
