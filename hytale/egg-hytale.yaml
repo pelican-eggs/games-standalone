@@ -1,7 +1,7 @@
 _comment: 'DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL'
 meta:
   version: PLCN_v3
-  update_url: null
+  update_url: 'https://raw.githubusercontent.com/pelican-eggs/games-standalone/refs/heads/main/hytale/egg-hytale.yaml'
 exported_at: '2026-01-18T15:38:23+00:00'
 name: Hytale
 author: 161775222+JoanFo1456@users.noreply.github.com
