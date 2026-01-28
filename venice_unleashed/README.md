@@ -76,7 +76,7 @@ Hosting a VU server requires authorization with your EA login token to authentic
 It is up to you if you want panel clients to provide their own tokens, or if you want to edit the Egg to hide the "EA Auth Token" Startup Variable from view and use your own master "host" token for all servers. If you do the latter, it shouldn't be easy for clients to see your token, but it is still recommended not to use a personal EA account that could be potentially stolen (ie. create an account specifically for hosting that just owns BF3).
 
 > [!NOTE]
-> Tokens can sometimes rotate or become invalid over time. If you have trouble starting the server, you may need to regenerate your token.
+> Tokens can sometimes rotate or become invalid over time. If you have trouble starting the server, you may need to regenerate your token and enable the "[Repair] Reactivate on Start" Startup Variable.
 
 #### 2. Setup BF3 Mount
 
@@ -108,9 +108,9 @@ allowed_mounts:
 
 #### 4. Authenticate server with EA
 
-Start the server. Assuming you followed steps 1-3 correctly, the server should automatically authenticate itself with EA on the first boot and quit. Wings will likely see this as a "crash" (don't worry, it isn't) and reboot the server. If it doesn't, simply start the server again.
+Start the server. Assuming you followed steps 1-3 correctly, the server should automatically authenticate itself with EA on the first boot.
 
-Assuming it authenticated successfully, the next boot should start the server normally! 😃
+Assuming it authenticated successfully, the server should start normally! 😃
 
 > [!NOTE]
 > It can take some time for the server to start while it works to connect to the Zeus backend for server listing.
