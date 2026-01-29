@@ -2,7 +2,7 @@ _comment: 'DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL'
 meta:
   version: PLCN_v3
   update_url: 'https://raw.githubusercontent.com/pelican-eggs/games-standalone/refs/heads/main/hytale/egg-hytale.yaml'
-exported_at: '2026-01-18T15:38:23+00:00'
+exported_at: '2026-01-29T20:16:28+00:00'
 name: Hytale
 author: 161775222+JoanFo1456@users.noreply.github.com
 uuid: 6dfb0986-d542-47a4-aea6-c89255926d64
@@ -17,7 +17,8 @@ docker_images:
   Hytale: 'ghcr.io/pelican-eggs/games:hytale'
 file_denylist: {  }
 startup_commands:
-  Default: 'java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar HytaleServer.jar --assets {{ASSETS_PATH}} --bind 0.0.0.0:{{SERVER_PORT}} --backup --backup-dir {{BACKUP_DIR}} --backup-frequency ${BACKUP_FREQUENCY}'
+  Default: 'java -Xms128M -XX:MaxRAMPercentage=95.0 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}} --assets {{ASSETS_PATH}} --bind 0.0.0.0:{{SERVER_PORT}} --backup --backup-dir {{BACKUP_DIR}} --backup-frequency ${BACKUP_FREQUENCY}'
+  Optimised: 'java -Xms{{HEAP_SIZE}} -Xmx{{HEAP_SIZE}} -XX:MaxDirectMemorySize={{DIRECT_MEMORY}} -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}} --assets {{ASSETS_PATH}} --bind 0.0.0.0:{{SERVER_PORT}} --backup --backup-dir {{BACKUP_DIR}} --backup-frequency {{BACKUP_FREQUENCY}}'
 config:
   files: {  }
   startup:
@@ -43,7 +44,6 @@ scripts:
     entrypoint: bash
 variables:
   -
-    sort: 6
     name: 'Assets Path'
     description: 'This will tell Hytale where to search for the assets'
     env_variable: ASSETS_PATH
@@ -53,8 +53,8 @@ variables:
     rules:
       - required
       - string
+    sort: 6
   -
-    sort: 1
     name: 'Auto update'
     description: 'This will enable autoupdate for the game.'
     env_variable: AUTO_UPDATE
@@ -63,8 +63,8 @@ variables:
     user_editable: true
     rules:
       - boolean
+    sort: 1
   -
-    sort: 5
     name: 'Backup Dir'
     description: 'The directory where it will save the backups.'
     env_variable: BACKUP_DIR
@@ -74,8 +74,8 @@ variables:
     rules:
       - required
       - string
+    sort: 5
   -
-    sort: 4
     name: 'Backup Frequency'
     description: 'Backup interval in minutes'
     env_variable: BACKUP_FREQUENCY
@@ -85,8 +85,40 @@ variables:
     rules:
       - integer
       - required
+    sort: 4
   -
-    sort: 2
+    name: 'Direct Memory'
+    description: 'Network buffer memory (Off-Heap).'
+    env_variable: DIRECT_MEMORY
+    default_value: 1536M
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - string
+    sort: 9
+  -
+    name: 'Heap Size'
+    description: 'Main game memory.'
+    env_variable: HEAP_SIZE
+    default_value: 5G
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - string
+    sort: 8
+  -
+    name: 'Install Performance Saver Plugin'
+    description: 'Enables the Hytale Performance Saver Plugin to optimize server performance.'
+    env_variable: PSAVER
+    default_value: 0
+    user_viewable: true
+    user_editable: true
+    rules:
+      - boolean
+    sort: 3
+  -
     name: Patchline
     description: ''
     env_variable: PATCHLINE
@@ -96,13 +128,15 @@ variables:
     rules:
       - required
       - 'in:release,pre-release'
+    sort: 2
   -
-    sort: 3
-    name: 'Install Performance Saver Plugin'
-    description: 'Enables the Hytale Performance Saver Plugin to optimize server performance.'
-    env_variable: PSAVER
-    default_value: 0
+    name: 'Server JAR File'
+    description: 'The name of the jar file to run.'
+    env_variable: SERVER_JARFILE
+    default_value: HytaleServer.jar
     user_viewable: true
     user_editable: true
     rules:
-      - boolean
+      - required
+      - string
+    sort: 7
