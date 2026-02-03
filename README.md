@@ -94,4 +94,5 @@
 * [Wolfenstein: Enemy Territory](wolfenstein_enemy_territory)
   * [ET: Legacy](wolfenstein_enemy_territory/etlegacy)
 * [Wine (Generic/Template Egg)](wine/generic)
+* [Witcher Online][witcher_online]
 * [Xonotic](xonotic)
