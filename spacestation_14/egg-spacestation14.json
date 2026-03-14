@@ -4,7 +4,7 @@
         "version": "PLCN_v3",
         "update_url": "https://raw.githubusercontent.com/pelican-eggs/games-standalone/refs/heads/main/spacestation_14/egg-spacestation14.json"
     },
-    "exported_at": "2025-11-24T08:29:01+00:00",
+    "exported_at": "2026-03-14T18:04:21+00:00",
     "name": "Space Station 14",
     "author": "josdekurk@gmail.com",
     "uuid": "ef79fd90-64e9-4387-b862-af0042ed2d28",
@@ -13,6 +13,7 @@
     "tags": [],
     "features": [],
     "docker_images": {
+        "Dotnet 10": "ghcr.io/parkervcp/yolks:dotnet_10",
         "Dotnet 9": "ghcr.io/parkervcp/yolks:dotnet_9",
         "Dotnet 8": "ghcr.io/parkervcp/yolks:dotnet_8"
     },
@@ -35,7 +36,6 @@
     },
     "variables": [
         {
-            "sort": 4,
             "name": "Authentication",
             "description": "Enforces authentication so that ALL connecting clients must have a proper account.\nPossible values here are: 0 (optional), 1 (required), 2 (disabled).\n",
             "env_variable": "SERVER_AUTH",
@@ -46,10 +46,10 @@
                 "required",
                 "numeric",
                 "in:0,1,2"
-            ]
+            ],
+            "sort": 4
         },
         {
-            "sort": 3,
             "name": "Max players",
             "description": "",
             "env_variable": "SERVER_MAX_PLAYERS",
@@ -60,10 +60,10 @@
                 "required",
                 "numeric",
                 "between:1,256"
-            ]
+            ],
+            "sort": 3
         },
         {
-            "sort": 1,
             "name": "Server name",
             "description": "Changes the name of the server as it appears in the lobby and launcher.",
             "env_variable": "SERVER_NAME",
@@ -74,10 +74,10 @@
                 "required",
                 "string",
                 "max:48"
-            ]
+            ],
+            "sort": 1
         },
         {
-            "sort": 2,
             "name": "Server tickrate",
             "description": "The tickrate of the server. Default is 60",
             "env_variable": "SERVER_TICK",
@@ -88,7 +88,8 @@
                 "required",
                 "numeric",
                 "between:1,80"
-            ]
+            ],
+            "sort": 2
         }
     ]
 }
