@@ -289,9 +289,9 @@ variables:
     rules:
       - boolean
   - sort: 17
-    name: 'Skip Mod Validation'
-    description: 'Skip mod validation, allowing the server to boot even if a mod fails to load.'
-    env_variable: SKIP_MOD_VALIDATION
+    name: 'Ignore Broken Mods'
+    description: 'Ignore broken mods, allowing the server to boot even if a mod fails to load.'
+    env_variable: IGNORE_BROKEN_MODS
     default_value: 0
     user_viewable: true
     user_editable: true
