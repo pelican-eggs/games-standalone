@@ -68,15 +68,16 @@ Hosting a VU server requires authorization with your EA login token to authentic
 1. Install and launch the EA App on your personal computer.
 2. Install the VU client.
 3. Search for the "Activate BF3" shortcut in your Windows Start Menu (added by VU; see [the docs](https://docs.veniceunleashed.net/hosting/setup-win/#activating-the-game) for alternative method if shortcut is missing).
-4. Run this shortcut and copy the long token value it provides to a safe place.
+4. Run this shortcut and copy the long token value it provides.
+5. Paste the token into the "EA Auth Token" Startup Variable of the server.
+
+> [!NOTE]
+> Tokens will occasionally expire after about a week, causing the server to crash on startup. If this happens, simply regenerate a new token using the steps above.
+
+Unfortunately, at this time, it is impossible to automatically detect if a token has expired or regenerate a new one server-side due to VU and EA limitations. Updating it manually will occasionally be required if the server is regularly restarted (eg. restart schedule).
 
 > [!CAUTION]
 > EA Auth Tokens can be used to freely access the corresponding EA account, bypassing passwords and 2FA! This token is required by the Egg and stored as a Startup Variable in **plain text**. Be mindful of associated security concerns regarding this.
-
-It is up to you if you want panel clients to provide their own tokens, or if you want to edit the Egg to hide the "EA Auth Token" Startup Variable from view and use your own master "host" token for all servers. If you do the latter, it shouldn't be easy for clients to see your token, but it is still recommended not to use a personal EA account that could be potentially stolen (ie. create an account specifically for hosting that just owns BF3).
-
-> [!NOTE]
-> Tokens can sometimes rotate or become invalid over time. If you have trouble starting the server, you may need to regenerate your token and enable the "[Repair] Reactivate on Start" Startup Variable.
 
 #### 2. Setup BF3 Mount
 
@@ -104,7 +105,7 @@ allowed_mounts:
 #### 3. Obtain/Install your VU `server.key` file
 
 1. Obtain and download a key file from Venice Unleashed [key management portal](https://veniceunleashed.net/keys).
-2. Upload this file to your VU server instance under `/home/container/vu/instance`
+2. Upload this file to your VU server instance at `~/vu/instance/server.key`
 
 #### 4. Authenticate server with EA
 
