@@ -106,3 +106,25 @@ variables:
     user_editable: true
     rules:
       - boolean
+  -
+    sort: 7
+    name: 'Session Token'
+    description: 'OAuth session token for server authentication (Method C: Token Passthrough). Leave empty to use interactive auth. See: https://support.hytale.com/hc/en-us/articles/45328341414043'
+    env_variable: HYTALE_SERVER_SESSION_TOKEN
+    default_value: ''
+    user_viewable: true
+    user_editable: true
+    rules:
+      - nullable
+      - string
+  -
+    sort: 8
+    name: 'Identity Token'
+    description: 'OAuth identity token for server authentication (Method C: Token Passthrough). Leave empty to use interactive auth. See: https://support.hytale.com/hc/en-us/articles/45328341414043'
+    env_variable: HYTALE_SERVER_IDENTITY_TOKEN
+    default_value: ''
+    user_viewable: true
+    user_editable: true
+    rules:
+      - nullable
+      - string
