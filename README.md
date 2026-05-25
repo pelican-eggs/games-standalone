@@ -87,6 +87,8 @@
   * [Vanilla](terraria/vanilla)
 * [The Battle For Wesnoth](thebattleforwesnoth)
 * [Trackmania (2020)](trackmania2020)
+* [Unreal Tournament](unrealtournament)
+  * [Unreal Tournament 2004](unrealtournament/unrealtournament2004)
 * [Urban Terror](urbanterror)
 * [Veloren](veloren)
 * [Venice Unleashed](venice_unleashed)
