@@ -1,0 +1,192 @@
+_comment: 'DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL'
+meta:
+  version: PLCN_v3
+  update_url: null
+exported_at: '2026-06-09T09:27:59+00:00'
+name: 'World of PADMAN'
+author: bas1874@github.com
+uuid: 2361e74d-50d4-4582-b63d-93d637188205
+description: 'World of PADMAN (WoP) standalone server. with automatic configuration generation.'
+icon: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAFA3PEY8MlBGQUZaVVBfeMiCeG5uePWvuZHI////////////////////////////////////////////////////2wBDAVVaWnhpeOuCguv/////////////////////////////////////////////////////////////////////////wAARCAHiAVYDAREAAhEBAxEB/8QAGQAAAwEBAQAAAAAAAAAAAAAAAAECAwQF/8QANhAAAgIBAwIGAgECBQMFAQAAAAECEQMSITFBUQQTIjJhcYGRoTNCFCNDUrFicvAkNILR4ZL/xAAZAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAX/xAAeEQEBAQEAAwEBAQEAAAAAAAAAARECEiExA0ETIv/aAAwDAQACEQMRAD8AyPS5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABN1yS3Fw4RnlfoVLuzj1+mNTkZcXkuLu75M8d7WrAj0SuRN70lbM9dY1IuOHNLoo/Zxv6teJ/4bJ/vRn/AGXxROGTHvJWu6OnP6ys3kk7Vo7S6zYZUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQrXcmrhlROnVljG6s5d3G+Wr8NkXtkn9nGfq14olHJD3Qf2jrP1jN5S5Ktjd69JjXBijOKnJ6n2PN33XSR08cHH61jPxEdeJ91ua4uUscuPdHt5rj0qPpzwOf6/F5dlnjdRZAWWGOPLHy8u3tker8+mOoD0uQAAAAAAAAAAAAAAAAAAAAAAACdSujPlFxRpAAAAAAAJvdJK2+hjrrGpG2Pw175Xb7I8vX6uki/8Ni/2v9mP9KuMcmCWP1QeqPY7cfqzeUY2nng13NfpdiSO2zyOgsDPJhhk5VPujc7sTGWO8OTQ3s+Gbv8A1NJ6b2cmxYg460ZXE9fFceoc9pQfZl7+Jy67PHXaCyKdlwYeLXpi/k6/n6Y6Zrg9fLjQaQAAAAAAAAAAAAAAAAAAAAAAHRLw8Hj0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'
+tags: {  }
+features: {  }
+docker_images:
+  Ubuntu: 'ghcr.io/pelican-eggs/yolks:ubuntu'
+file_denylist: {  }
+startup_commands:
+  Default: './wopded +set fs_homepath . +set fs_basepath . +set fs_game {{FS_GAME}} +set dedicated {{DEDICATED_TYPE}} +set net_port {{SERVER_PORT}} +set com_hunkMegs {{SERVER_MEMORY}} +exec {{SERVER_CONFIG}}'
+config:
+  files: {  }
+  startup:
+    done: 'InitGame:'
+  logs: {  }
+  stop: quit
+scripts:
+  installation:
+    script: |-
+      #!/bin/bash
+      # World of PADMAN Installation Script
+
+
+      cd /mnt/server
+
+      ## get release info and download links
+      LATEST_JSON=$(curl --silent "https://api.github.com/repos/PadWorld-Entertainment/worldofpadman/releases/latest")
+      RELEASES=$(curl --silent "https://api.github.com/repos/PadWorld-Entertainment/worldofpadman/releases")
+
+      if [ -z "${VERSION}" ] || [ "${VERSION}" == "latest" ]; then
+          DOWNLOAD_URL=$(echo ${LATEST_JSON} | jq .assets | jq -r .[].browser_download_url | grep -i unified.zip)
+      else
+          VERSION_CHECK=$(echo ${RELEASES} | jq -r --arg VERSION "${VERSION}" '.[] | select(.tag_name==$VERSION) | .tag_name')
+          if [ "${VERSION}" == "${VERSION_CHECK}" ]; then
+              DOWNLOAD_URL=$(echo ${RELEASES} | jq -r --arg VERSION "${VERSION}" '.[] | select(.tag_name==$VERSION) | .assets[].browser_download_url' | grep -i unified.zip)
+          else
+              echo -e "defaulting to latest release"
+              DOWNLOAD_URL=$(echo ${LATEST_JSON} | jq .assets | jq -r .[].browser_download_url)
+          fi
+      fi
+
+      echo "Downloading from ${DOWNLOAD_URL}..."
+      curl -sSL ${DOWNLOAD_URL} -o wop.zip
+
+      echo "Extracting files..."
+      unzip -q -o wop.zip
+      rm wop.zip
+
+      # 2. Permissions & Architecture Symlink
+      echo "Setting up executables..."
+      chmod +x wopded.*
+
+      ARCH=$(uname -m)
+      if [ "$ARCH" == "aarch64" ] || [ "$ARCH" == "arm64" ]; then
+          ln -sf wopded.aarch64 wopded
+      elif [ "$ARCH" == "x86_64" ] || [ "$ARCH" == "amd64" ]; then
+          ln -sf wopded.x86_64 wopded
+      else
+          ln -sf wopded.x86 wopded
+      fi
+
+      # 3. Generate Config
+      mkdir -p ${FS_GAME}
+
+      echo "Generating ${FS_GAME}/${SERVER_CONFIG}..."
+      cat << EOF > ${FS_GAME}/${SERVER_CONFIG}
+      //
+      //    World of PADMAN - Panel generated server settings
+      //
+
+      // Server name and message
+      set sv_hostName "${SERVER_HOSTNAME}"
+      set g_MOTD      "Welcome to World of PADMAN!"
+
+      // Server settings
+      set sv_maxClients "12"
+      set sv_VoIP       "1"
+      set sv_maxRate    "9000"
+
+      // Download Settings
+      set sv_allowdownload "${ALLOW_DOWNLOAD}"
+
+      // Bot settings
+      set bot_enable     "1"
+      set bot_minPlayers "4"
+      set g_spSkill      "2"
+
+      // Passwords
+      set rconPassword "${RCON_PASSWORD}"
+      set g_password   ""
+
+      // Game settings
+      set g_allowVote "1"
+      set g_doWarmup  "1"
+      set g_warmup    "30"
+
+      // Execution of map rotation
+      exec "rotation.cfg"
+
+      // Fallback map just in case rotation fails
+      map wop_padgarden
+      EOF
+
+      echo "Installation complete!"
+    container: 'ghcr.io/pelican-eggs/installers:debian'
+    entrypoint: bash
+variables:
+  -
+    name: 'Allow Downloads'
+    description: '1 = Allow players to download maps from the server. 0 = Disable.'
+    env_variable: ALLOW_DOWNLOAD
+    default_value: 1
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - boolean
+    sort: 1
+  -
+    name: 'Config File Name'
+    description: 'The name of the config file inside the fs_game folder.'
+    env_variable: SERVER_CONFIG
+    default_value: server-settings.cfg
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - string
+    sort: 2
+  -
+    name: 'Game Version'
+    description: 'The version of World of PADMAN to download (e.g., latest or v1.7.0).'
+    env_variable: VERSION
+    default_value: latest
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - string
+    sort: 3
+  -
+    name: 'Mod Folder (fs_game)'
+    description: "The folder name for the game data. Default is 'wop'."
+    env_variable: FS_GAME
+    default_value: wop
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - string
+    sort: 4
+  -
+    name: 'RCON Password'
+    description: 'Password for remote admin. Leave empty to disable RCON.'
+    env_variable: RCON_PASSWORD
+    default_value: ''
+    user_viewable: true
+    user_editable: true
+    rules:
+      - nullable
+      - string
+    sort: 5
+  -
+    name: 'Server Hostname'
+    description: 'The name of the server displayed in the browser.'
+    env_variable: SERVER_HOSTNAME
+    default_value: 'A World of PADMAN Server'
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - string
+    sort: 6
+  -
+    name: 'Server Visibility'
+    description: '1 = LAN, 2 = Internet (Master Server).'
+    env_variable: DEDICATED_TYPE
+    default_value: 2
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - numeric
+      - 'in:1,2'
+    sort: 7

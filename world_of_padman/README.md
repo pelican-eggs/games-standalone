@@ -13,7 +13,7 @@ World of PADMAN (WoP) is a freeware first-person shooter game available for mult
 | **Server Name** | The hostname displayed in the server browser. | `A World of PADMAN Server` |
 | **RCON Password** | Password for remote administration. Leave empty to disable. | |
 | **Game Version** | The version tag to download (e.g., `latest` or `1.7.0`). | `latest` |
-| **Max RAM** | The amount of memory dedicated to the engine (`com_hunkMegs`). | `256` |
+| **Max RAM** | The amount of memory dedicated to the engine (`com_hunkMegs`). | `4096` |
 | **Server Visibility** | 1 = LAN, 2 = Internet (Master Server). | `2` |
 
 ## Ports
@@ -21,6 +21,3 @@ World of PADMAN (WoP) is a freeware first-person shooter game available for mult
 | :--- | :--- | :--- |
 | `27960` | UDP | Game Port (Default) |
 
-## Docker Info
-This egg uses the generic Debian image to ensure maximum compatibility.
-*   **Image:** `ghcr.io/pterodactyl/yolks:debian`
