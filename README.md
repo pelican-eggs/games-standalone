@@ -95,4 +95,5 @@
   * [ET: Legacy](wolfenstein_enemy_territory/etlegacy)
 * [World Of PARMAN](world_of_PADMAN)
 * [Wine (Generic/Template Egg)](wine/generic)
+* [Witcher Online][witcher_online]
 * [Xonotic](xonotic)
