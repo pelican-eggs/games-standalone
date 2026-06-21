@@ -1,124 +1,194 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
+        "version": "PLCN_v2",
         "update_url": null
     },
-    "exported_at": "2024-06-01T00:17:31+00:00",
-    "name": "Clusterio",
-    "author": "psychoalex@thevcbc.com",
-    "uuid": "935a6b24-0e36-45b4-9615-58c5aa153971",
-    "description": "Clusterio is a clustered Factorio server manager that provides the tooling for implementing cross server interactions in Factorio. It was previously best known for implementing cross server transfer and cloud storage of items via teleporter chests. But this functionality has been pulled out of Clusterio into its own plugin for Clusterio named Subspace Storage.\r\n\r\nBy itself Clusterio doesn't change the gameplay in any way, you could even use Clusterio to manage completely vanilla Factorio servers. Plugins do the work of modding in the visible changes into the game, see the Plugins section for ready-made plugins you can install into a Clusterio cluster.",
-    "features": null,
+    "exported_at": "2025-10-01T03:55:23+00:00",
+    "name": "Clusterio Controller",
+    "author": "conor-power@themolehole.org",
+    "uuid": "82ee459e-15d1-42f5-950a-24eca84c51d8",
+    "description": null,
+    "tags": [],
+    "features": [],
     "docker_images": {
-        "ghcr.io\/parkervcp\/yolks:nodejs_21": "ghcr.io\/parkervcp\/yolks:nodejs_21",
-        "ghcr.io\/parkervcp\/yolks:nodejs_20": "ghcr.io\/parkervcp\/yolks:nodejs_20",
-        "ghcr.io\/parkervcp\/yolks:nodejs_19": "ghcr.io\/parkervcp\/yolks:nodejs_19",
-        "ghcr.io\/parkervcp\/yolks:nodejs_18": "ghcr.io\/parkervcp\/yolks:nodejs_18"
+        "ghcr.io/parkervcp/yolks:nodejs_21": "ghcr.io/parkervcp/yolks:nodejs_21"
     },
     "file_denylist": [],
-    "startup": "exec .\/node_modules\/.bin\/clusterio{{SERVER_MODE}} run",
+    "startup": "npx clusteriocontroller run",
     "config": {
-        "files": "{\r\n    \"config-controller.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"controller~1http_port\": \"{{server.build.default.port}}\",\r\n            \"controller~1name\": \"{{server.build.env.CLUSTER_NAME}}\"\r\n        }\r\n    },\r\n    \"config-host.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"host~1controller_url\": \"{{server.build.env.CONTROLLER_URL}}\",\r\n            \"host~1controller_token\": \"{{server.build.env.CONTROLLER_TOKEN}}\",\r\n            \"host~1public_address\": \"{{server.build.default.ip}}\"\r\n        }\r\n    }\r\n}",
-        "startup": "{\r\n    \"done\": \"Started\"\r\n}",
+        "files": "{\n    \"config-controller.json\": {\n        \"parser\": \"json\",\n        \"find\": {\n            \"controller~1name\": \"{{server.environment.CONTROLLER_NAME}}\",\n            \"controller~1database_directory\": \"{{server.environment.DATABASE_DIRECTORY}}\",\n            \"controller~1http_port\": \"{{server.environment.HTTP_PORT}}\",\n            \"controller~1bind_address\": \"{{server.environment.BIND_ADDRESS}}\",\n            \"controller~1public_url\": \"{{server.environment.PUBLIC_URL}}\",\n            \"controller~1tls_certificate\": \"{{server.environment.TLS_CERTIFICATE}}\",\n            \"controller~1tls_private_key\": \"{{server.environment.TLS_PRIVATE_KEY}}\",\n            \"controller~1heartbeat_interval\": \"{{server.environment.HEARTBEAT_INTERVAL}}\",\n            \"controller~1session_timeout\": \"{{server.environment.SESSION_TIMEOUT}}\",\n            \"controller~1metrics_timeout\": \"{{server.environment.METRICS_TIMEOUT}}\",\n            \"controller~1stream_timeout\": \"{{server.environment.STREAM_TIMEOUT}}\",\n            \"controller~1default_role_id\": \"{{server.environment.DEFAULT_ROLE_ID}}\"\n        }\n    }\n}",
+        "startup": "{\n    \"done\": \"Started controller\"\n}",
         "logs": "{}",
         "stop": "^C"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/bash\r\n# Clusterio Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napt update\r\napt install -y git curl jq file unzip make gcc g++ python3 python3-dev libtool\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\nif [ \"${USER_UPLOAD}\" == \"true\" ] || [ \"${USER_UPLOAD}\" == \"1\" ]; then\r\n    echo -e \"assuming user knows what they are doing have a good day.\"\r\n    exit 0\r\nfi\r\n\r\ncase \"${SERVER_MODE}\" in\r\n\r\n  \"controller\")\r\n    echo -e \"Initialising Clustorio In Controller mode\"\r\n        npm init \"@clusterio\" -y -- --allow-install-as-root --mode \"${SERVER_MODE}\" --download-headless --log-level \"${LOG_LEVEL}\" --admin \"${ADMIN_STRING}\" --public-address \"${SERVER_IP}\":\"${SERVER_PORT}\" --plugins ${PLUGINS}\r\n\t;;\r\n\r\n  \"host\")\r\n    echo -e \"Initialising Clustorio In Host mode\"\r\n\tnpm init \"@clusterio\" -y -- --allow-install-as-root --mode \"${SERVER_MODE}\" --download-headless --log-level \"${LOG_LEVEL}\" --host-name \"${HOST_NAME}\" --public-address \"${SERVER_IP}\" --controller-url \"${CONTROLLER_URL}\" --controller-token \"${CONTROLLER_TOKEN}\" --plugins ${PLUGINS}\r\n    ;;\r\n    \r\nesac\r\n\r\necho -e \"install complete\"\r\nexit 0",
+            "script": "apt update\r\napt install -y git curl jq file unzip make gcc g++ python3 python3-dev libtool xz-utils\r\n\r\nmkdir -p /mnt/server\r\ncd /mnt/server\r\n\r\nnpm install @clusterio/controller @clusterio/plugin-subspace_storage @clusterio/plugin-global_chat @clusterio/plugin-research_sync @clusterio/plugin-inventory_sync\r\n\r\nnpx clusteriocontroller config set controller.name ${CONTROLLER_NAME}\r\nnpx clusteriocontroller config set controller.database_directory ${DATABASE_DIRECTORY}\r\nnpx clusteriocontroller config set controller.http_port ${HTTP_PORT}\r\nnpx clusteriocontroller config set controller.bind_address ${BIND_ADDRESS}\r\nnpx clusteriocontroller config set controller.public_url ${PUBLIC_URL}\r\nnpx clusteriocontroller config set controller.tls_certificate ${TLS_CERTIFICATE}\r\nnpx clusteriocontroller config set controller.tls_private_key ${TLS_PRIVATE_KEY}\r\n\r\nnpx clusteriocontroller config set controller.heartbeat_interval ${HEARTBEAT_INTERVAL}\r\nnpx clusteriocontroller config set controller.session_timeout ${SESSION_TIMEOUT}\r\nnpx clusteriocontroller config set controller.metrics_timeout ${METRICS_TIMEOUT}\r\nnpx clusteriocontroller config set controller.stream_timeout ${STREAM_TIMEOUT}\r\n\r\nnpx clusteriocontroller config set controller.default_role_id ${DEFAULT_ROLE_ID}\r\n\r\nnpx clusteriocontroller bootstrap create-admin ${ADMIN_NAME}\r\nnpx clusteriocontroller bootstrap create-ctl-config ${ADMIN_NAME}",
             "container": "node:21-bookworm-slim",
             "entrypoint": "bash"
         }
     },
     "variables": [
         {
-            "name": "Server Mode",
-            "description": "Set's the cluster operation mode of the server, can be either \"controller\" or \"host\". This is better thought of as Management or Gameserver nodes.\r\n\r\nRequired on:\r\nAll",
-            "env_variable": "SERVER_MODE",
-            "default_value": "controller",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|in:controller,host",
-            "sort": null,
-            "field_type": "text"
-        },
-        {
-            "name": "Log Level",
-            "description": "Options: \"none\", \"fatal\", \"error\", \"warn\", \"audit\", \"info\", \"verbose\"\r\n\r\nRequired on:\r\nAll",
-            "env_variable": "LOG_LEVEL",
-            "default_value": "info",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|in:none,fatal,error,warn,audit,info,verbose",
-            "sort": null,
-            "field_type": "text"
-        },
-        {
-            "name": "Server Admin",
-            "description": "Superadmin account name\r\n\r\nRequired on:\r\nController",
-            "env_variable": "ADMIN_STRING",
+            "name": "Admin Name",
+            "description": "",
+            "env_variable": "ADMIN_NAME",
             "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:64",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required"
+            ],
+            "sort": 14
         },
         {
-            "name": "Host Name",
-            "description": "Host name in the Controller Web UI\r\n\r\nRequired on:\r\nHost",
-            "env_variable": "HOST_NAME",
-            "default_value": "Your Sub-Server",
+            "name": "Bind Address",
+            "description": "IP address to bind the HTTP and HTTPS ports on. Useful to limit which interface to accept connections from. If set to null the unspecified IPv6 address will be used, which on most systems means it will also listen on the unspecified IPv4 address and accept connections from all interfaces.",
+            "env_variable": "BIND_ADDRESS",
+            "default_value": "0.0.0.0",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "nullable|string|max:20",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required"
+            ],
+            "sort": 5
         },
         {
-            "name": "Controller URL",
-            "description": "Connection URL to the Controller server, can be an internal address if you have allocated an additional internal port to the Controller Server.\r\nExample: http:\/\/yourip:yourport\r\nRequired on:\r\nHost",
-            "env_variable": "CONTROLLER_URL",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "nullable|string|max:64",
-            "sort": null,
-            "field_type": "text"
-        },
-        {
-            "name": "Controller Token",
-            "description": "Authentication token used to connect to the Controller server, generated through the Controller Web UI.\r\n\r\nRequired on:\r\nHost",
-            "env_variable": "CONTROLLER_TOKEN",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "nullable|string|max:256",
-            "sort": null,
-            "field_type": "text"
-        },
-        {
-            "name": "Plugins",
-            "description": "Clusterio Plugins to install, space separate list.\r\n\r\nExample:\r\n@clusterio\/plugin-subspace_storage @clusterio\/plugin-global_chat @clusterio\/plugin-research_sync @clusterio\/plugin-inventory_sync\r\n\r\nRequired on:\r\nAll",
-            "env_variable": "PLUGINS",
-            "default_value": "",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "nullable|string|max:512",
-            "sort": null,
-            "field_type": "text"
-        },
-        {
-            "name": "Cluster Name",
-            "description": "The Name of your Controller server cluster.\r\n\r\nRequired:\r\nController",
-            "env_variable": "CLUSTER_NAME",
+            "name": "Controller Name",
+            "description": "Name of the cluster. Used to distinguish it from other clusters and is prepended to the name of servers in the server list.",
+            "env_variable": "CONTROLLER_NAME",
             "default_value": "Your Cluster",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "nullable|string|max:20",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "string",
+                "required"
+            ],
+            "sort": 1
+        },
+        {
+            "name": "Database Directory",
+            "description": "Directory used to store cluster data to. Needs to be writeable by the controller. This is also used by plugins to store its data.",
+            "env_variable": "DATABASE_DIRECTORY",
+            "default_value": "database",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [],
+            "sort": 2
+        },
+        {
+            "name": "Default Role Id",
+            "description": "Role to automatically grant to new users. If null no role is granted. Defaults to 1 which correspond to the default Player role.",
+            "env_variable": "DEFAULT_ROLE_ID",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "integer"
+            ],
+            "sort": 13
+        },
+        {
+            "name": "Heartbeat Interval",
+            "description": "Interval in seconds heartbeats are sent out at for WebSocket connections. If a WebSocket connection hasn't received a heartbeat in 2 times the heartbeat interval it will be considered stale and closed. A lower value means less time between connections going stale and them being closed.",
+            "env_variable": "HEARTBEAT_INTERVAL",
+            "default_value": "15",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "integer"
+            ],
+            "sort": 9
+        },
+        {
+            "name": "Http Port",
+            "description": "Port to host HTTP server on. If set to null no HTTP server will be exposed. At least one of this and controller.https_port needs to be set to a port.",
+            "env_variable": "HTTP_PORT",
+            "default_value": "8080",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "integer",
+                "required"
+            ],
+            "sort": 3
+        },
+        {
+            "name": "Https Port",
+            "description": "Port to host HTTPS server on. Uses controller.tls_certificate and controller.tls_private_key as the certificate and private key for the HTTPS server. If set to null no HTTPS server will be exposed. At least one of this and controller.http_port needs to be set to a port.",
+            "env_variable": "HTTPS_PORT",
+            "default_value": "null",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [],
+            "sort": 4
+        },
+        {
+            "name": "Metrics Timeout",
+            "description": "Timeout in seconds before a call to gather metrics from a host times out. This should be less than both the timeout and collection interval configured for the collection job in Prometheus.",
+            "env_variable": "METRICS_TIMEOUT",
+            "default_value": "8",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "integer"
+            ],
+            "sort": 11
+        },
+        {
+            "name": "Public Url",
+            "description": "Public address the controller is accessible on. Currently only used for clusteriocontroller bootstrap create-ctl-config in order to give the right url to connect to. This should be a full URL ending with a /.",
+            "env_variable": "PUBLIC_URL",
+            "default_value": "null",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [],
+            "sort": 6
+        },
+        {
+            "name": "Session Timeout",
+            "description": "Time in seconds from the connection is closed following a heartbeat timeout until the session is invalidated and data loss occurs. A higher timeout gives more time for a client to recconect and resume an active session over a connection that was dropped, but also leads to stale connections taking longer to clear out. In the case of the controller or client crashing the data loss is unavoidable.\n\nValue should not be less than the configured max_reconnect_delay of the clients and it should be greater than 2 times controller.heartbeat_interval",
+            "env_variable": "SESSION_TIMEOUT",
+            "default_value": "60",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "integer"
+            ],
+            "sort": 10
+        },
+        {
+            "name": "Stream Timeout",
+            "description": "Timeout in seconds for proxy streams through the controller that has been created but is not yet sending data to be automatically closed. Streams that have started sending data before this timeout is not affected.",
+            "env_variable": "STREAM_TIMEOUT",
+            "default_value": "15",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "integer"
+            ],
+            "sort": 12
+        },
+        {
+            "name": "Tls Certificate",
+            "description": "Path to TLS certificate to use for the HTTPS server when controller.https_port is configured.",
+            "env_variable": "TLS_CERTIFICATE",
+            "default_value": "database/certificates/cert.key",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [],
+            "sort": 7
+        },
+        {
+            "name": "Tls Private Key",
+            "description": "Path to TLS private key to use for the HTTPS server when controller.https_port is configured.",
+            "env_variable": "TLS_PRIVATE_KEY",
+            "default_value": "database/certificates/cert.key",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [],
+            "sort": 8
         }
     ]
 }
