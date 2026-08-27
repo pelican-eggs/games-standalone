@@ -1,8 +1,8 @@
 {
-  "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+  "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PELICAN PANEL - PELICAN.DEV",
   "meta": {
     "version": "PTDL_v2",
-    "update_url": "https://raw.githubusercontent.com/pelican-eggs/games-standalone/refs/heads/main/hytale/pterodactyl-egg-hytale.json"
+    "update_url": "https://raw.githubusercontent.com/pelican-eggs/games-standalone/refs/heads/main/hytale/pelican-egg-hytale.json"
   },
   "exported_at": "2026-02-02T01:40:00+00:00",
   "name": "Hytale",

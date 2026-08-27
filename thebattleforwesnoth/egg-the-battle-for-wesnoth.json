@@ -62,7 +62,7 @@
             "name": "Message of the Day",
             "description": "A message that will display when a user joins the server.",
             "env_variable": "MOTD",
-            "default_value": "Welcome to the Pterodactyl Server!",
+            "default_value": "Welcome to the Pelican Server!",
             "user_viewable": true,
             "user_editable": true,
             "rules": [

@@ -26,17 +26,17 @@ You can contribute by either creating a new pull request or testing [existing pu
 
 ### Sources for working on a new egg
 
-Look at existing eggs to see how they work. In most cases, you can take the existing egg as your new template. There's a brief documentation on how to [create eggs](https://pterodactyl.io/community/config/eggs/creating_a_custom_egg.html) and [Docker images](https://pterodactyl.io/community/config/eggs/creating_a_custom_image.html).
+Look at existing eggs to see how they work. In most cases, you can take the existing egg as your new template. There's a brief documentation on how to [create eggs](https://pelican.dev/community/config/eggs/creating_a_custom_egg.html) and [Docker images](https://pelican.dev/community/config/eggs/creating_a_custom_image.html).
 
-Use existing Docker images for your egg. You can find them in [Parkers Yolks fork](https://github.com/pelican-eggs/yolks) and [Pterodactyl Yolks](https://github.com/pterodactyl/yolks).
+Use existing Docker images for your egg. You can find them in [Parkers Yolks fork](https://github.com/pelican-eggs/yolks) and [Pelican Yolks](https://github.com/pterodactyl/yolks).
 
 We have a collection of [existing install script snippets](https://github.com/pelican-eggs/eggs/tree/master/scripts) that you can use.
 
 ## Step 1
 
-### Be aware of the pterodactyl install process
+### Be aware of the pelican install process
 
-The Pterodactyl install process is fairly simple once you know it.
+The Pelican install process is fairly simple once you know it.
 
 ```md
 1. Spin up install container

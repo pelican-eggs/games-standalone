@@ -5,12 +5,12 @@
 FiveM **ONLY** supports **amd64**. **arm64** is **NOT** supported (like Oracle free cloud)
 
 
-## Note on FiveM support from Pteroadactyl
+## Note on FiveM support from Pelican
 
-Pterodactyl will not be providing support for FiveM. You are free to run a FiveM server but no support will be provided in the Pterodactyl Discord, check the discord annoucement below for details.
+Pelican will not be providing support for FiveM. You are free to run a FiveM server but no support will be provided in the Pelican Discord, check the discord annoucement below for details.
 
 Worth a read if you plan on running a FiveM server
-[Pterodactyl Discord Announcement](https://discord.com/channels/122900397965705216/124919575534895105/869733533495746560)
+[Pelican Discord Announcement](https://discord.com/channels/122900397965705216/124919575534895105/869733533495746560)
 
 ## From the [FiveM](https://fivem.net/) Site
 

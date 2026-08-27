@@ -82,15 +82,15 @@ Unfortunately, at this time, it is impossible to automatically detect if a token
 #### 2. Setup BF3 Mount
 
 > [!NOTE]
-> Screenshots are of the Pterodactyl panel, but the setup should be identical for Pelican.
+> Screenshots are of the Pelican panel, but the setup should be identical for Pelican.
 
 1. Ensure you have an allowed mount directory configured for (and accessible by) your Wings node(s). This can be done by adding something like the following to your Wings `config.yml` and rebooting Wings:
 ```yml
 allowed_mounts:
-  - /var/lib/<pelican\pterodactyl>/mounts
+  - /var/lib/<pelican\pelican>/mounts
 ```
 2. Download a legal copy of Battlefield 3 on your personal computer and open up its installation location (eg. via EA App: `C:\Program Files\EA Games\Battlefield 3`).
-3. Copy all of the files/folders in this directory (the one containing `bf3.exe`) to any host nodes you would like to host this Egg on. It should be copied to a new folder named `bf3` in your allowed mount directory (eg. `/var/lib/<pelican\pterodactyl>/mounts/bf3`).
+3. Copy all of the files/folders in this directory (the one containing `bf3.exe`) to any host nodes you would like to host this Egg on. It should be copied to a new folder named `bf3` in your allowed mount directory (eg. `/var/lib/<pelican\pelican>/mounts/bf3`).
 4. In the admin panel, navigate to the "Mounts" tab and create a new mount like the following:
 ![Mount Config](images/mount_config.jpg)
     Be sure to:
