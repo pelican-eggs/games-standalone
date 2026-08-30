@@ -42,7 +42,7 @@
             "name": "Server Name",
             "description": "Specify the server name",
             "env_variable": "HOSTNAME",
-            "default_value": "Pterodactyl Server",
+            "default_value": "Pelican Server",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:30",

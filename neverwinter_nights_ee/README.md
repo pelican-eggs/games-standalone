@@ -5,7 +5,7 @@ Return to the Forgotten Realms in this bestselling Dungeons & Dragons roleplayin
 Be mindful that this is a very old 32-bit application. Documentation and support is limited.
 
 > [!IMPORTANT]
-> Due to a bug in the current Pterodactyl Wings daemon ([git issue here](https://github.com/pterodactyl/panel/issues/3830)) your Wings daemon **must** be configured to use UID `1000`` when running this server. If not, then the server will crash upon opening. TLDR; The game expects the current user to exist as it uses it to build working directory paths, and by default the user created for the container has a UID of 1000.
+> Due to a bug in the current Pelican Wings daemon ([git issue here](https://github.com/pterodactyl/panel/issues/3830)) your Wings daemon **must** be configured to use UID `1000`` when running this server. If not, then the server will crash upon opening. TLDR; The game expects the current user to exist as it uses it to build working directory paths, and by default the user created for the container has a UID of 1000.
 
 ### Server Ports
 
@@ -24,7 +24,7 @@ Official data can be transferred and used on the server, but you must own a copy
 
 1. Browse to your local installation of the game.
 2. Archive the `data/` directory.
-3. In Pterodactyl, navigate to the server view and into the `Files` tab.
+3. In Pelican, navigate to the server view and into the `Files` tab.
 4. Upload the new `data.zip` archive to the server.
 5. Unarchive the `data.zip` archive into the `data/` directory.
 

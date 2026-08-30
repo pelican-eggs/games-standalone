@@ -8,7 +8,7 @@
     "name": "LeagueSandbox",
     "author": "domi@imagine.team",
     "uuid": "3eeeca1c-51ef-427e-8227-cfec30f49c78",
-    "description": "A simple egg to run LeagueSandbox server in pterodactyl",
+    "description": "A simple egg to run LeagueSandbox server in pelican",
     "features": null,
     "docker_images": {
         "ghcr.io\/parkervcp\/yolks:dotnet_6": "ghcr.io\/parkervcp\/yolks:dotnet_6"
