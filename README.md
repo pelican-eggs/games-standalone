@@ -86,6 +86,7 @@
   * [TShock](terraria/tshock)
   * [Vanilla](terraria/vanilla)
 * [The Battle For Wesnoth](thebattleforwesnoth)
+* [Tiny Block Server](tiny_block)
 * [Trackmania (2020)](trackmania2020)
 * [Urban Terror](urbanterror)
 * [Veloren](veloren)
