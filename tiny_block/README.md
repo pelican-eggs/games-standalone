@@ -6,7 +6,7 @@ The egg downloads a verified Linux x86_64 release from [GitHub Releases](https:/
 
 ## Network
 
-Tiny Block Server initiates outbound HTTPS, WebSocket, STUN, and WebRTC connections. It does not require a fixed inbound game port. The host must allow outbound HTTPS/WebSocket traffic and ephemeral UDP traffic used by WebRTC.
+Tiny Block Server initiates outbound HTTPS and WebSocket connections, and attempts STUN/WebRTC for a lower-latency direct path. It does not require a fixed inbound game port. When ephemeral UDP is unavailable behind Docker or NAT, dedicated servers automatically fall back to the authenticated WebSocket relay.
 
 ## Variables
 
@@ -16,8 +16,7 @@ Tiny Block Server initiates outbound HTTPS, WebSocket, STUN, and WebRTC connecti
 | `WORLD_ID` | `world_community_1` | Stable save identifier. |
 | `WORLD_NAME` | `Tiny Block Community` | Public name displayed in the server browser. |
 | `WORLD_MODE` | `skyblock` | `skyblock`, `floating_islands`, `procedural`, `one_block`, or `challenge_run`. |
-| `MAX_PLAYERS` | `16` | Server-declared capacity from 1 through 16. |
+| `MAX_PLAYERS` | `16` | Server-declared capacity; any positive integer is accepted. |
 
 World saves persist under `/home/container/.local/share/godot/app_userdata/Tiny Block Server/`.
-
 
