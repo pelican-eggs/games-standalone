@@ -1,0 +1,108 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PLCN_v3",
+        "update_url": null
+    },
+    "exported_at": "2026-09-01T02:25:28+00:00",
+    "name": "Tiny Block Server",
+    "author": "tinyblock@nosuchgames.com",
+    "uuid": "7fd51080-2e5a-4475-aa78-4aad79d3125b",
+    "description": "Open-source headless dedicated server for persistent Tiny Block multiplayer worlds.",
+    "icon": null,
+    "tags": [],
+    "features": [],
+    "docker_images": {
+        "Debian": "ghcr.io/parkervcp/yolks:debian"
+    },
+    "file_denylist": [],
+    "startup_commands": {
+        "Default": "./tinyblock-server.x86_64 --tinyblock-server --world \"{{WORLD_ID}}\" --world-name \"{{WORLD_NAME}}\" --world-mode \"{{WORLD_MODE}}\" --max-players {{MAX_PLAYERS}}"
+    },
+    "config": {
+        "files": "{}",
+        "startup": "{\n    \"done\": \"Tiny Block headless server is online:\"\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\nset -euo pipefail\n\napt-get update\napt-get install -y --no-install-recommends ca-certificates curl jq tar\n\nmkdir -p /mnt/server\ncd /mnt/server\n\nREPOSITORY=hardtab/tinyblock-server\nASSET=tinyblock-server-linux-x86_64.tar.gz\nif [ -z \"${VERSION:-}\" ] || [ \"${VERSION}\" = \"latest\" ]; then\n    RELEASE_URL=\"https://api.github.com/repos/${REPOSITORY}/releases/latest\"\nelse\n    RELEASE_URL=\"https://api.github.com/repos/${REPOSITORY}/releases/tags/${VERSION}\"\nfi\n\nRELEASE_JSON=$(curl -fsSL \"${RELEASE_URL}\")\nDOWNLOAD_URL=$(printf '%s' \"${RELEASE_JSON}\" | jq -r --arg ASSET \"${ASSET}\" '.assets[] | select(.name == $ASSET) | .browser_download_url' | head -n 1)\nCHECKSUM_URL=$(printf '%s' \"${RELEASE_JSON}\" | jq -r --arg ASSET \"${ASSET}.sha256\" '.assets[] | select(.name == $ASSET) | .browser_download_url' | head -n 1)\n\nif [ -z \"${DOWNLOAD_URL}\" ] || [ \"${DOWNLOAD_URL}\" = \"null\" ] || [ -z \"${CHECKSUM_URL}\" ] || [ \"${CHECKSUM_URL}\" = \"null\" ]; then\n    echo \"Tiny Block Server release assets were not found for ${VERSION:-latest}.\" >&2\n    exit 1\nfi\n\ncurl -fsSL \"${DOWNLOAD_URL}\" -o \"${ASSET}\"\ncurl -fsSL \"${CHECKSUM_URL}\" -o \"${ASSET}.sha256\"\nsha256sum -c \"${ASSET}.sha256\"\ntar -xzf \"${ASSET}\" --strip-components=1 -C /mnt/server\nrm -f \"${ASSET}\" \"${ASSET}.sha256\"\nchmod +x /mnt/server/tinyblock-server.x86_64\n\necho \"Tiny Block Server installation completed.\"",
+            "container": "ghcr.io/parkervcp/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Maximum Players",
+            "description": "Capacity advertised by this server. Player-hosted P2P worlds remain capped separately.",
+            "env_variable": "MAX_PLAYERS",
+            "default_value": "16",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "integer",
+                "min:1"
+            ],
+            "sort": 1
+        },
+        {
+            "name": "Version",
+            "description": "GitHub release tag to install, such as v0.1.0, or latest.",
+            "env_variable": "VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:32"
+            ],
+            "sort": 2
+        },
+        {
+            "name": "World ID",
+            "description": "Stable identifier used for the persistent world save.",
+            "env_variable": "WORLD_ID",
+            "default_value": "world_community_1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:64",
+                "regex:/^[A-Za-z0-9_-]+$/"
+            ],
+            "sort": 3
+        },
+        {
+            "name": "World Mode",
+            "description": "World generator: skyblock, floating_islands, procedural, one_block, or challenge_run.",
+            "env_variable": "WORLD_MODE",
+            "default_value": "skyblock",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "in:skyblock,floating_islands,procedural,one_block,challenge_run"
+            ],
+            "sort": 4
+        },
+        {
+            "name": "World Name",
+            "description": "Public name displayed in the Tiny Block server browser.",
+            "env_variable": "WORLD_NAME",
+            "default_value": "Tiny Block Community",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "string",
+                "max:64"
+            ],
+            "sort": 5
+        }
+    ]
+}
