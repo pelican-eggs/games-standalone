@@ -8,7 +8,7 @@
     "name": "Hogwarp",
     "author": "imkringle@proton.me",
     "uuid": "9ae78c9d-1d23-4b67-8a58-5c8fca30c124",
-    "description": "A Pterodactyl egg for the Hogwarts Legacy mod Hogwarp - For more info see their Nexus: https:\/\/www.nexusmods.com\/hogwartslegacy\/mods\/1378",
+    "description": "A Pelican egg for the Hogwarts Legacy mod Hogwarp - For more info see their Nexus: https:\/\/www.nexusmods.com\/hogwartslegacy\/mods\/1378",
     "features": null,
     "docker_images": {
         "ghcr.io\/parkervcp\/yolks:wine_latest": "ghcr.io\/parkervcp\/yolks:wine_latest"
@@ -62,7 +62,7 @@
             "name": "Server Name",
             "description": "A name that displays on the Hogwarp list",
             "env_variable": "SERV_NAME",
-            "default_value": "Ptero Hogwarp Server",
+            "default_value": "Peli Hogwarp Server",
             "user_viewable": true,
             "user_editable": true,
             "rules": [

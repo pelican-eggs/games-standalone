@@ -82,7 +82,7 @@ Unfortunately, at this time, it is impossible to automatically detect if a token
 #### 2. Setup BF3 Mount
 
 > [!NOTE]
-> Screenshots are of the Pterodactyl panel, but the setup should be identical for Pelican.
+> Screenshots are of the Pelican panel, but the setup should be identical for Pelican.
 
 1. Ensure you have an allowed mount directory configured for (and accessible by) your Wings node(s). This can be done by adding something like the following to your Wings `config.yml` and rebooting Wings:
 ```yml

@@ -33,7 +33,7 @@
             "name": "Server Name",
             "description": "The Name of the Server",
             "env_variable": "SERVER_NAME",
-            "default_value": "Pterodactyl_Server",
+            "default_value": "Pelican_Server",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:50",

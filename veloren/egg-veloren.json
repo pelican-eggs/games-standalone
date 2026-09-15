@@ -47,7 +47,7 @@
             "name": "Server name",
             "description": "The name your server will be displaying",
             "env_variable": "SERVER_NAME",
-            "default_value": "A pterodactyl hosted server",
+            "default_value": "A pelican hosted server",
             "user_viewable": true,
             "user_editable": true,
             "rules": [

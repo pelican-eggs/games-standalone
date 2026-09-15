@@ -1,5 +1,5 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PELICAN PANEL - PELICAN.DEV",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
@@ -7,7 +7,7 @@
     "exported_at": "2024-10-20T20:24:42+02:00",
     "name": "Hogwarp",
     "author": "imkringle@proton.me",
-    "description": "A Pterodactyl egg for the Hogwarts Legacy mod Hogwarp - For more info see their Nexus: https:\/\/www.nexusmods.com\/hogwartslegacy\/mods\/1378",
+    "description": "A Pelican egg for the Hogwarts Legacy mod Hogwarp - For more info see their Nexus: https:\/\/www.nexusmods.com\/hogwartslegacy\/mods\/1378",
     "features": null,
     "docker_images": {
         "ghcr.io\/parkervcp\/yolks:wine_latest": "ghcr.io\/parkervcp\/yolks:wine_latest"
@@ -52,7 +52,7 @@
             "name": "Server Name",
             "description": "A name that displays on the Hogwarp list",
             "env_variable": "SERV_NAME",
-            "default_value": "Ptero Hogwarp Server",
+            "default_value": "Peli Hogwarp Server",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string",

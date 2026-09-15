@@ -1,5 +1,5 @@
 {
-    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PELICAN PANEL - PELICAN.DEV",
     "meta": {
         "version": "PTDL_v2",
         "update_url": null
@@ -52,7 +52,7 @@
             "name": "Message of the Day",
             "description": "A message that will display when a user joins the server.",
             "env_variable": "MOTD",
-            "default_value": "Welcome to the Pterodactyl Server!",
+            "default_value": "Welcome to the Pelican Server!",
             "user_viewable": true,
             "user_editable": true,
             "rules": "required|string|max:100",
