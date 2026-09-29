@@ -1,4 +1,4 @@
-# [Daggerfall Enhanced](https://daggerfalljs.dev/)
+# [Daggerfall Online](https://daggerfalljs.dev/)
 
 An open-source rebuild of The Elder Scrolls II: Daggerfall that runs in a browser. Same rules, new renderer, nothing to install.
 This egg is built off of the generic Node.js egg and utilizes wrangler.
