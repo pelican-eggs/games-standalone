@@ -5,10 +5,10 @@
         "update_url": null
     },
     "exported_at": "2026-09-24T04:06:04+00:00",
-    "name": "Daggerfall Enhanced",
+    "name": "Daggerfall Online",
     "author": "dartkittenz@gmail.com",
     "uuid": "6f3c4a75-3537-4a98-a150-9b31ce2554d2",
-    "description": "Daggerfall Enhanced server created from the default generic Node.js egg.\nSSL is required for this egg to run properly.",
+    "description": "Daggerfall Online server created from the default generic Node.js egg.\nSSL is required for this egg to run properly.",
     "icon": null,
     "tags": [],
     "features": [],
