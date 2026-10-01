@@ -1,0 +1,327 @@
+{
+  "_comment": "FS25 Pelican/Pterodactyl egg using the unmodified wine-gameservers image directly.",
+  "meta": {
+    "version": "PTDL_v2",
+    "update_url": null
+  },
+  "exported_at": "2026-10-01T00:00:00+02:00",
+  "name": "Farming Simulator 25 - wine-gameservers upstream",
+  "author": "DasEric@users.noreply.github.com",
+  "description": "Uses toetje585/arch-fs25server:latest directly. A BASH_ENV compatibility hook bypasses the image's root-oriented init script so it runs with the non-root, read-only-rootfs container contract used by Pelican/Wings.",
+  "features": null,
+  "tags": [
+    "wine",
+    "farming-simulator",
+    "upstream-image"
+  ],
+  "docker_images": {
+    "wine-gameservers/arch-fs25server (upstream)": "toetje585/arch-fs25server:latest"
+  },
+  "file_denylist": [],
+  "startup": "Upstream CMD intercepted by BASH_ENV compatibility hook",
+  "config": {
+    "files": "{}",
+    "startup": "{\"done\": \"FS25 upstream compatibility layer ready.\"}",
+    "logs": "{}",
+    "stop": "^C"
+  },
+  "scripts": {
+    "installation": {
+      "script": "#!/bin/bash\nset -euo pipefail\nmkdir -p /mnt/server/.fs25-egg /mnt/server/{game,config,installer,dlc,logs,Desktop}\ncat > /mnt/server/.fs25-egg/bash-env.sh <<'FS25_BASH-ENV_SH'\n#!/usr/bin/env bash\n# The upstream image starts /bin/bash /usr/bin/init.sh. Stock Pelican/Wings\n# cannot run that root-oriented init script, so Bash loads this hook first.\nruntime_root=\"${FS25_COMPAT_ROOT:-/home/container}/.fs25-runtime/wine-11.0-1/root\"\nif [[ -x \"${runtime_root}/usr/bin/wine\" ]]; then\n    export PATH=\"${runtime_root}/usr/bin:${PATH}\"\n    export WINEDLLPATH=\"${runtime_root}/usr/lib/wine${WINEDLLPATH:+:${WINEDLLPATH}}\"\nfi\n\nif [[ \"${FS25_PELICAN_COMPAT_ACTIVE:-0}\" != \"1\" ]]; then\n    export FS25_PELICAN_COMPAT_ACTIVE=1\n    exec \"${FS25_COMPAT_ROOT:-/home/container}/.fs25-egg/start.sh\"\nfi\nFS25_BASH-ENV_SH\ncat > /mnt/server/.fs25-egg/wine-runtime.sh <<'FS25_WINE-RUNTIME_SH'\n#!/usr/bin/env bash\nset -Eeuo pipefail\n\nexport HOME=\"${FS25_HOME:-/home/container}\"\n\nFS25_WINE_RUNTIME_MODE=\"${WINE_RUNTIME_MODE:-portable11}\"\nFS25_WINE_VERSION=\"11.0-1\"\nFS25_WINE_SHA256=\"C93A939DE66F3DDFA378B3EA2FB01F800477955F4CB623A81E94DA1835B20C56\"\nFS25_WINE_URL=\"${WINE_RUNTIME_URL:-https://archive.archlinux.org/packages/w/wine/wine-${FS25_WINE_VERSION}-x86_64.pkg.tar.zst}\"\nFS25_WINE_BASE=\"${HOME}/.fs25-runtime\"\nFS25_WINE_DIR=\"${FS25_WINE_BASE}/wine-${FS25_WINE_VERSION}\"\nFS25_WINE_ROOT=\"${FS25_WINE_DIR}/root\"\nFS25_WINE_PACKAGE=\"${FS25_WINE_BASE}/wine-${FS25_WINE_VERSION}.pkg.tar.zst\"\n\nfs25_activate_wine_runtime() {\n    export PATH=\"${FS25_WINE_ROOT}/usr/bin:${PATH}\"\n    export WINEDLLPATH=\"${FS25_WINE_ROOT}/usr/lib/wine${WINEDLLPATH:+:${WINEDLLPATH}}\"\n}\n\nif [[ \"${FS25_WINE_RUNTIME_MODE}\" == \"system\" ]]; then\n    echo \"[FS25] Wine-Runtime: Systemversion $(wine --version 2>&1).\"\n    return 0 2>/dev/null || exit 0\nfi\n\nif [[ \"${FS25_WINE_RUNTIME_MODE}\" != \"portable11\" ]]; then\n    echo \"[FS25] Ungültiger WINE_RUNTIME_MODE: ${FS25_WINE_RUNTIME_MODE}\"\n    return 1 2>/dev/null || exit 1\nfi\n\nif [[ ! -x \"${FS25_WINE_ROOT}/usr/bin/wine\" || ! -f \"${FS25_WINE_DIR}/.ready\" ]]; then\n    mkdir -p \"${FS25_WINE_BASE}\"\n    echo \"[FS25] Offizielles Arch-Wine ${FS25_WINE_VERSION} wird einmalig vorbereitet.\"\n\n    if [[ ! -f \"${FS25_WINE_PACKAGE}\" ]] || \\\n       [[ \"$(sha256sum \"${FS25_WINE_PACKAGE}\" 2>/dev/null | awk '{print toupper($1)}')\" != \"${FS25_WINE_SHA256}\" ]]; then\n        rm -f \"${FS25_WINE_PACKAGE}.part\"\n        if command -v curl >/dev/null 2>&1; then\n            curl --fail --location --retry 4 --retry-delay 3 \\\n                --output \"${FS25_WINE_PACKAGE}.part\" \"${FS25_WINE_URL}\"\n        elif command -v wget >/dev/null 2>&1; then\n            wget -O \"${FS25_WINE_PACKAGE}.part\" \"${FS25_WINE_URL}\"\n        else\n            echo \"[FS25] Weder curl noch wget ist zum Laden der Wine-Runtime vorhanden.\"\n            return 1 2>/dev/null || exit 1\n        fi\n        mv \"${FS25_WINE_PACKAGE}.part\" \"${FS25_WINE_PACKAGE}\"\n    fi\n\n    actual_sha=\"$(sha256sum \"${FS25_WINE_PACKAGE}\" | awk '{print toupper($1)}')\"\n    if [[ \"${actual_sha}\" != \"${FS25_WINE_SHA256}\" ]]; then\n        echo \"[FS25] Wine-Paket-Prüfsumme falsch: ${actual_sha}\"\n        return 1 2>/dev/null || exit 1\n    fi\n\n    extract_dir=\"${FS25_WINE_DIR}.extracting\"\n    rm -rf \"${extract_dir}\"\n    mkdir -p \"${extract_dir}/root\"\n    echo \"[FS25] Entpacke Wine ${FS25_WINE_VERSION} ...\"\n    if command -v bsdtar >/dev/null 2>&1; then\n        bsdtar -xf \"${FS25_WINE_PACKAGE}\" -C \"${extract_dir}/root\"\n    elif tar --help 2>&1 | grep -q -- '--zstd'; then\n        tar --zstd -xf \"${FS25_WINE_PACKAGE}\" -C \"${extract_dir}/root\"\n    elif command -v 7zz >/dev/null 2>&1; then\n        7zz x -so \"${FS25_WINE_PACKAGE}\" | 7zz x -si -ttar -o\"${extract_dir}/root\" -y\n    else\n        echo \"[FS25] Kein Entpacker für das verifizierte Wine-Paket vorhanden.\"\n        return 1 2>/dev/null || exit 1\n    fi\n\n    [[ -x \"${extract_dir}/root/usr/bin/wine\" ]] || {\n        echo \"[FS25] Wine-Paket wurde unvollständig entpackt.\"\n        return 1 2>/dev/null || exit 1\n    }\n    printf '%s\\n' \"${FS25_WINE_SHA256}\" >\"${extract_dir}/.ready\"\n    rm -rf \"${FS25_WINE_DIR}\"\n    mv \"${extract_dir}\" \"${FS25_WINE_DIR}\"\nfi\n\nfs25_activate_wine_runtime\nruntime_version=\"$(wine --version 2>&1)\"\nif [[ \"${runtime_version}\" != wine-11.0* ]]; then\n    echo \"[FS25] Unerwartete portable Wine-Version: ${runtime_version}\"\n    return 1 2>/dev/null || exit 1\nfi\necho \"[FS25] Wine-Runtime aktiv: ${runtime_version} (${FS25_WINE_ROOT}).\"\nFS25_WINE-RUNTIME_SH\ncat > /mnt/server/.fs25-egg/configure-headless-wine.sh <<'FS25_CONFIGURE-HEADLESS-WINE_SH'\n#!/usr/bin/env bash\nset -Eeuo pipefail\n\nexport HOME=\"${FS25_HOME:-/home/container}\"\nexport WINEPREFIX=\"${HOME}/.fs25server\"\nexport WINEARCH=win64\nexport WINEDEBUG=\"${WINEDEBUG:--all}\"\n\nSTATE_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nsource \"${STATE_DIR}/wine-runtime.sh\"\n\nif [[ \"${WINE_AUDIO_MODE:-disabled}\" == \"disabled\" ]]; then\n    export WINEDLLOVERRIDES=\"${WINEDLLOVERRIDES:-mscoree=d};winealsa.drv=d;winepulse.drv=d;winedbg.exe=d\"\n    marker=\"${WINEPREFIX}/.fs25-headless-audio-disabled\"\n    if [[ ! -f \"${marker}\" ]]; then\n        echo \"[FS25] Deaktiviere Wine-Audio und den Crash-Debugger für den Headless-Server.\"\n        timeout --signal=TERM --kill-after=10s 60s \\\n            wine reg add 'HKCU\\Software\\Wine\\Drivers' /v Audio /t REG_SZ /d disabled /f \\\n            >/dev/null 2>&1\n        mkdir -p \"${WINEPREFIX}\"\n        touch \"${marker}\"\n    fi\nelse\n    echo \"[FS25] Wine-Audio bleibt aktiviert (${WINE_AUDIO_MODE}).\"\nfi\nFS25_CONFIGURE-HEADLESS-WINE_SH\ncat > /mnt/server/.fs25-egg/ensure-wine-prefix.sh <<'FS25_ENSURE-WINE-PREFIX_SH'\n#!/usr/bin/env bash\nset -Eeuo pipefail\n\nexport HOME=\"${FS25_HOME:-/home/container}\"\nexport USER=container\nexport LOGNAME=container\nexport WINEPREFIX=\"${HOME}/.fs25server\"\nexport WINEARCH=win64\nexport WINEDEBUG=\"${WINEDEBUG:--all}\"\nexport WINEDLLOVERRIDES=\"${WINEDLLOVERRIDES:-mscoree=d}\"\n\nSTATE_DIR=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" && pwd)\"\nsource \"${STATE_DIR}/wine-runtime.sh\"\n\nWINEBOOT_TIMEOUT=\"${WINEBOOT_TIMEOUT:-180}\"\nWINECHECK_TIMEOUT=\"${WINECHECK_TIMEOUT:-45}\"\n\nLOG_DIR=\"${HOME}/logs\"\nmkdir -p \"${LOG_DIR}\"\n\nprefix_files_exist() {\n    [[ -s \"${WINEPREFIX}/system.reg\" ]] &&\n    [[ -f \"${WINEPREFIX}/drive_c/windows/system32/kernel32.dll\" ]] &&\n    [[ -f \"${WINEPREFIX}/drive_c/windows/system32/cmd.exe\" ]]\n}\n\nprefix_runs() {\n    timeout --signal=TERM --kill-after=10s \"${WINECHECK_TIMEOUT}s\" \\\n        wine cmd /d /c \"exit 0\" 2>&1 | tee \"${LOG_DIR}/wine-prefix-check.log\"\n}\n\nprefix_healthy() {\n    prefix_files_exist && prefix_runs\n}\n\nif prefix_healthy; then\n    echo \"[FS25] Wine-Prefix ist vollständig und ausführbar.\"\n    exit 0\nfi\n\nfor attempt in 1 2; do\n    if [[ -e \"${WINEPREFIX}\" ]]; then\n        wineserver -k >/dev/null 2>&1 || true\n        broken=\"${WINEPREFIX}.broken-$(date +%Y%m%d-%H%M%S)-${attempt}\"\n        mv \"${WINEPREFIX}\" \"${broken}\"\n        echo \"[FS25] Unvollständiger Wine-Prefix wurde nach ${broken} verschoben.\"\n    fi\n\n    mkdir -p \"${WINEPREFIX}\"\n    echo \"[FS25] Wine-Prefix wird neu erzeugt (Versuch ${attempt}/2).\"\n    echo \"[FS25] Wine: $(wine --version 2>&1); Benutzer: $(id -u):$(id -g); Timeout: ${WINEBOOT_TIMEOUT}s\"\n    if timeout --signal=TERM --kill-after=15s \"${WINEBOOT_TIMEOUT}s\" \\\n        wineboot --init 2>&1 | tee \"${LOG_DIR}/wineboot.log\"; then\n        echo \"[FS25] wineboot wurde beendet; Prefix-Dateien werden geprüft.\"\n    else\n        status=${PIPESTATUS[0]}\n        echo \"[FS25] wineboot endete mit Status ${status}; der Prefix wird geprüft und bei Bedarf neu erzeugt.\"\n        wineserver -k >/dev/null 2>&1 || true\n    fi\n\n    if prefix_healthy; then\n        echo \"[FS25] Wine-Prefix wurde erfolgreich verifiziert.\"\n        exit 0\n    fi\n\n    echo \"[FS25] Wine-Prefix-Prüfung ${attempt}/2 fehlgeschlagen.\"\n    tail -n 40 \"${LOG_DIR}/wineboot.log\" 2>/dev/null || true\n    tail -n 20 \"${LOG_DIR}/wine-prefix-check.log\" 2>/dev/null || true\ndone\n\necho \"[FS25] Wine-Prefix konnte nicht funktionsfähig angelegt werden.\"\nexit 1\nFS25_ENSURE-WINE-PREFIX_SH\ncat > /mnt/server/.fs25-egg/start-desktop.sh <<'FS25_START-DESKTOP_SH'\n#!/usr/bin/env bash\nset -Eeuo pipefail\n\nexport HOME=\"${FS25_HOME:-/home/container}\"\nexport DISPLAY=\"${DISPLAY:-:0}\"\nexport XDG_RUNTIME_DIR=\"${XDG_RUNTIME_DIR:-/tmp/xdg-runtime-fs25}\"\n\nLOG_DIR=\"${HOME}/logs\"\nSESSION_LOG=\"${LOG_DIR}/xfce.log\"\nmkdir -p \"${LOG_DIR}\" \"${HOME}/Desktop\" \"${HOME}/.config\" \"${XDG_RUNTIME_DIR}\"\nchmod 700 \"${XDG_RUNTIME_DIR}\"\n\n# A restored XFCE session from the upstream image can contain only the Wine\n# console. Always build a clean session so noVNC has a window manager, panel,\n# and desktop icons while activation and DLC dialogs are open.\nrm -rf \"${HOME}/.cache/sessions\"\ncat >\"${HOME}/.config/user-dirs.dirs\" <<EOF\nXDG_DESKTOP_DIR=\"${HOME}/Desktop\"\nEOF\n\nif command -v dbus-launch >/dev/null 2>&1; then\n    eval \"$(dbus-launch --sh-syntax)\"\n    export DBUS_SESSION_BUS_ADDRESS DBUS_SESSION_BUS_PID\nfi\n\n: >\"${SESSION_LOG}\"\nif command -v startxfce4 >/dev/null 2>&1; then\n    startxfce4 >>\"${SESSION_LOG}\" 2>&1 &\nfi\n\nsleep 4\n\nstart_missing() {\n    local process=\"$1\"\n    shift\n    if ! pgrep -u \"$(id -u)\" -x \"${process}\" >/dev/null 2>&1; then\n        \"$@\" >>\"${SESSION_LOG}\" 2>&1 &\n    fi\n}\n\n# Explicit fallbacks fix the black noVNC root window if startxfce4 exits early\n# or restores an incomplete session.\nstart_missing xfsettingsd xfsettingsd\nstart_missing xfwm4 xfwm4 --replace --compositor=off\nstart_missing xfdesktop xfdesktop\nstart_missing xfce4-panel xfce4-panel\n\necho \"[FS25] XFCE-Desktopkomponenten wurden gestartet.\" >>\"${SESSION_LOG}\"\nwhile pgrep -u \"$(id -u)\" -x xfwm4 >/dev/null 2>&1 || \\\n      pgrep -u \"$(id -u)\" -x xfdesktop >/dev/null 2>&1 || \\\n      pgrep -u \"$(id -u)\" -x xfce4-panel >/dev/null 2>&1; do\n    sleep 5\ndone\nFS25_START-DESKTOP_SH\ncat > /mnt/server/.fs25-egg/start.sh <<'FS25_START_SH'\n#!/usr/bin/env bash\nset -Eeuo pipefail\n\nlog() { printf '[FS25] %s\\n' \"$*\"; }\n\nexport HOME=/home/container\nexport USER=container\nexport LOGNAME=container\nexport WINEPREFIX=\"${HOME}/.fs25server\"\nexport WINEARCH=win64\nexport WINEDEBUG=\"${WINEDEBUG:--all}\"\nexport DISPLAY=:0\nexport XDG_RUNTIME_DIR=/tmp/xdg-runtime-fs25\n\nSTATE_DIR=\"${HOME}/.fs25-egg\"\nGAME_ROOT=\"${HOME}/game\"\nGAME_DIR=\"${GAME_ROOT}/Farming Simulator 2025\"\nCONFIG_ROOT=\"${HOME}/config\"\nCONFIG_DIR=\"${CONFIG_ROOT}/FarmingSimulator2025\"\nINSTALLER_DIR=\"${HOME}/installer\"\nDLC_DIR=\"${HOME}/dlc\"\nLOG_DIR=\"${HOME}/logs\"\nDESKTOP_DIR=\"${HOME}/Desktop\"\n\nmkdir -p \"${STATE_DIR}\" \"${GAME_DIR}\" \"${CONFIG_DIR}\" \"${INSTALLER_DIR}\" \\\n    \"${DLC_DIR}\" \"${LOG_DIR}\" \"${DESKTOP_DIR}\" \"${XDG_RUNTIME_DIR}\" \"${HOME}/.vnc\"\nchmod 700 \"${XDG_RUNTIME_DIR}\" \"${HOME}/.vnc\"\n\nsource \"${STATE_DIR}/wine-runtime.sh\"\n\nchildren=()\ncleanup() {\n    local pid\n    for pid in \"${children[@]:-}\"; do\n        kill \"${pid}\" 2>/dev/null || true\n    done\n    wait 2>/dev/null || true\n}\ntrap cleanup EXIT INT TERM\n\nrm -f /tmp/.X0-lock /tmp/.X11-unix/X0\nvnc_command=(Xvnc :0 -depth 24 -geometry \"${VNC_GEOMETRY:-1280x720}\")\nif [[ -n \"${VNC_PASSWORD:-}\" && \"${#VNC_PASSWORD}\" -ge 6 ]]; then\n    printf '%s\\n' \"${VNC_PASSWORD}\" | vncpasswd -f >\"${HOME}/.vnc/passwd\"\n    chmod 600 \"${HOME}/.vnc/passwd\"\n    vnc_command+=( -PasswordFile=\"${HOME}/.vnc/passwd\" )\nelse\n    vnc_command+=( -SecurityTypes=None )\nfi\n\"${vnc_command[@]}\" >\"${LOG_DIR}/xvnc.log\" 2>&1 &\nXVNC_PID=$!\nchildren+=(\"${XVNC_PID}\")\n\nfor _ in {1..30}; do\n    if DISPLAY=:0 xdpyinfo >/dev/null 2>&1; then break; fi\n    if ! kill -0 \"${XVNC_PID}\" 2>/dev/null; then\n        log \"Xvnc wurde beendet; siehe ${LOG_DIR}/xvnc.log\"\n        exit 1\n    fi\n    sleep 1\ndone\n\n/usr/sbin/websockify --web /usr/share/webapps/novnc/ 6080 localhost:5900 \\\n    >\"${LOG_DIR}/novnc.log\" 2>&1 &\nchildren+=(\"$!\")\n\nbash \"${STATE_DIR}/start-desktop.sh\" &\nchildren+=(\"$!\")\n\nbash \"${STATE_DIR}/ensure-wine-prefix.sh\"\nsource \"${STATE_DIR}/configure-headless-wine.sh\"\n\nlink_persistent_directory() {\n    local source=\"$1\" target=\"$2\"\n    mkdir -p \"${source}\" \"$(dirname \"${target}\")\"\n    if [[ -L \"${target}\" && \"$(readlink \"${target}\")\" == \"${source}\" ]]; then\n        return\n    fi\n    if [[ -d \"${target}\" && ! -L \"${target}\" ]]; then\n        cp -a \"${target}/.\" \"${source}/\" 2>/dev/null || true\n    fi\n    rm -rf \"${target}\"\n    ln -s \"${source}\" \"${target}\"\n}\n\nlink_persistent_directory \"${GAME_DIR}\" \\\n    \"${WINEPREFIX}/drive_c/Program Files (x86)/Farming Simulator 2025\"\nlink_persistent_directory \"${CONFIG_DIR}\" \\\n    \"${WINEPREFIX}/drive_c/users/${USER}/Documents/My Games/FarmingSimulator2025\"\n\ncat >\"${DESKTOP_DIR}/FS25 installieren.desktop\" <<'DESKTOP'\n[Desktop Entry]\nType=Application\nName=FS25 installieren / aktivieren\nExec=xfce4-terminal --hold --command=\"bash /home/container/.fs25-egg/setup.sh\"\nTerminal=false\nIcon=system-software-install\nDESKTOP\n\ncat >\"${DESKTOP_DIR}/FS25 Webserver starten.desktop\" <<'DESKTOP'\n[Desktop Entry]\nType=Application\nName=FS25 Webserver starten\nExec=xfce4-terminal --hold --command=\"bash /home/container/.fs25-egg/start-server.sh\"\nTerminal=false\nIcon=applications-games\nDESKTOP\n\ncat >\"${DESKTOP_DIR}/FS25 DLCs installieren.desktop\" <<'DESKTOP'\n[Desktop Entry]\nType=Application\nName=FS25 DLCs installieren\nExec=xfce4-terminal --hold --command=\"bash /home/container/.fs25-egg/install-dlcs.sh\"\nTerminal=false\nIcon=system-software-install\nDESKTOP\nchmod +x \"${DESKTOP_DIR}\"/*.desktop\n\npython3 \"${STATE_DIR}/configure.py\"\n\npublic_host=\"${PUBLIC_IP:-${SERVER_IP:-127.0.0.1}}\"\nlog \"Upstream-Image: toetje585/arch-fs25server:latest\"\nlog \"noVNC: http://${public_host}:6080/vnc.html?resize=remote&autoconnect=1\"\nlog \"GIANTS-Webinterface: http://${public_host}:${WEB_PORT:-7999}\"\nlog \"Spielport: ${SERVER_PORT:-10823}/tcp+udp\"\n\nif [[ -x \"${GAME_DIR}/dedicatedServer.exe\" ]]; then\n    if [[ \"${AUTO_INSTALL_DLC:-false}\" == \"true\" || -f \"${STATE_DIR}/dlc-autoinstall.enabled\" ]]; then\n        log \"DLC-Automatik ist aktiviert. Fehlende Pakete werden vor dem Serverstart verarbeitet.\"\n        bash \"${STATE_DIR}/install-dlcs.sh\"\n    fi\n    if [[ \"${AUTOSTART_SERVER:-web_only}\" == \"true\" || \"${AUTOSTART_SERVER:-web_only}\" == \"web_only\" ]]; then\n        bash \"${STATE_DIR}/start-server.sh\" &\n        children+=(\"$!\")\n    else\n        log \"Installation erkannt. Starte den Webserver über die Desktop-Verknüpfung.\"\n    fi\nelse\n    log \"Noch keine Installation erkannt. Installer nach ${INSTALLER_DIR} hochladen.\"\n    if [[ \"${AUTO_INSTALL:-false}\" == \"true\" ]] && find \"${INSTALLER_DIR}\" -maxdepth 1 -type f | grep -Eiq '\\.(exe|img|iso|zip)$'; then\n        bash \"${STATE_DIR}/setup.sh\" &\n        children+=(\"$!\")\n    fi\nfi\n\nlog \"FS25 upstream compatibility layer ready.\"\nwait \"${XVNC_PID}\"\nFS25_START_SH\ncat > /mnt/server/.fs25-egg/setup.sh <<'FS25_SETUP_SH'\n#!/usr/bin/env bash\nset -Eeuo pipefail\n\nexport HOME=\"${FS25_HOME:-/home/container}\"\nexport USER=container\nexport LOGNAME=container\nexport WINEPREFIX=\"${HOME}/.fs25server\"\nexport WINEARCH=win64\nexport WINEDEBUG=\"${WINEDEBUG:--all}\"\nexport DISPLAY=:0\n\nINSTALLER_DIR=\"${HOME}/installer\"\nEXTRACTED_DIR=\"${INSTALLER_DIR}/extracted\"\nGAME_DIR=\"${HOME}/game/Farming Simulator 2025\"\nLOG_DIR=\"${HOME}/logs\"\nSTATE_DIR=\"${FS25_EGG_DIR:-${HOME}/.fs25-egg}\"\nINSTALL_MODE=\"${INSTALL_MODE:-silent}\"\nINSTALL_TIMEOUT=\"${INSTALL_TIMEOUT:-7200}\"\nINSTALL_PROGRESS_INTERVAL=\"${INSTALL_PROGRESS_INTERVAL:-30}\"\nACTIVATION_TIMEOUT=\"${ACTIVATION_TIMEOUT:-7200}\"\n\nmkdir -p \"${INSTALLER_DIR}\" \"${EXTRACTED_DIR}\" \"${GAME_DIR}\" \"${LOG_DIR}\"\n\nsource \"${STATE_DIR}/wine-runtime.sh\"\nbash \"${STATE_DIR}/ensure-wine-prefix.sh\"\nsource \"${STATE_DIR}/configure-headless-wine.sh\"\n\nif [[ ! -f \"${GAME_DIR}/FarmingSimulator2025.exe\" || ! -f \"${GAME_DIR}/dedicatedServer.exe\" ]]; then\ninstaller=\"\"\nwhile IFS= read -r candidate; do\n    installer=\"${candidate}\"\n    break\ndone < <(find \"${INSTALLER_DIR}\" -maxdepth 2 -type f \\\n    \\( -iname 'Setup.exe' -o -iname 'FarmingSimulator2025.exe' \\) | sort)\n\nif [[ -z \"${installer}\" ]]; then\n    archive=\"\"\n    while IFS= read -r candidate; do archive=\"${candidate}\"; break; done \\\n        < <(find \"${INSTALLER_DIR}\" -maxdepth 1 -type f \\\n        \\( -iname '*.img' -o -iname '*.iso' -o -iname '*.zip' \\) | sort)\n    if [[ -n \"${archive}\" ]]; then\n        echo \"[FS25] Entpacke $(basename \"${archive}\") ...\"\n        if command -v 7z >/dev/null 2>&1; then\n            7z x -y -o\"${EXTRACTED_DIR}\" -- \"${archive}\"\n        elif command -v 7zz >/dev/null 2>&1; then\n            7zz x -y -o\"${EXTRACTED_DIR}\" -- \"${archive}\"\n        elif command -v 7za >/dev/null 2>&1; then\n            7za x -y -o\"${EXTRACTED_DIR}\" -- \"${archive}\"\n        elif command -v bsdtar >/dev/null 2>&1; then\n            bsdtar -xf \"${archive}\" -C \"${EXTRACTED_DIR}\"\n        else\n            echo \"[FS25] Kein Archivprogramm vorhanden (7z/7zz/7za/bsdtar).\"\n            echo \"[FS25] Setup.exe alternativ außerhalb des Containers entpacken und nach ${INSTALLER_DIR} hochladen.\"\n            exit 1\n        fi\n        while IFS= read -r candidate; do installer=\"${candidate}\"; break; done \\\n            < <(find \"${EXTRACTED_DIR}\" -type f \\\n            \\( -iname 'Setup.exe' -o -iname 'FarmingSimulator2025.exe' \\) | sort)\n    fi\nfi\n\nif [[ -z \"${installer}\" ]]; then\n    echo \"[FS25] Kein Setup gefunden. IMG/ISO/ZIP oder Setup.exe nach ${INSTALLER_DIR} hochladen.\"\n    exit 1\nfi\n\n# Some IMG extractors expose the ISO 9660 short names (SETUP_1A.BIN), while\n# the Windows installer asks for the Joliet-style name (Setup-1a.bin). Keep the\n# extracted files untouched and create hard-link aliases beside Setup.exe.\ninstaller_dir=\"$(dirname \"${installer}\")\"\ninstaller_stem=\"$(basename \"${installer}\")\"\ninstaller_stem=\"${installer_stem%.*}\"\ncase \"${installer_stem,,}\" in\n    setup) installer_stem=\"Setup\" ;;\n    farmingsimulator2025) installer_stem=\"FarmingSimulator2025\" ;;\nesac\n\nslice_aliases=0\nwhile IFS= read -r -d '' slice; do\n    slice_name=\"$(basename \"${slice}\")\"\n    if [[ \"${slice_name}\" =~ ^[^_]+_([0-9]+[A-Za-z])\\.[Bb][Ii][Nn]$ ]]; then\n        slice_suffix=\"${BASH_REMATCH[1],,}\"\n        slice_alias=\"${installer_dir}/${installer_stem}-${slice_suffix}.bin\"\n        if [[ ! -e \"${slice_alias}\" ]]; then\n            if ln \"${slice}\" \"${slice_alias}\" 2>/dev/null; then\n                link_kind=\"Hardlink\"\n            else\n                ln -s \"${slice_name}\" \"${slice_alias}\"\n                link_kind=\"Symlink\"\n            fi\n            echo \"[FS25] Datenträger-Dateiname korrigiert: ${slice_name} -> $(basename \"${slice_alias}\") (${link_kind}).\"\n        fi\n        slice_aliases=$((slice_aliases + 1))\n    fi\ndone < <(find \"${installer_dir}\" -maxdepth 1 -type f -iname '*.bin' -print0)\n\nif (( slice_aliases > 0 )); then\n    echo \"[FS25] ${slice_aliases} Installer-Slices sind unter den erwarteten Bindestrich-Namen verfügbar.\"\nfi\n\ninstaller_args=()\nif [[ \"${INSTALL_MODE}\" == \"silent\" ]]; then\n    # These are the same unattended flags used by the upstream image's setup_fs25.sh.\n    installer_args=(\"/SILENT\" \"/NOCANCEL\" \"/NOICONS\")\n    echo \"[FS25] Starte $(basename \"${installer}\") im Silent-Modus nach Upstream-Vorgabe.\"\nelse\n    echo \"[FS25] Starte $(basename \"${installer}\") interaktiv im noVNC-Desktop.\"\nfi\n\ninstall_log=\"${LOG_DIR}/fs25-installer.log\"\n: >\"${install_log}\"\ncd \"${installer_dir}\"\n\necho \"[FS25] Installations-Timeout: ${INSTALL_TIMEOUT}s; Fortschritt alle ${INSTALL_PROGRESS_INTERVAL}s.\"\n(\n    set -o pipefail\n    timeout --signal=TERM --kill-after=30s \"${INSTALL_TIMEOUT}s\" \\\n        wine \"${installer}\" \"${installer_args[@]}\" 2>&1 | tee \"${install_log}\"\n) &\ninstaller_pid=$!\n\nelapsed=0\nwhile kill -0 \"${installer_pid}\" 2>/dev/null; do\n    sleep \"${INSTALL_PROGRESS_INTERVAL}\"\n    elapsed=$((elapsed + INSTALL_PROGRESS_INTERVAL))\n    installed_mib=\"$(du -sm \"${GAME_DIR}\" 2>/dev/null | awk '{print $1}')\"\n    installed_mib=\"${installed_mib:-0}\"\n    echo \"[FS25] Installation läuft: ${elapsed}s, Spielverzeichnis: ${installed_mib} MiB, Log: ${install_log}\"\ndone\n\nif wait \"${installer_pid}\"; then\n    installer_status=0\nelse\n    installer_status=$?\nfi\n\nif [[ \"${installer_status}\" -ne 0 ]]; then\n    echo \"[FS25] Installer endete mit Status ${installer_status}. Letzte Logzeilen:\"\n    tail -n 60 \"${install_log}\" 2>/dev/null || true\n    exit \"${installer_status}\"\nfi\n\nmissing=()\nfor required in \"${GAME_DIR}/FarmingSimulator2025.exe\" \"${GAME_DIR}/dedicatedServer.exe\"; do\n    [[ -f \"${required}\" ]] || missing+=(\"${required}\")\ndone\nif (( ${#missing[@]} > 0 )); then\n    echo \"[FS25] Installer meldete Erfolg, aber die Installation ist unvollständig. Fehlend:\"\n    printf '[FS25] - %s\\n' \"${missing[@]}\"\n    tail -n 60 \"${install_log}\" 2>/dev/null || true\n    exit 1\nfi\n\necho \"[FS25] Installation verifiziert: FarmingSimulator2025.exe und dedicatedServer.exe sind vorhanden.\"\nelse\n    echo \"[FS25] Vollständige Installation erkannt; Installer wird übersprungen.\"\nfi\n\ngame_exe=\"${GAME_DIR}/FarmingSimulator2025.exe\"\nif [[ -f \"${game_exe}\" && \"${ACTIVATE_AFTER_INSTALL:-true}\" == \"true\" ]]; then\n    activation_log=\"${LOG_DIR}/fs25-activation.log\"\n    echo \"[FS25] Starte FS25 einmalig für die Lizenzaktivierung mit $(wine --version 2>&1).\"\n    echo \"[FS25] Audio ist im Headless-Container deaktiviert; das ist für den Dedicated Server vorgesehen.\"\n    cd \"${GAME_DIR}\"\n    if timeout --signal=TERM --kill-after=30s \"${ACTIVATION_TIMEOUT}s\" \\\n        wine \"${game_exe}\" 2>&1 | tee \"${activation_log}\"; then\n        echo \"[FS25] Aktivierungsprogramm wurde regulär beendet.\"\n    else\n        activation_status=${PIPESTATUS[0]}\n        echo \"[FS25] Aktivierungsprogramm endete mit Status ${activation_status}; Log: ${activation_log}\"\n        tail -n 80 \"${activation_log}\" 2>/dev/null || true\n        exit \"${activation_status}\"\n    fi\nfi\n\nif [[ \"${AUTO_INSTALL_DLC:-false}\" == \"true\" || -f \"${STATE_DIR}/dlc-autoinstall.enabled\" ]]; then\n    echo \"[FS25] Spielinstallation und Aktivierung sind abgeschlossen; starte jetzt die DLC-Reihenfolge.\"\n    bash \"${STATE_DIR}/install-dlcs.sh\"\nelse\n    echo \"[FS25] DLC-Automatik ist deaktiviert (AUTO_INSTALL_DLC=false).\"\nfi\n\npython3 \"${STATE_DIR}/configure.py\"\necho \"[FS25] Einrichtung abgeschlossen. Danach 'FS25 Webserver starten' öffnen.\"\nFS25_SETUP_SH\ncat > /mnt/server/.fs25-egg/install-dlcs.sh <<'FS25_INSTALL-DLCS_SH'\n#!/usr/bin/env bash\nset -Eeuo pipefail\n\nexport HOME=\"${FS25_HOME:-/home/container}\"\nexport USER=container\nexport LOGNAME=container\nexport WINEPREFIX=\"${HOME}/.fs25server\"\nexport WINEARCH=win64\nexport WINEDEBUG=\"${WINEDEBUG:--all}\"\nexport DISPLAY=\"${DISPLAY:-:0}\"\n\nSTATE_DIR=\"${HOME}/.fs25-egg\"\nDLC_DIR=\"${HOME}/dlc\"\nPDLC_DIR=\"${HOME}/config/FarmingSimulator2025/pdlc\"\nLOG_DIR=\"${HOME}/logs\"\nDLC_PREFIX=\"FarmingSimulator25_\"\nDLC_INSTALL_TIMEOUT=\"${DLC_INSTALL_TIMEOUT:-7200}\"\n\nmkdir -p \"${DLC_DIR}\" \"${PDLC_DIR}\" \"${LOG_DIR}\"\nsource \"${STATE_DIR}/wine-runtime.sh\"\nsource \"${STATE_DIR}/configure-headless-wine.sh\"\n\nextract_archive() {\n    local archive=\"$1\" temp_dir target file\n    temp_dir=\"$(mktemp -d \"${DLC_DIR}/.extract-XXXXXX\")\"\n    echo \"[FS25] Entpacke DLC-Archiv $(basename \"${archive}\") ...\"\n    if command -v 7z >/dev/null 2>&1; then\n        7z x -y -o\"${temp_dir}\" -- \"${archive}\" >/dev/null\n    elif command -v 7zz >/dev/null 2>&1; then\n        7zz x -y -o\"${temp_dir}\" -- \"${archive}\" >/dev/null\n    elif command -v 7za >/dev/null 2>&1; then\n        7za x -y -o\"${temp_dir}\" -- \"${archive}\" >/dev/null\n    elif command -v bsdtar >/dev/null 2>&1; then\n        bsdtar -xf \"${archive}\" -C \"${temp_dir}\"\n    else\n        echo \"[FS25] Kein Entpacker für $(basename \"${archive}\") vorhanden.\"\n        rm -rf \"${temp_dir}\"\n        return 1\n    fi\n    while IFS= read -r -d '' file; do\n        target=\"${DLC_DIR}/$(basename \"${file}\")\"\n        [[ -e \"${target}\" ]] || mv \"${file}\" \"${target}\"\n    done < <(find \"${temp_dir}\" -type f -print0)\n    rm -rf \"${temp_dir}\"\n}\n\nshopt -s nullglob nocasematch\nfor archive in \"${DLC_DIR}\"/${DLC_PREFIX}*.img \\\n               \"${DLC_DIR}\"/${DLC_PREFIX}*.iso \\\n               \"${DLC_DIR}\"/${DLC_PREFIX}*.zip; do\n    [[ -e \"${archive}\" ]] || continue\n    archive_base=\"$(basename \"${archive}\")\"\n    archive_name=\"${archive_base#${DLC_PREFIX}}\"\n    archive_name=\"${archive_name%%_*}\"\n    if compgen -G \"${DLC_DIR}/${DLC_PREFIX}${archive_name}_*.exe\" >/dev/null; then\n        continue\n    fi\n    extract_archive \"${archive}\"\ndone\n\ninstallers=(\"${DLC_DIR}\"/${DLC_PREFIX}*.exe)\nif (( ${#installers[@]} == 0 )); then\n    echo \"[FS25] Keine DLC-Installer in ${DLC_DIR} gefunden.\"\n    exit 0\nfi\n\necho \"[FS25] Automatische DLC-Reihenfolge aktiv: ${#installers[@]} Paket(e).\"\necho \"[FS25] noVNC geöffnet lassen; Produktschlüssel werden weiterhin manuell eingegeben.\"\n\nfailures=0\nfor installer in \"${installers[@]}\"; do\n    base=\"$(basename \"${installer}\")\"\n    raw=\"${base#${DLC_PREFIX}}\"\n    dlc_name=\"${raw%%_*}\"\n    expected=\"${PDLC_DIR}/${dlc_name}.dlc\"\n\n    if [[ -f \"${expected}\" ]]; then\n        echo \"[FS25] DLC ${dlc_name} ist bereits installiert; überspringe ${base}.\"\n        continue\n    fi\n\n    before=\"$(find \"${PDLC_DIR}\" -maxdepth 1 -type f -iname '*.dlc' -printf '%f\\n' | sort)\"\n    safe_name=\"${base//[^A-Za-z0-9._-]/_}\"\n    install_log=\"${LOG_DIR}/dlc-${safe_name}.log\"\n    echo \"[FS25] Starte DLC ${dlc_name}: ${base}\"\n    echo \"[FS25] Bitte den Produktschlüssel im noVNC-Fenster eingeben. Timeout: ${DLC_INSTALL_TIMEOUT}s.\"\n\n    set +e\n    timeout --signal=TERM --kill-after=30s \"${DLC_INSTALL_TIMEOUT}s\" \\\n        wine \"${installer}\" 2>&1 | tee \"${install_log}\"\n    status=${PIPESTATUS[0]}\n    set -e\n\n    after=\"$(find \"${PDLC_DIR}\" -maxdepth 1 -type f -iname '*.dlc' -printf '%f\\n' | sort)\"\n    if [[ \"${status}\" -eq 0 && ( -f \"${expected}\" || \"${after}\" != \"${before}\" ) ]]; then\n        echo \"[FS25] DLC ${dlc_name} wurde installiert.\"\n    else\n        echo \"[FS25] DLC ${dlc_name} ist nicht vollständig installiert (Status ${status}); Log: ${install_log}\"\n        failures=$((failures + 1))\n    fi\ndone\n\nif (( failures > 0 )); then\n    echo \"[FS25] ${failures} DLC-Installation(en) müssen beim nächsten Start erneut bestätigt werden.\"\n    exit 1\nfi\n\necho \"[FS25] Alle gefundenen DLC-Installer wurden verarbeitet.\"\nFS25_INSTALL-DLCS_SH\ncat > /mnt/server/.fs25-egg/start-server.sh <<'FS25_START-SERVER_SH'\n#!/usr/bin/env bash\nset -Eeuo pipefail\n\nexport HOME=\"${FS25_HOME:-/home/container}\"\nexport USER=container\nexport LOGNAME=container\nexport WINEPREFIX=\"${HOME}/.fs25server\"\nexport WINEARCH=win64\nexport WINEDEBUG=\"${WINEDEBUG:--all}\"\nexport DISPLAY=:0\n\nGAME_DIR=\"${HOME}/game/Farming Simulator 2025\"\nSERVER_EXE=\"${GAME_DIR}/dedicatedServer.exe\"\nSTATE_DIR=\"${FS25_EGG_DIR:-${HOME}/.fs25-egg}\"\n\nsource \"${STATE_DIR}/wine-runtime.sh\"\nsource \"${STATE_DIR}/configure-headless-wine.sh\"\n\nif [[ ! -f \"${SERVER_EXE}\" ]]; then\n    echo \"[FS25] dedicatedServer.exe fehlt. Zuerst FS25 installieren.\"\n    exit 1\nfi\n\npython3 \"${STATE_DIR}/configure.py\"\necho \"[FS25] GIANTS-Webinterface startet auf Port ${WEB_PORT:-7999}.\"\ncd \"${GAME_DIR}\"\nexec wine \"${SERVER_EXE}\"\nFS25_START-SERVER_SH\ncat > /mnt/server/.fs25-egg/configure.py <<'FS25_CONFIGURE_PY'\n#!/usr/bin/env python3\nimport os\nimport pathlib\nimport tempfile\nimport xml.etree.ElementTree as ET\n\nHOME = pathlib.Path(os.environ.get(\"FS25_HOME\", \"/home/container\"))\nGAME = HOME / \"game\" / \"Farming Simulator 2025\"\nCONFIG = HOME / \"config\" / \"FarmingSimulator2025\" / \"dedicated_server\"\n\n\ndef env(name: str, default: str = \"\") -> str:\n    return os.environ.get(name, default)\n\n\ndef port(name: str, default: str) -> str:\n    value = env(name, default)\n    try:\n        number = int(value)\n    except ValueError as exc:\n        raise SystemExit(f\"[FS25] {name} muss eine Zahl sein: {value}\") from exc\n    if not 1024 <= number <= 65535:\n        raise SystemExit(f\"[FS25] {name} muss zwischen 1024 und 65535 liegen: {number}\")\n    return str(number)\n\n\ndef atomic_xml(path: pathlib.Path, root: ET.Element) -> None:\n    path.parent.mkdir(parents=True, exist_ok=True)\n    ET.indent(root, space=\"    \")\n    with tempfile.NamedTemporaryFile(\"wb\", dir=path.parent, delete=False) as handle:\n        tmp = pathlib.Path(handle.name)\n        ET.ElementTree(root).write(handle, encoding=\"utf-8\", xml_declaration=True)\n    ET.parse(tmp)\n    os.replace(tmp, path)\n\n\nweb_port = port(\"WEB_PORT\", \"7999\")\ngame_port = port(\"SERVER_PORT\", \"10823\")\nif web_port == game_port:\n    raise SystemExit(\"[FS25] WEB_PORT und der primaere SERVER_PORT muessen verschieden sein\")\n\nconfig_path = CONFIG / \"dedicatedServerConfig.xml\"\nrequested_map = env(\"SERVER_MAP\", \"\").strip()\nsaved_map_id = \"\"\nsaved_map_filename = \"\"\nif config_path.is_file():\n    try:\n        previous = ET.parse(config_path).getroot()\n        saved_map_id = (previous.findtext(\"./settings/mapID\") or \"\").strip()\n        saved_map_filename = (previous.findtext(\"./settings/mapFilename\") or \"\").strip()\n    except (ET.ParseError, OSError):\n        pass\n\nif requested_map:\n    map_id = requested_map\n    map_filename = \"default\"\n    map_source = \"Panelvariable\"\nelif saved_map_id:\n    map_id = saved_map_id\n    map_filename = saved_map_filename or \"default\"\n    map_source = \"GIANTS-Webinterface\"\nelse:\n    map_id = \"MapUS\"\n    map_filename = \"default\"\n    map_source = \"Erststart-Standard\"\n\nserver = ET.Element(\"server\")\nweb = ET.SubElement(server, \"webserver\", {\"port\": web_port})\nadmin = ET.SubElement(web, \"initial_admin\")\nET.SubElement(admin, \"username\").text = env(\"WEB_USERNAME\", \"admin\")\nET.SubElement(admin, \"passphrase\").text = env(\"WEB_PASSWORD\", \"webpassword\")\nET.SubElement(\n    server,\n    \"game\",\n    {\n        \"description\": \"Farming Simulator 25\",\n        \"name\": \"FarmingSimulator2025\",\n        \"exe\": \"FarmingSimulator2025Game.exe\",\n    },\n)\natomic_xml(GAME / \"dedicatedServer.xml\", server)\n\ngameserver = ET.Element(\"gameserver\")\nsettings = ET.SubElement(gameserver, \"settings\")\nvalues = {\n    \"game_name\": env(\"SERVER_NAME\", \"FS25 Server\"),\n    \"admin_password\": env(\"SERVER_ADMIN\", \"adminpassword\"),\n    \"game_password\": env(\"SERVER_PASSWORD\", \"\"),\n    \"savegame_index\": env(\"SAVEGAME_INDEX\", \"1\"),\n    \"max_player\": env(\"SERVER_PLAYERS\", \"16\"),\n    \"port\": game_port,\n    \"language\": env(\"SERVER_REGION\", \"de\"),\n    \"auto_save_interval\": env(\"SERVER_SAVE_INTERVAL\", \"180.000000\"),\n    \"stats_interval\": env(\"SERVER_STATS_INTERVAL\", \"31536000\"),\n    \"crossplay_allowed\": env(\"SERVER_CROSSPLAY\", \"true\"),\n    \"pause_game_if_empty\": env(\"SERVER_PAUSE\", \"2\"),\n    \"mapID\": map_id,\n    \"mapFilename\": map_filename,\n}\nfor key, value in values.items():\n    ET.SubElement(settings, key).text = value\natomic_xml(config_path, gameserver)\n\nprint(\n    \"[FS25] Konfiguration geschrieben: \"\n    f\"web={web_port} game={game_port} map={map_id} ({map_source})\"\n)\nFS25_CONFIGURE_PY\nchmod +x /mnt/server/.fs25-egg/*.sh /mnt/server/.fs25-egg/configure.py\ncat > /mnt/server/README-FIRST.txt <<'FS25_README'\nFS25 Egg fuer das direkte Upstream-Image toetje585/arch-fs25server:latest\nAllocations: primaer z. B. 10823 (Spiel TCP/UDP), zusaetzlich z. B. 7999 (Web), 6080 (noVNC), optional 5900 (VNC).\nInstaller als IMG/ISO/ZIP/EXE nach /home/container/installer hochladen.\nDLC-Installer als FarmingSimulator25_*.exe/img/iso/zip nach /home/container/dlc hochladen.\nDanach die Desktop-Verknuepfung zur Installation benutzen. Der Installer laeuft standardmaessig mit den Silent-Parametern des Upstream-Images.\nFS25_README\necho 'FS25 upstream egg compatibility files installed.'\n",
+      "container": "ghcr.io/pterodactyl/installers:debian",
+      "entrypoint": "bash"
+    }
+  },
+  "variables": [
+    {
+      "name": "Compatibility hook",
+      "description": "Required for the upstream image on Wings.",
+      "env_variable": "BASH_ENV",
+      "default_value": "/home/container/.fs25-egg/bash-env.sh",
+      "user_viewable": false,
+      "user_editable": false,
+      "rules": "required|string|in:/home/container/.fs25-egg/bash-env.sh",
+      "field_type": "text"
+    },
+    {
+      "name": "VNC password",
+      "description": "Password for noVNC/VNC; at least six characters.",
+      "env_variable": "VNC_PASSWORD",
+      "default_value": "fs25server",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|min:6|max:64",
+      "field_type": "text"
+    },
+    {
+      "name": "VNC geometry",
+      "description": "Virtual desktop resolution.",
+      "env_variable": "VNC_GEOMETRY",
+      "default_value": "1280x720",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|regex:/^[0-9]{3,4}x[0-9]{3,4}$/",
+      "field_type": "text"
+    },
+    {
+      "name": "Web username",
+      "description": "GIANTS web administration username.",
+      "env_variable": "WEB_USERNAME",
+      "default_value": "admin",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|min:1|max:32",
+      "field_type": "text"
+    },
+    {
+      "name": "Web password",
+      "description": "GIANTS web administration password.",
+      "env_variable": "WEB_PASSWORD",
+      "default_value": "webpassword",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|min:6|max:64",
+      "field_type": "text"
+    },
+    {
+      "name": "Web port",
+      "description": "Any additional allocation for the GIANTS web interface. It must differ from the primary game port.",
+      "env_variable": "WEB_PORT",
+      "default_value": "7999",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer|between:1024,65535",
+      "field_type": "text"
+    },
+    {
+      "name": "Public IP or hostname",
+      "description": "Address displayed in console links.",
+      "env_variable": "PUBLIC_IP",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "nullable|string|max:253",
+      "field_type": "text"
+    },
+    {
+      "name": "Server name",
+      "description": "Name shown in the FS25 server browser.",
+      "env_variable": "SERVER_NAME",
+      "default_value": "FS25 Server",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:60",
+      "field_type": "text"
+    },
+    {
+      "name": "Game password",
+      "description": "Password used by players.",
+      "env_variable": "SERVER_PASSWORD",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "nullable|string|max:64",
+      "field_type": "text"
+    },
+    {
+      "name": "Admin password",
+      "description": "In-game administrator password.",
+      "env_variable": "SERVER_ADMIN",
+      "default_value": "adminpassword",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|min:4|max:64",
+      "field_type": "text"
+    },
+    {
+      "name": "Players",
+      "description": "Maximum number of players.",
+      "env_variable": "SERVER_PLAYERS",
+      "default_value": "16",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer|between:1,16",
+      "field_type": "text"
+    },
+    {
+      "name": "Region/language",
+      "description": "GIANTS server language code.",
+      "env_variable": "SERVER_REGION",
+      "default_value": "de",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:4",
+      "field_type": "text"
+    },
+    {
+      "name": "Map",
+      "description": "Leave empty to choose and retain the map in the GIANTS web interface. A value here forces this mapID on every container start.",
+      "env_variable": "SERVER_MAP",
+      "default_value": "",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "nullable|string|max:64",
+      "field_type": "text"
+    },
+    {
+      "name": "Savegame slot",
+      "description": "Savegame slot 1-20.",
+      "env_variable": "SAVEGAME_INDEX",
+      "default_value": "1",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer|between:1,20",
+      "field_type": "text"
+    },
+    {
+      "name": "Pause when empty",
+      "description": "2 pauses while empty; 1 keeps running.",
+      "env_variable": "SERVER_PAUSE",
+      "default_value": "2",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|in:1,2",
+      "field_type": "text"
+    },
+    {
+      "name": "Autosave interval",
+      "description": "Autosave interval in seconds.",
+      "env_variable": "SERVER_SAVE_INTERVAL",
+      "default_value": "180.000000",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|numeric|min:30",
+      "field_type": "text"
+    },
+    {
+      "name": "Statistics interval",
+      "description": "Statistics interval in seconds.",
+      "env_variable": "SERVER_STATS_INTERVAL",
+      "default_value": "31536000",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|numeric|min:60",
+      "field_type": "text"
+    },
+    {
+      "name": "Crossplay",
+      "description": "Allow cross-platform players.",
+      "env_variable": "SERVER_CROSSPLAY",
+      "default_value": "true",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|in:true,false",
+      "field_type": "text"
+    },
+    {
+      "name": "Autostart",
+      "description": "web_only starts dedicatedServer.exe; false waits for the desktop shortcut.",
+      "env_variable": "AUTOSTART_SERVER",
+      "default_value": "web_only",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|in:false,web_only,true",
+      "field_type": "text"
+    },
+    {
+      "name": "Auto-launch installer",
+      "description": "Start an uploaded installer automatically on boot.",
+      "env_variable": "AUTO_INSTALL",
+      "default_value": "false",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|in:true,false",
+      "field_type": "text"
+    },
+    {
+      "name": "Wine runtime",
+      "description": "portable11 uses the verified Arch Wine 11 package required by current upstream scripts; system uses the older Wine shipped in the image.",
+      "env_variable": "WINE_RUNTIME_MODE",
+      "default_value": "portable11",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|in:portable11,system",
+      "field_type": "text"
+    },
+    {
+      "name": "Wine audio",
+      "description": "disabled avoids ALSA device failures in a headless Wings container.",
+      "env_variable": "WINE_AUDIO_MODE",
+      "default_value": "disabled",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|in:disabled,alsa",
+      "field_type": "text"
+    },
+    {
+      "name": "Installer mode",
+      "description": "silent uses the unattended flags from the upstream image; interactive shows the installer in noVNC.",
+      "env_variable": "INSTALL_MODE",
+      "default_value": "silent",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|in:silent,interactive",
+      "field_type": "text"
+    },
+    {
+      "name": "Installer timeout",
+      "description": "Maximum installer runtime in seconds.",
+      "env_variable": "INSTALL_TIMEOUT",
+      "default_value": "7200",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer|between:300,21600",
+      "field_type": "text"
+    },
+    {
+      "name": "Installer progress interval",
+      "description": "Seconds between installer progress messages.",
+      "env_variable": "INSTALL_PROGRESS_INTERVAL",
+      "default_value": "30",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer|between:10,300",
+      "field_type": "text"
+    },
+    {
+      "name": "Activation timeout",
+      "description": "Maximum time in seconds for the interactive FS25 license activation.",
+      "env_variable": "ACTIVATION_TIMEOUT",
+      "default_value": "7200",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer|between:300,21600",
+      "field_type": "text"
+    },
+    {
+      "name": "Run activation after install",
+      "description": "Launch FS25 once for license activation after setup.",
+      "env_variable": "ACTIVATE_AFTER_INSTALL",
+      "default_value": "true",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|in:true,false",
+      "field_type": "text"
+    },
+    {
+      "name": "DLCs automatisch installieren",
+      "description": "After game installation/activation, launch every missing DLC installer in sequence. Product keys are entered manually in noVNC.",
+      "env_variable": "AUTO_INSTALL_DLC",
+      "default_value": "false",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|in:true,false",
+      "field_type": "text"
+    },
+    {
+      "name": "DLC installer timeout",
+      "description": "Maximum interactive runtime per DLC installer in seconds.",
+      "env_variable": "DLC_INSTALL_TIMEOUT",
+      "default_value": "7200",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|integer|between:300,21600",
+      "field_type": "text"
+    }
+  ]
+}
