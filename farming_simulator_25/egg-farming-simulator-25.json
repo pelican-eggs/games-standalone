@@ -15,7 +15,7 @@
     "novnc"
   ],
   "docker_images": {
-    "DasEric FS25 test image": "ghcr.io/daseric/games:fs25"
+    "Pelican FS25": "ghcr.io/pelican-eggs/games:fs25"
   },
   "file_denylist": [],
   "startup": "wine \"/home/container/game/Farming Simulator 2025/dedicatedServer.exe\"",
@@ -314,7 +314,7 @@
       "field_type": "text"
     },
     {
-      "name": "DLCs automatisch installieren",
+      "name": "Automatically install DLCs",
       "description": "After game installation/activation, launch every missing DLC installer in sequence. Product keys are entered manually in noVNC.",
       "env_variable": "AUTO_INSTALL_DLC",
       "default_value": "false",

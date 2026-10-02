@@ -4,9 +4,9 @@ Farming Simulator 25 dedicated server egg for Pelican and Pterodactyl. It uses
 the FS25-specific image from the Pelican yolks repository. The image contains
 Wine 11, an XFCE desktop, TigerVNC and noVNC.
 
-> The egg currently points to `ghcr.io/daseric/games:fs25` so the image can be
-> tested before its image contribution is merged. Change the image to
-> `ghcr.io/pelican-eggs/games:fs25` after that image is published.
+```text
+ghcr.io/pelican-eggs/games:fs25
+```
 
 ## Features
 
@@ -36,7 +36,8 @@ allocations assigned in the panel.
 
 1. Import `egg-farming-simulator-25.json` in the panel.
 2. Assign the three ports listed above.
-3. Upload the FS25 installer to `/home/container/installer`.
+3. Upload the official FS25 installer (`.exe`, `.img`, `.iso` or `.zip`) to
+   `/home/container/installer`.
 4. Start the server.
 5. Open noVNC:
 
@@ -44,9 +45,17 @@ allocations assigned in the panel.
    http://SERVER-IP:6080/vnc.html?resize=remote&autoconnect=1
    ```
 
-6. Open **FS25 installieren / aktivieren** on the desktop.
+6. Open **Install / activate FS25** on the desktop. Archives and disk images
+   are extracted automatically before the installer starts.
 7. Enter the dedicated-server product key when the activation window opens.
-8. Restart the server after installation and activation have completed.
+8. During installation, Farming Simulator 25 is launched once to complete
+   activation. This is expected and is the only time the full game is started
+   by the installation process. Quit the game after activation, or restart the
+   container if it remains open.
+9. Restart the server after installation and activation have completed.
+10. Delete the contents of `/home/container/installer` after a successful
+    installation to reclaim the disk space used by the installer and extracted
+    files.
 
 A separate GIANTS dedicated-server license is required. The Steam edition does
 not provide the required server key.
@@ -63,10 +72,15 @@ the activation program through noVNC afterwards.
 - `web_only`: start the GIANTS web interface but not the game session.
 - `true`: start the web interface and submit its game-server start form.
 
+After installation, open the GIANTS Web Interface address printed in the
+container console. The first game-server start from that interface can take
+several minutes before the server becomes available. This longer delay occurs
+only on the first start; later starts are faster.
+
 ## DLCs
 
 Upload DLC installers named `FarmingSimulator25_*.exe`, `.img`, `.iso` or
-`.zip` to `/home/container/dlc`. Either open **FS25 DLCs installieren** on the
+`.zip` to `/home/container/dlc`. Either open **Install FS25 DLCs** on the
 desktop or set:
 
 ```text
@@ -91,6 +105,25 @@ Logs:       /home/container/logs
 ```
 
 Upload mods as ZIP files without extracting them.
+
+## Mods and savegames
+
+Upload mod ZIP files without extracting them to:
+
+```text
+/home/container/config/FarmingSimulator2025/mods
+```
+
+Savegames are stored in numbered directories below the same persistent config
+directory. For example, savegame slot `1` is:
+
+```text
+/home/container/config/FarmingSimulator2025/savegame1
+```
+
+To migrate a savegame, stop the server and upload the complete contents of the
+existing `savegameN` directory into the matching destination directory. Set
+`SAVEGAME_INDEX` to the same slot number, then start the server again.
 
 ## Map selection
 
