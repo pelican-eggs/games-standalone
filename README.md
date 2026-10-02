@@ -40,6 +40,7 @@
   * [Vanilla](factorio/factorio)
   * [ModUpdate](factorio/factorio-modupdate)
   * [Clusterio](factorio/clusterio)
+* [Farming Simulator 25](farming_simulator_25)
 * [Foundry VTT](foundry_vtt)
 * [FTL: Tachyon](ftl_tachyon)
 * [Grand Theft Auto](gta)
