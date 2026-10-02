@@ -57,8 +57,9 @@ allocations assigned in the panel.
     installation to reclaim the disk space used by the installer and extracted
     files.
 
-A separate GIANTS dedicated-server license is required. The Steam edition does
-not provide the required server key.
+A separate GIANTS license is required. The Steam edition does
+not work at the moment.
+Steam Support will maybe added in a Future update.
 
 Set `AUTO_INSTALL=true` if an uploaded installer should launch automatically.
 The default `INSTALL_MODE=silent` installs the game unattended and still opens
@@ -130,14 +131,6 @@ existing `savegameN` directory into the matching destination directory. Set
 Leave `SERVER_MAP` empty to select and retain the map in the GIANTS web
 interface. Setting `SERVER_MAP` forces that `mapID` whenever the container
 starts.
-
-## Migration from the previous image
-
-Back up the complete `/home/container` directory before changing images. The
-new image keeps the existing `game`, `config`, `installer`, `dlc`, `logs` and
-`.fs25server` paths. Old `.fs25-egg` and `.fs25-runtime` directories are no
-longer executed and should only be removed after installation, activation and a
-server restart have been verified.
 
 ## Disclaimer
 
