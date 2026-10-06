@@ -1,0 +1,72 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-05-25T00:53:04+00:00",
+    "name": "Unreal Tournament 2004",
+    "author": "tlearm15@github",
+    "description": "Dedicated server for Unreal Tournament 2004.",
+    "features": [],
+    "docker_images": {
+        "ghcr.io\/parkervcp\/yolks:debian": "ghcr.io\/parkervcp\/yolks:debian"
+    },
+    "file_denylist": [],
+    "startup": "cd System && .\/ucc-bin-linux-amd64 server {{MAP}}?game={{GAME_TYPE}}?AdminName={{SERVER_NAME}}?Port={{PORT}} -nohomedir ini=Default.ini",
+    "config": {
+        "files": "{}",
+        "startup": "{\n    \"done\": \"up for play\",\n    \"userInteraction\": {}\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\n# Install script for UT2004 dedicated server\n\n#update apt repos and install required utilities\napt update\napt install -y wget tar xz-utils pv\n\n#Create server dir\nmkdir -p \/mnt\/server\ncd \/mnt\/server\n\n# Download the server from linuxgsm\nwget http:\/\/linuxgsm.download\/UnrealTournament2004\/ut2004-server-3369-3-ultimate-linux.tar.xz --show-progress -O \"server.tar.xz\"\n\n# Extract and remove tar, using pv to display status\necho \"Extracting server tarball (may take a while)\"\npv server.tar.xz | tar -xJ\necho \"Extraction Complete\"\nrm server.tar.xz\n\n# Ensure the binary is executable\nchmod +x System\/ucc-bin\n\n# Updates masterserver in default.ini to connect to new master server\ncd \/mnt\/server\/System\nsed -i 's\/.*ut2004master1.epicgames.com.*\/MasterServerList=(Address=\"utmaster.openspy.net\",Port=28902)\/' Default.ini\nsed -i 's\/DoUplink=False\/DoUplink=True\/g' Default.ini\n#enables webserver\nsed -i \"s\/bEnabled=False\/bEnabled=True\/g\" Default.ini\nsed -i \"s\/ListenPort=80\/ListenPort=1028\/g\" Default.ini\n\ntouch \/mnt\/server\/System\/cdkey\n# Use generic CDKEY to avoid issues\necho \"SRVER-3Y9AC-FDRKE-YKDW7\" > \/mnt\/server\/System\/cdkey",
+            "container": "ghcr.io\/pelican-eggs\/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Map",
+            "description": "Starting Map",
+            "env_variable": "MAP",
+            "default_value": "ONS-Torlan",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": {},
+            "field_type": "text"
+        },
+        {
+            "name": "Game Type",
+            "description": "Starting Game Type",
+            "env_variable": "GAME_TYPE",
+            "default_value": "XGame.xDeathMatch",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": {},
+            "field_type": "text"
+        },
+        {
+            "name": "Server Name",
+            "description": "The server's name",
+            "env_variable": "SERVER_NAME",
+            "default_value": "Pelican UT2004 Server",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": {},
+            "field_type": "text"
+        },
+        {
+            "name": "Server Port",
+            "description": "The port used for the server. The game allocates other ports based on this choice, eg. Game Port: 7777 crt Port: 7787 To ensure the server works please assign the additional ports accordingly. Webserver is also enabled on port 1028, to allow for easier server management locally.",
+            "env_variable": "PORT",
+            "default_value": "7777",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": {},
+            "field_type": "text"
+        }
+    ]
+}
