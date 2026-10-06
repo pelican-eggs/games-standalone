@@ -74,9 +74,10 @@ the activation program through noVNC afterwards.
 - `true`: start the web interface and submit its game-server start form.
 
 After installation, open the GIANTS Web Interface address printed in the
-container console. The first game-server start from that interface can take
-several minutes before the server becomes available. This longer delay occurs
-only on the first start; later starts are faster.
+container console. The Web Interface can be ready while the game server is
+still loading. `FS25 image ready.` indicates container initialization, not a
+loaded map. Large mod maps can take several minutes on any start, not only
+the first one. Wait until the game server is available before trying to join.
 
 ## Panel variables and GIANTS settings
 
@@ -156,17 +157,51 @@ the matching map filename.
 
 ## Slow mod-map startup
 
-FS25 checks every ZIP in the active mod directory before loading the selected
-map and savegame. For a controlled test, keep only the mod map and its required
-dependencies in `/home/container/config/FarmingSimulator2025/mods`, then
-compare the first and second start with the same files. Do not extract mod ZIP
-files.
+Measure from clicking **Start** in GIANTS until the game server is joinable.
+Keep the same FS25 version, DLCs, complete mod set, selected map and a copy of
+the same savegame for the Windows/Linux comparison. Compare at least three
+runs, separating the first load from subsequent loads. CPU and memory limits
+are ceilings, not targets that every loading stage must reach.
 
-Review `/home/container/config/FarmingSimulator2025/log.txt` for `Error:`
-entries and compare the same save with a built-in map. Large maps can still
-take substantially longer on the first load because map data, textures and
-shaders must be prepared. The image preserves the Wine prefix and FS25 config
-directory between restarts and does not clear game caches.
+After pulling an image containing the updated runtime, open a terminal in
+noVNC while the game server is loading and run:
+
+```text
+/opt/fs25/fs25ctl.py diagnose --seconds 10
+```
+
+The existing image controller reports Wine version, CPU affinity, CPU cgroup
+limits/throttling counters, process/thread CPU and disk I/O, process open-file
+limits/counts and the largest i3d timings from the game-log tail. It runs only when
+invoked and does not rewrite settings, restart Wine or change game data.
+Log timings can be from earlier loading stages. Repeat the command if the
+game process starts after the first PID lookup. Save the output together with
+`/home/container/config/FarmingSimulator2025/log.txt` for diagnosis.
+
+The runtime uses the game directory for the GIANTS server process and applies
+headless Wine options before Wine starts, even with an existing prefix. It
+raises low open-file soft limits to at most 65,536 without exceeding the hard
+limit or lowering an existing higher limit. These changes address runtime
+inconsistencies; a speed improvement must still be measured with your mod set.
+Existing servers need the updated image, not an egg reimport, for these changes.
+
+Wine 11 NTSync requires a supporting Wine build, a compatible host driver and
+container access to `/dev/ntsync`; the kernel includes support from Linux 6.14
+or a distribution backport. An egg variable alone does not enable it. Check
+the node and Wings device support before changing synchronization settings.
+See [Wine 11 release notes](https://github.com/wine-mirror/wine/blob/wine-11.0/ANNOUNCE.md)
+and the [NTSync kernel documentation](https://docs.kernel.org/userspace-api/ntsync.html).
+
+Review the complete game log for `Error:` entries. Isolate optional mods only
+on a separate test copy after checking savegame dependencies. Use a new savegame
+for a built-in-map reference; do not switch the map of an existing mod-map save.
+Do not extract mod ZIPs or delete game caches. The image preserves the Wine
+prefix and FS25 config directory between restarts.
+
+Before an image/Wine upgrade, stop the container and back up the prefix,
+configuration and savegame, and record the old image digest. Test join/rejoin,
+save/load, stop/restart and retained GIANTS settings after the update. Restore
+the previous image and its matching backup if a regression occurs.
 
 ## Player disconnect and pause checks
 
