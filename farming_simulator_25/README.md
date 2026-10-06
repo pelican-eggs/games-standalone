@@ -78,6 +78,26 @@ container console. The first game-server start from that interface can take
 several minutes before the server becomes available. This longer delay occurs
 only on the first start; later starts are faster.
 
+## Panel variables and GIANTS settings
+
+`SERVER_PORT` and `WEB_PORT` are always applied because they must match the
+Pelican allocations. Optional game and web settings follow one consistent
+rule:
+
+- leave a variable empty to keep the value saved in the GIANTS Web Interface;
+- enter a value to make the panel override that setting on every container
+  start.
+
+This applies to the server name, web login, game and admin passwords, player
+limit, language, map, savegame slot, pause behavior, save interval, Web API
+interval and crossplay. A new installation uses `admin` / `webpassword` for the
+initial web login. Change those credentials in the GIANTS Web Interface.
+
+When upgrading an existing server, clear the optional variables once in the
+panel. Values already stored for an old egg remain explicit overrides until
+they are emptied. The previous image's one-year Web API interval is migrated
+once to 60 seconds when `SERVER_STATS_INTERVAL` is empty.
+
 ## DLCs
 
 Upload DLC installers named `FarmingSimulator25_*.exe`, `.img`, `.iso` or
@@ -103,6 +123,7 @@ DLC data:   /home/container/config/FarmingSimulator2025/pdlc
 Installers: /home/container/installer
 DLC setup:  /home/container/dlc
 Logs:       /home/container/logs
+Game log:   /home/container/config/FarmingSimulator2025/log.txt
 ```
 
 Upload mods as ZIP files without extracting them.
@@ -129,8 +150,35 @@ existing `savegameN` directory into the matching destination directory. Set
 ## Map selection
 
 Leave `SERVER_MAP` empty to select and retain the map in the GIANTS web
-interface. Setting `SERVER_MAP` forces that `mapID` whenever the container
-starts.
+interface. Setting `SERVER_MAP` forces a built-in `mapID` whenever the
+container starts. Select mod maps in the GIANTS Web Interface so GIANTS keeps
+the matching map filename.
+
+## Slow mod-map startup
+
+FS25 checks every ZIP in the active mod directory before loading the selected
+map and savegame. For a controlled test, keep only the mod map and its required
+dependencies in `/home/container/config/FarmingSimulator2025/mods`, then
+compare the first and second start with the same files. Do not extract mod ZIP
+files.
+
+Review `/home/container/config/FarmingSimulator2025/log.txt` for `Error:`
+entries and compare the same save with a built-in map. Large maps can still
+take substantially longer on the first load because map data, textures and
+shaders must be prepared. The image preserves the Wine prefix and FS25 config
+directory between restarts and does not clear game caches.
+
+## Player disconnect and pause checks
+
+For **Pause Game If Empty**, leave `SERVER_PAUSE` empty and enable the option in
+the GIANTS Web Interface. The game allocation must be available on the same
+port over TCP and UDP. `SERVER_STATS_INTERVAL` controls the Link XML/Web API
+refresh interval, so a shorter value makes external player-status displays
+update sooner; the game engine still owns the actual disconnect timeout.
+
+When testing, verify both a normal quit and a dropped client connection. Check
+the game log for the disconnect time and confirm that the Web Interface reports
+zero players before evaluating pause behavior.
 
 ## Disclaimer
 
