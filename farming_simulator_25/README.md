@@ -79,6 +79,20 @@ still loading. `FS25 image ready.` indicates container initialization, not a
 loaded map. Large mod maps can take several minutes on any start, not only
 the first one. Wait until the game server is available before trying to join.
 
+## Terminal access
+
+Open **Terminal** on the noVNC desktop or in the applications menu. The image
+uses XTerm with an interactive Bash shell, without reusing a D-Bus terminal
+process. **Alt+F2** opens the application finder; enter `xterm` to open another
+terminal. Installation and DLC shortcuts use the same terminal and retain
+their output after finishing.
+
+The updated image repairs XFCE's terminal preference and desktop/menu launchers
+before the desktop starts, preserving other preferences and keeping a one-time
+`.bak` copy of changed files. Pull the rebuilt image and restart the container.
+No egg reimport or game reinstallation is required. Existing mods, savegames,
+GIANTS settings and the Wine prefix remain unchanged.
+
 ## Panel variables and GIANTS settings
 
 `SERVER_PORT` and `WEB_PORT` are always applied because they must match the
@@ -185,12 +199,59 @@ limit or lowering an existing higher limit. These changes address runtime
 inconsistencies; a speed improvement must still be measured with your mod set.
 Existing servers need the updated image, not an egg reimport, for these changes.
 
-Wine 11 NTSync requires a supporting Wine build, a compatible host driver and
-container access to `/dev/ntsync`; the kernel includes support from Linux 6.14
-or a distribution backport. An egg variable alone does not enable it. Check
-the node and Wings device support before changing synchronization settings.
-See [Wine 11 release notes](https://github.com/wine-mirror/wine/blob/wine-11.0/ANNOUNCE.md)
-and the [NTSync kernel documentation](https://docs.kernel.org/userspace-api/ntsync.html).
+### Wine runtime and synchronization
+
+The updated image builds Wine-Proton 11 from pinned source against the Pelican
+base image's 64-bit libraries, with Wine 11 WoW64 support for both 32-bit and
+64-bit Windows programs and the existing `win64` prefix format. It retains
+the existing WineHQ 11 runtime as an explicit compatibility option. The image
+build tests prefix initialization and both Windows command interpreters.
+
+The default `proton`/`auto` selection checks `futex_waitv` and usable shared
+memory in a disposable child before Wine starts. FSYNC does not need a new
+host kernel, privileged mode or `/dev/ntsync` on supporting containers. If
+the host/container does not support it, blocks the syscall or fails the
+shared-memory check, FSYNC is disabled and startup continues. Wine may prefer
+NTSync if its device is already accessible. The image does not change the
+kernel, Docker device mappings or Wings configuration. ESYNC is not included
+in this Wine branch. Acceleration and Windows-equivalent loading times are
+not guaranteed; compare measurements with the same mod set and savegame.
+
+`diagnose` reports the inherited request separately from observed process file
+descriptors. Look for `FSYNC shared-memory descriptor observed` or `NTSync
+device descriptor observed` while the map loads. A requested flag or a message
+in an old log alone does not establish the current backend.
+
+No egg reimport is required. To change the selection on an existing server,
+stop the container, create `/home/container/config/wine-runtime.json` using
+the Pelican file manager, and restart the container:
+
+```json
+{"runtime": "proton", "sync": "auto"}
+```
+
+`runtime` accepts `proton` (default) or `stable` (WineHQ 11). `sync` accepts
+`auto` (default), `fsync` (try FSYNC only, otherwise fall back), or `server`
+(disable accelerated backends in Wine-Proton). Non-empty `FS25_WINE_RUNTIME`
+and `FS25_WINE_SYNC` environment variables override the file's respective
+values. The choice is inherited by the desktop, installers and GIANTS; changes
+require a full container restart, not only a GIANTS game restart.
+
+For an A/B test, compare `proton`/`auto` with `proton`/`server`, restarting the
+container between tests. Use `stable`/`server` with the matching pre-upgrade
+prefix/configuration backup if the new runtime causes a compatibility regression.
+Keep the old image digest and data backup until join/rejoin, save/load, settings
+retention, installation/activation, DLCs and noVNC terminal access are verified.
+
+Wine is LGPL-2.1-or-later. The pinned source archive, license notices, authors
+and the sole source overlay (`VERSION.fs25`) are included in
+`/opt/fs25/wine-source`. The version `11.0-fs25-proton-dc26e61` identifies the
+runtime separately from WineHQ 11. Wine's normal prefix-update mechanism remains
+in use; runtime selection does not reset activation or game settings.
+The Dockerfile verifies the source
+archive checksum and uses generic CPU targets rather than `-march=native`.
+See the [pinned Wine-Proton source](https://github.com/ValveSoftware/wine/tree/dc26e61847081a1b5cb0733dc30feba6ee575482)
+and its [FSYNC implementation](https://github.com/ValveSoftware/wine/blob/dc26e61847081a1b5cb0733dc30feba6ee575482/server/fsync.c).
 
 Review the complete game log for `Error:` entries. Isolate optional mods only
 on a separate test copy after checking savegame dependencies. Use a new savegame
