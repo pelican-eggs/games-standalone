@@ -1,0 +1,268 @@
+_comment: 'DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL'
+meta:
+  version: PLCN_v3
+  update_url: 'https://raw.githubusercontent.com/pelican-eggs/games-standalone/refs/heads/main/factorio/factorio/egg-factorio.yaml'
+exported_at: '2026-01-11T12:51:36+00:00'
+name: Factorio
+author: parker@parkervcp.com
+uuid: 053b2768-bae0-44ab-a82c-15245b1478e0
+description: "The vanilla Factorio server.\r\n\r\nhttps://www.factorio.com/"
+image: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAKBueIx4ZKCMgoy0qqC+8P//8Nzc8P//////////////////////////////////////////////////////////2wBDAaq0tPDS8P//////////////////////////////////////////////////////////////////////////////wAARCAFhAmgDAREAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAQACAwT/xAAvEAACAQMEAAUEAgIDAQEAAAAAARECITESQVFhIjJxgfADQpGxwdFioRMz4VLx/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAHBEBAQEAAwEBAQAAAAAAAAAAAAERITFBcRJR/9oADAMBAAIRAxEAPwDkAsAA3TkDcuISAzU3hoDmBECFMAQCBAV+AD2AWEAVAQRAappQUVKAjBRuiIckHSnw0dmfVYx7mhTbA1FtgAqKCSAkoQDcDThqygDKQEAwAMAAQICgAA1gBwQDwFWhvDAVQ1EhFTKmCgqTc1cAYAgNU4YFsAMAVmBrURUlYICiAAGAICIIoUpIF39AICwAyBZAP4AgICQEBAZKFgVOQN07gap3IM/U2KMASUuCDemlOLyUTdKcJSAa/wDH5+ACFU7WYClyASomAFwBPzABBcgCezAUrgdoSRRzryQcyhTIOnT2RFFouUOm2QB02yEDushQwgKICAQJAaqdMWQAnwiKtKi4EqE9wFfTlZuEYfhqhlGk4RBa08oBhPAGboAYD7hRJUaTtgAdTj3AtSewA/QCW4BsBbga0kBBRrCIMAQEBAQCBQA4XqURAgADsBYKDogXS0gBgSAgIDJQ7AVNgNK7A3T5Z5IM/U2KMAapSSl+wCs6gBrxSroAhwrPICvC23YATtcClL0AJl4AX5gKUATkCswNIg67FHOsDmAkGk/DICiKzVKZpEpAUSgYEUQG4SoAEgACSAkrsimvy0+5UFKXEhWtapZBipyVAsAAGkBatmBaZ6AWophOQMwA1OKUk8ACgBvxYCb7AyA7AG4G1DXYBMbAGcgRAAQEAgUgaS+MCdLiSgZBAQGk0rtSAJ6qpA0kkpb/AKCjW2BncIgICAkm1ZFA01kCA0rqEB0VqSDFexRgDVeEBr7QObUMAsAwA2iGRQ4A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'
+tags:
+  - factorio
+features: {  }
+docker_images:
+  'ghcr.io/parkervcp/yolks:debian': 'ghcr.io/parkervcp/yolks:debian'
+file_denylist: {  }
+startup_commands:
+  Default: '[ ! -f "./saves/{{SAVE_NAME}}.zip" ] && ./bin/x64/factorio --create ./saves/{{SAVE_NAME}}.zip --map-gen-settings data/map-gen-settings.json --map-settings data/map-settings.json; ./bin/x64/factorio --port {{SERVER_PORT}} --server-settings data/server-settings.json --start-server saves/{{SAVE_NAME}}.zip $( [ "$RCON_ENABLED" = "1" ] && echo "--rcon-port {{RCON_PORT}} --rcon-password {{RCON_PASSWORD}}" )'
+config:
+  files:
+    data/server-settings.json:
+      parser: json
+      find:
+        name: '{{server.environment.SERVER_NAME}}'
+        description: '{{server.environment.SERVER_DESC}}'
+        max_players: '{{server.environment.MAX_SLOTS}}'
+        username: '{{server.environment.SERVER_USERNAME}}'
+        token: '{{server.environment.SERVER_TOKEN}}'
+        autosave_interval: '{{server.environment.SAVE_INTERVAL}}'
+        autosave_slots: '{{server.environment.SAVE_SLOTS}}'
+        afk_autokick_interval: '{{server.environment.AFK_KICK}}'
+        game_password: '{{server.environment.SERVER_PASSWORD}}'
+  startup:
+    done: 'Hosting game at'
+  logs: {  }
+  stop: /quit
+scripts:
+  installation:
+    script: |-
+      #!/bin/bash
+      # Factorio Installation Script
+      #
+      # Server Files: /mnt/server
+      apt update 
+      apt install -y curl tar xz-utils jq
+
+      VERSION_JSON=$(curl -sSL https://factorio.com/api/latest-releases)
+
+      latest_stable=$(echo $VERSION_JSON | jq -r '.stable.headless')
+      latest_experimental=$(echo $VERSION_JSON | jq -r '.experimental.headless')
+
+      if [ -z "${FACTORIO_VERSION}" ] || [ "${FACTORIO_VERSION}" == "latest" ]; then
+        DL_VERSION=$latest_stable
+      elif [ "${FACTORIO_VERSION}" == "experimental" ]; then
+        DL_VERSION=$latest_experimental
+      else
+        DL_VERSION=${FACTORIO_VERSION}
+      fi
+
+      mkdir -p /mnt/server
+      cd /mnt/server
+
+      echo -e "
+       running 'curl -sL https://www.factorio.com/get-download/${DL_VERSION}/headless/linux64 -o factorio-${DL_VERSION}' 
+      "
+
+      curl -sL https://www.factorio.com/get-download/${DL_VERSION}/headless/linux64 -o factorio-${DL_VERSION}
+
+      tar -xf factorio-${DL_VERSION} --strip-components=1 -C /mnt/server
+
+      rm factorio-${DL_VERSION}
+
+      if [ -e data/map-gen-settings.json ]; then
+          echo "map-gen exists"
+      else
+          echo "copying map-gen default settings"
+          mv data/map-gen-settings.example.json data/map-gen-settings.json
+      fi
+
+      if [ -e data/server-settings.json ]; then
+          echo "server settings exists"
+      else
+          echo "copying server default settings"
+          mv data/server-settings.example.json data/server-settings.json
+      fi
+
+      if [ -e map-settings.json ]; then
+          echo "map settings exists"
+      else
+          echo "copying map default settings"
+          mv data/map-settings.example.json data/map-settings.json
+      fi
+
+      if [ -e ./saves/${SAVE_NAME}.zip ]; then
+          echo "save file exists"
+      else
+          ./bin/x64/factorio --create ./saves/${SAVE_NAME} --map-gen-settings data/map-gen-settings.json --map-settings data/map-settings.json
+          chmod o+w ./saves/${SAVE_NAME}.zip
+      fi
+
+      ## install end
+      echo "-----------------------------------------"
+      echo "Installation completed..."
+      echo "-----------------------------------------"
+    container: 'ghcr.io/parkervcp/installers:debian'
+    entrypoint: bash
+variables:
+  -
+    name: 'AFK Kick'
+    description: "Time specified in minutes to kick AFK players.\r\n0 is off"
+    env_variable: AFK_KICK
+    default_value: 0
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - numeric
+      - 'digits_between:1,3'
+    sort: 8
+  -
+    name: 'Factorio Version'
+    description: 'Which version of Factorio to install and use.'
+    env_variable: FACTORIO_VERSION
+    default_value: latest
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - string
+      - 'between:3,12'
+    sort: 1
+  -
+    name: 'Maximum Slots'
+    description: 'Total number of slots to allow on the server.'
+    env_variable: MAX_SLOTS
+    default_value: 20
+    user_viewable: true
+    user_editable: false
+    rules:
+      - required
+      - numeric
+      - 'digits_between:1,3'
+    sort: 2
+  -
+    name: 'RCON Enabled?'
+    description: ''
+    env_variable: RCON_ENABLED
+    default_value: 0
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - boolean
+    sort: 12
+  -
+    name: 'RCON Password'
+    description: ''
+    env_variable: RCON_PASSWORD
+    default_value: ''
+    user_viewable: true
+    user_editable: true
+    rules:
+      - nullable
+      - string
+    sort: 14
+  -
+    name: 'RCON Port'
+    description: ''
+    env_variable: RCON_PORT
+    default_value: ''
+    user_viewable: true
+    user_editable: true
+    rules:
+      - nullable
+      - integer
+    sort: 13
+  -
+    name: 'Auto Save Interval'
+    description: 'Time between auto saves specified in minutes'
+    env_variable: SAVE_INTERVAL
+    default_value: 10
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - numeric
+      - 'digits_between:1,3'
+    sort: 6
+  -
+    name: 'Save Name'
+    description: 'The save name for the server.'
+    env_variable: SAVE_NAME
+    default_value: gamesave
+    user_viewable: true
+    user_editable: true
+    rules:
+      - alpha_dash
+      - 'between:1,100'
+    sort: 3
+  -
+    name: 'Auto Save Slots'
+    description: 'The number of auto saves to keep.'
+    env_variable: SAVE_SLOTS
+    default_value: 5
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - numeric
+      - 'digits_between:1,3'
+    sort: 7
+  -
+    name: 'Server Description'
+    description: 'Description of the game that will appear in the listing.'
+    env_variable: SERVER_DESC
+    default_value: Description
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - string
+      - 'max:200'
+    sort: 4
+  -
+    name: 'Server Name'
+    description: 'Name of the game as it will appear in the game listing'
+    env_variable: SERVER_NAME
+    default_value: 'Factorio Server'
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - string
+      - 'max:100'
+    sort: 5
+  -
+    name: 'Server password'
+    description: 'The password for the server.'
+    env_variable: SERVER_PASSWORD
+    default_value: ''
+    user_viewable: true
+    user_editable: true
+    rules:
+      - 'max:40'
+    sort: 9
+  -
+    name: 'Server Token'
+    description: 'Your factorio.com token, it is required for your server to be visible in the public server list.'
+    env_variable: SERVER_TOKEN
+    default_value: undefined
+    user_viewable: true
+    user_editable: true
+    rules:
+      - alpha_num
+      - 'max:100'
+    sort: 11
+  -
+    name: 'Server Username'
+    description: 'Username used for the server'
+    env_variable: SERVER_USERNAME
+    default_value: unnamed
+    user_viewable: true
+    user_editable: true
+    rules:
+      - required
+      - string
+      - 'max:40'
+    sort: 10

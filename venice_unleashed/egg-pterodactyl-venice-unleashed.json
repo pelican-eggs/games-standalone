@@ -1,0 +1,223 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-05-09T05:07:31+00:00",
+    "name": "Venice Unleashed",
+    "author": "red_thirten@yahoo.com",
+    "description": "Venice Unleashed (VU) is a community-oriented Battlefield 3 custom server & modding platform that gives you back control of your gaming experience. This Egg requires a valid VU `server.key` file, and requires Battlefield 3 client files (from a legal copy of the game) to be internally mounted to `\/bf3`.",
+    "features": [],
+    "docker_images": {
+        "Wine Latest (Recommended)": "ghcr.io\/parkervcp\/yolks:wine_latest",
+        "Wine Staging": "ghcr.io\/parkervcp\/yolks:wine_staging"
+    },
+    "file_denylist": [],
+    "startup": "[ -f \/bf3\/bf3.exe ] || { echo \"BF3 is not mounted properly! Exiting.\"; exit 1; }; [ -f .\/vu\/instance\/server.key ] || { echo \"Missing 'vu\/instance\/server.key'! Exiting.\"; exit 1; }; tok=\"$LIC_PATH\"\/token.txt; [ \"$(cat \"$tok\" 2>\/dev\/null)\" != \"$EA_TOKEN\" ] && { rm -f \"$LIC_PATH\"\/*.dlf; echo \"$EA_TOKEN\" > \"$tok\"; }; if ! compgen -G \"$LIC_PATH\"\/*.dlf >\/dev\/null; then wine .\/vu\/client\/vu.com -gamepath \/bf3 -activate -ea_token \"$EA_TOKEN\"; fi; wine .\/vu\/client\/vu.com -gamepath \/bf3 -serverInstancePath \"$(winepath -w ~\/vu\/instance)\" -server -dedicated -headless $( [ {{AUTO_UPDATE}} = 0 ] && echo -noUpdate ) -{{SERVER_FREQUENCY}} -maxPlayers {{MAX_PLAYERS}} -listen 0.0.0.0:{{SERVER_PORT}} -mHarmonyPort {{HARMONY_PORT}} ${RCON_PORT:+-RemoteAdminPort 0.0.0.0:{{RCON_PORT}}} ${JOIN_HOST:+-joinhost {{JOIN_HOST}}} $( [ {{UNLISTED}} = 1 ] && echo -unlisted ) $( [ {{HIGH_RES_TERRAIN}} = 1 ] && echo -highResTerrain ) $( [ {{DISABLE_TERRAIN_INTERP}} = 1 ] && echo -disableTerrainInterp ) $( [ {{SKIP_CHECKSUM}} = 1 ] && echo -skipChecksum )",
+    "config": {
+        "files": "{\n    \"vu\/instance\/Admin\/Startup.txt\": {\n        \"parser\": \"file\",\n        \"find\": {\n            \"admin.password\": \"admin.password \\\"{{server.build.env.RCON_PASSWORD}}\\\"\",\n            \"vars.serverName\": \"vars.serverName \\\"{{server.build.env.SERVER_NAME}}\\\"\",\n            \"vars.gamePassword\": \"vars.gamePassword \\\"{{server.build.env.SERVER_PASSWORD}}\\\"\"\n        }\n    }\n}",
+        "startup": "{\n    \"_comment\": \"'now accepting connections' with required Wine control characters\",\n    \"done\": \"n\\u001b[?25h\\u001b[?25lo\\u001b[?25h\\u001b[?25lw\\u001b[?25h\\u001b[?25l\\u001b[K\\u001b[1C\\u001b[?25h\\u001b[?25la\\u001b[?25h\\u001b[?25lc\\u001b[?25h\\u001b[?25lc\\u001b[?25h\\u001b[?25le\\u001b[?25h\\u001b[?25lp\\u001b[?25h\\u001b[?25lt\\u001b[?25h\\u001b[?25li\\u001b[?25h\\u001b[?25ln\\u001b[?25h\\u001b[?25lg\\u001b[?25h\\u001b[?25l\\u001b[K\\u001b[1C\\u001b[?25h\\u001b[?25lc\\u001b[?25h\\u001b[?25lo\\u001b[?25h\\u001b[?25ln\\u001b[?25h\\u001b[?25ln\\u001b[?25h\\u001b[?25le\\u001b[?25h\\u001b[?25lc\\u001b[?25h\\u001b[?25lt\\u001b[?25h\\u001b[?25li\\u001b[?25h\\u001b[?25lo\\u001b[?25h\\u001b[?25ln\\u001b[?25h\\u001b[?25ls\"\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\n\n# File: Pterodactyl Venice Unleashed Egg - egg-pterodactyl-venice-unleashed.json\n# Authors: Red-Thirten\n# Date: 2026\/05\/08\n# License: MIT License\n\nexport HOME=\/mnt\/server\n\n[ ! -d $HOME ] && mkdir $HOME\ncd $HOME\n\n# Remove old installation if present (except for VU instance folder to keep configs)\n[ -d .cache ] && rm -rf .cache\n[ -d .config ] && rm -rf .config\n[ -d .local ] && rm -rf .local\n[ -d .wine ] && rm -rf .wine\n[ -f .wget-hsts ] && rm .wget-hsts\n[ -d vu\/client ] && rm -rf vu\/client\n\n# Make VU required directories\nmkdir -p vu\/{client,instance}\nmkdir -p \"${LIC_PATH}\"\n\n# Validate VU download URL\nif ! curl --silent --head --fail ${DOWNLOAD_URL} > \/dev\/null; then\n    echo -e \"\\nThe VU Server Download URL is unreachable: ${DOWNLOAD_URL}\\n\"\n    exit 1\nfi\n\n# Download, unzip, and verify VU server files\ncd $HOME\/vu\/client\necho -e \"Downloading VU server files...\"\ncurl -L ${DOWNLOAD_URL} -o ${DOWNLOAD_URL##*\/}\necho -e \"Unzipping VU server files...\"\nunzip ${DOWNLOAD_URL##*\/}\nif [ ! -f vu.com ]; then\n    echo -e \"\\nFailed to download\/install VU server files from: ${DOWNLOAD_URL}\\n\"\n    exit 1\nelse\n    rm ${DOWNLOAD_URL##*\/}\nfi\n\n# Create default config files if they are missing\ncd $HOME\/vu\/instance\nmkdir -p Admin\/Mods\ncd Admin\n[ ! -f BanList.txt ] && touch BanList.txt\n[ ! -f ModList.txt ] && touch ModList.txt\nif [[ ! -f MapList.txt ]]; then\n    cat > MapList.txt <<EOF\n# -------------------------------------------------------------------------------------------------------------------------\n# This file defines the map rotation of the server. This means that it tells the server which map to load first and\n# on which gamemode, how many rounds to run, and what's the next map to load once the game ends.\n# \n# Every map is specified in a new line in the following format:\n# MapID GamemodeID Rounds\n# \n# Full list of the map and gamemode IDs:\n# https:\/\/docs.veniceunleashed.net\/hosting\/maps\n# -------------------------------------------------------------------------------------------------------------------------\n\nMP_Subway ConquestLarge0 1\nMP_013 TeamDeathMatch0 1\nEOF\nfi\nif [[ ! -f Startup.txt ]]; then\n    cat > Startup.txt <<EOF\n# -------------------------------------------------------------------------------------------------------------------------\n# This file is used to configure to the server upon startup. This is done by using specific configuration variables\n# followed by a relevant value. Each variable is specified in a new line.\n# \n# Full list of configuration variables and commands:\n# https:\/\/docs.veniceunleashed.net\/hosting\/commands\n# https:\/\/github.com\/dcodeIO\/BattleCon\/blob\/master\/eadocs\/BF3\/BF3%20PC%20Server%20Remote%20Administration%20Protocol.pdf\n# -------------------------------------------------------------------------------------------------------------------------\n\n# These variables are managed by the panel. Do not change or remove them!\nadmin.password \"${RCON_PASSWORD}\"\nvars.serverName \"${SERVER_NAME}\"\nvars.gamePassword \"${SERVER_PASSWORD}\"\n\n# Add additional variables below if desired\n\nEOF\nfi\n\n\necho -e \"\\nVU Successfully Installed!\"",
+            "container": "ghcr.io\/parkervcp\/installers:debian",
+            "entrypoint": "\/bin\/bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "[Host] Harmony Port",
+            "description": "Required port the VU server should listen for Monitored Harmony connections on.",
+            "env_variable": "HARMONY_PORT",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "required|integer|between:1024,65536",
+            "field_type": "text"
+        },
+        {
+            "name": "[Host] Join Host",
+            "description": "Specifies a hostname clients will use to connect to this server (advertised by the Zeus master server). Useful for hosts utilizing DDNS, and\/or for LAN clients connecting via DNS redirection (only way to connect locally). Hostname should NOT include \"http[s]:\/\/\" prefix. Leave blank to use public IP instead.",
+            "env_variable": "JOIN_HOST",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "EA Auth Token",
+            "description": "Can be obtained on your local Windows computer that has: EA App \/ Origin installed & running, BF3 installed, VU installed and VU account linked to EA\/Origin account. Run the \"Activate BF3\" shortcut in the Start Menu, or run `vu.exe -activate -lsx` in a Command Prompt (current working directory must be the VU client folder). Copy the displayed token and paste it here. NOTE: This token will occasionally expire, causing the server to crash on startup. If this happens, simply regenerate a new token and paste it here.",
+            "env_variable": "EA_TOKEN",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "Automatic Updates",
+            "description": "Enables VU automatic updater. (Use with caution; there have been reports of this sometimes crashing the server on startup if there is an update)",
+            "env_variable": "AUTO_UPDATE",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Name",
+            "description": "Name of the server, as it will appear in the master server list.",
+            "env_variable": "SERVER_NAME",
+            "default_value": "My incredible VU server",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:63",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Password",
+            "description": "Password clients must enter to join the server. Leave blank to have no password.",
+            "env_variable": "SERVER_PASSWORD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:16",
+            "field_type": "text"
+        },
+        {
+            "name": "Maximum Player Count",
+            "description": "Sets the maximum players that are allowed to set with vars.maxPlayers & vars.maxSpectators combined.",
+            "env_variable": "MAX_PLAYERS",
+            "default_value": "64",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|integer|min:1",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Frequency",
+            "description": "'30' = 30Hz (Default) | 'high60' = 60Hz High frequency mode | 'high120' = 120Hz High frequency mode",
+            "env_variable": "SERVER_FREQUENCY",
+            "default_value": "30",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:30,high60,high120",
+            "field_type": "text"
+        },
+        {
+            "name": "[RCON] RCON Port",
+            "description": "Optional port used to connect to the server via RCON (recommended client is Procon). Leave blank to disable RCON.",
+            "env_variable": "RCON_PORT",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "nullable|integer|between:1024,65536",
+            "field_type": "text"
+        },
+        {
+            "name": "[RCON] RCON Password",
+            "description": "Password used to authenticate with RCON. (No username is required and can be left blank when connecting with a client).",
+            "env_variable": "RCON_PASSWORD",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:16",
+            "field_type": "text"
+        },
+        {
+            "name": "[Advanced] Disable Server Listing",
+            "description": "Makes the server not show up in the master server list. Unlisted servers can only be joined by the `connect` console command or via the `vu:\/\/join\/server-id` URL scheme, which can also be added as a launch argument to vu.exe to auto-join as soon as the client loads.",
+            "env_variable": "UNLISTED",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "[Advanced] Enable High Resolution Terrain",
+            "description": "Useful for extending maps beyond their original play area.",
+            "env_variable": "HIGH_RES_TERRAIN",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "[Advanced] Disable Terrain Interpolation",
+            "description": "Disables interpolation between different terrain LODs.",
+            "env_variable": "DISABLE_TERRAIN_INTERP",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "[Advanced] Skip Checksum",
+            "description": "Disables level checksum validation on client connection.",
+            "env_variable": "SKIP_CHECKSUM",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "[System] VU Server Download URL",
+            "description": "Official URL provided by VU to download zipped server files. (Should not be changed unless you know what you are doing)",
+            "env_variable": "DOWNLOAD_URL",
+            "default_value": "https:\/\/veniceunleashed.net\/files\/vu.zip",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string",
+            "field_type": "text"
+        },
+        {
+            "name": "[System] EA License Path",
+            "description": "Path to where EA `.dlf` license files are stored for use in VU server activation. Should not be changed.",
+            "env_variable": "LIC_PATH",
+            "default_value": ".\/.wine\/drive_c\/ProgramData\/Electronic Arts\/EA Services\/License",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|in:.\/.wine\/drive_c\/ProgramData\/Electronic Arts\/EA Services\/License",
+            "field_type": "text"
+        },
+        {
+            "name": "[System] WINEDEBUG",
+            "description": "Sets the Wine debug level. Rarely needs to be changed.",
+            "env_variable": "WINEDEBUG",
+            "default_value": "-all",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "nullable|string",
+            "field_type": "text"
+        },
+        {
+            "name": "[System] WINETRICKS_RUN",
+            "description": "Installs the required Visual C++ 2008 runtime via winetricks. Should not be changed.",
+            "env_variable": "WINETRICKS_RUN",
+            "default_value": "vcrun2008",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|in:vcrun2008",
+            "field_type": "text"
+        },
+        {
+            "name": "[System] WINEARCH",
+            "description": "Sets the Wine prefix to use WoW64 (Windows 32-bit on Windows 64-bit), which is required by VU. Should not be changed.",
+            "env_variable": "WINEARCH",
+            "default_value": "wow64",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string|in:wow64",
+            "field_type": "text"
+        }
+    ]
+}

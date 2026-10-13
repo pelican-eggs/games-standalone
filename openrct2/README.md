@@ -47,9 +47,9 @@ ___
 
 ### Server Ports
 
-| Port | Default | Protocol |
-|---------|---------|---------|
-| **Primary** | 11753 | TCP |
+| Port | Default | Protocol | Required |
+|---------|---------|---------|---------|
+| **Primary** | 11753 | TCP | **Yes** |
 
 ___
 
@@ -59,7 +59,7 @@ ___
 |---------|---------|
 | Processor | x86/64 (\*multiarch may be supported for develop builds, but has not been tested) |
 | RAM | 256-512 MiB (depends on # of clients & park size) |
-| Storage | 110 MB (*may require more if building from source*) |
+| Storage | 200 MB (*2GB if building from source*) |
 | RCT2 Files | **Not required** |
 
 ___
@@ -80,7 +80,7 @@ Assuming you have "OpenRCT2 Version" set to `latest` or `develop`, you can simpl
 
 ### Console Commands
 
-Until support for console commands to interactive programs gets added to Pterodactyl, entering commands via the panel's console do nothing (reference issue [pterodactyl/panel#3712](https://github.com/pterodactyl/panel/issues/3712)).
+Until support for console commands to interactive programs gets added to the panel, entering commands via the panel's console do nothing (reference issue [pterodactyl/panel#3712](https://github.com/pterodactyl/panel/issues/3712)).
 
 ___
 
@@ -99,7 +99,7 @@ ___
 
 ### Known Issues
 
-The following are known issues that are unique to running OpenRCT2 on Pterodactyl, but likely can only be fixed by further development/updates from OpenRCT2.
+The following are known issues that are unique to running OpenRCT2 on Pelican/Pterodactyl, but likely can only be fixed by further development/updates from OpenRCT2.
 - Configuring a password on the server disallows non-admin clients from entering in a password in their client to connect; it just disconnects them. Admin clients can still join normally. (reference issue [OpenRCT2/OpenRCT2#16396](https://github.com/OpenRCT2/OpenRCT2/issues/16396))
 - You may rarely run into the server crashing on start due to a "Floating point exception(core dumped)" error. If this occurs to you, please help with OpenRCT2 development by doing the following:
 	1. Add the following to the beginning of your server's startup command: `SEGFAULT_SIGNALS=fpe LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so `

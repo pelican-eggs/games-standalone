@@ -1,30 +1,34 @@
 {
     "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
     "meta": {
-        "version": "PTDL_v2",
+        "version": "PLCN_v3",
         "update_url": null
     },
-    "exported_at": "2024-06-01T00:17:20+00:00",
+    "exported_at": "2026-03-08T08:48:47+00:00",
     "name": "Xonotic",
     "author": "parker@parkervcp.com",
     "uuid": "02b9b085-28d6-4593-992f-3fd34c753289",
-    "description": "This is for the default xonotic setup.",
-    "features": null,
+    "description": "Xonotic: The Free and Fast Arena Shooter",
+    "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDADUlKC8oITUvKy88OTU/UIVXUElJUKN1e2GFwarLyL6qurfV8P//1eL/5re6////////////zv//////////////2wBDATk8PFBGUJ1XV53/3Lrc////////////////////////////////////////////////////////////////////wAARCAD6APoDASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAIDBAEF/8QAMxAAAgIBAwMCBQMDAwUAAAAAAAECAxESITEEQVETYSIycYGRM0KhFDRSQ2KxI1Ny0fD/xAAYAQADAQEAAAAAAAAAAAAAAAAAAQIDBP/EAB8RAQEBAQACAwEBAQAAAAAAAAABEQIhMRJBUQNhcf/aAAwDAQACEQMRAD8A8wAAAAAAAAABLLwi2FOd5fgc5tK2RUd0SxnS/wAGqK0rC2R0v4J+bGDXOCnHD/JlktMms5wT1zhzrXAASoAAAAAAAAAOqMnxFv7F9Vais7Nv+Cw0+CL1+MbTXKBs7NeSqVKazHZhePwTr9UA7KLi8NHDP0sAAAAAAAAAAAAAAAOxg58Eq63N5fBpSUVhIvnn7qb1iMK1BbfkkC2ulzWqT0wXdmjNWk28JZZKcHBLU1nx3JytUFppWF3l3ZSACnqUlOLSxmOX+WXGa2euxvOUtkT36Vz7QABk0AAAAAACVSUrYJ7pySZEJtNNPDQFW07GOp4yl9SKkprKa38A3ZJShKDxJYIlkLXFaZLVDwycqVKOul5Xdd0Bs8oqSwzPZU47rg0gLN9iXGMFttWN4/gqMbMaS6AARgAAAAABOuvW9+DlcHOWF9zTGKjHCRfPO+U9XHUsLCANlFKrj6lnPO/Y0tZyIV0KEfUu4XYruudj8RXCF9rtl/tXCKhQw5KSissjZYoZ7vwZ5ScnlsL1Ic51Oy1y2WyKwDK21cmAAEYAAAAAADqhJrOGd9OXgWnlITcHlfg0QsjJbfgy4fhkowns0i53ntN41qJQnKuWqLKK7MrEvyWmuys7LGtxh1MdUfhmuTLKLjJqSw0dhNwkpRe5scYdTXlbSX8C9D2wlNtf7o/cvlFwk4yWGjg7NglxjBZbXp+JcFZjZlaS6AARgSbaSWWwXURzmT+w+ZtK3IthBQWFh+/k6C3p6vUl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",
+    "tags": [],
+    "features": [],
     "docker_images": {
-        "ghcr.io\/pterodactyl\/steamcmd:debian": "ghcr.io\/pterodactyl\/steamcmd:debian"
+        "Steamcmd Debian": "ghcr.io/pelican-eggs/steamcmd:debian"
     },
     "file_denylist": [],
-    "startup": ".\/xonotic-linux64-dedicated +log_file latest.log +net_address 0.0.0.0 +port {{SERVER_PORT}} +maxplayers {{MAX_PLAYERS}}",
+    "startup_commands": {
+        "Default": "./xonotic-linux64-dedicated +log_file latest.log +net_address 0.0.0.0 +port {{SERVER_PORT}} +maxplayers {{MAX_PLAYERS}}"
+    },
     "config": {
         "files": "{}",
-        "startup": "{\r\n    \"done\": \"Server listening on address 0.0.0.0:\"\r\n}",
+        "startup": "{\n    \"done\": \"Server listening on address 0.0.0.0:\"\n}",
         "logs": "{}",
         "stop": "quit"
     },
     "scripts": {
         "installation": {
-            "script": "#!\/bin\/ash\r\n# Vanilla Xonotic Installation Script\r\n#\r\n# Server Files: \/mnt\/server\r\napk add rsync --no-cache\r\n\r\nmkdir -p \/mnt\/server\r\n\r\ncd \/mnt\/server\r\n\r\nwget -O xonotic.zip http:\/\/dl.xonotic.org\/xonotic-${VERSION}.zip\r\n\r\nunzip -o xonotic.zip\r\n\r\nmv Xonotic\/* .\/\r\n\r\n.\/misc\/tools\/rsync-updater\/update-to-autobuild.sh\r\n\r\n# create initial folder structure to copy the default config to, because it only gets created on first startup\r\nmkdir -p .xonotic\/data\r\ncp -n server\/server.cfg .xonotic\/data\/server.cfg || true # do not overwrite existing config file\r\n\r\nrm -rf COPYING Makefile *glx* *glx *sdl* *sdl *linux32* *exe *.app *.sh bin* GPL* Docs\/ gmqcc\/ source\/ misc\/ Xonotic\/ xonotic.zip\r\n\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
-            "container": "ghcr.io\/parkervcp\/installers:alpine",
+            "script": "#!/bin/ash\r\n# Vanilla Xonotic Installation Script\r\n#\r\n# Server Files: /mnt/server\r\napk add rsync --no-cache\r\n\r\nmkdir -p /mnt/server\r\n\r\ncd /mnt/server\r\n\r\nwget -O xonotic.zip http://dl.xonotic.org/xonotic-${VERSION}.zip\r\n\r\nunzip -o xonotic.zip\r\n\r\nmv Xonotic/* ./\r\n\r\n./misc/tools/rsync-updater/update-to-autobuild.sh -y\r\n\r\necho \"finished autobuild\"\r\n\r\n# create initial folder structure to copy the default config to, because it only gets created on first startup\r\nmkdir -p .xonotic/data\r\ncp -n server/server.cfg .xonotic/data/server.cfg || true # do not overwrite existing config file\r\n\r\nrm -rf COPYING Makefile *glx* *glx *sdl* *sdl *linux32* *exe *.app *.sh bin* GPL* Docs/ gmqcc/ source/ misc/ Xonotic/ xonotic.zip\r\n\r\n\r\n## install end\r\necho \"-----------------------------------------\"\r\necho \"Installation completed...\"\r\necho \"-----------------------------------------\"",
+            "container": "ghcr.io/pelican-eggs/installers:alpine",
             "entrypoint": "ash"
         }
     },
@@ -36,9 +40,12 @@
             "default_value": "16",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|numeric|digits_between:1,2",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "numeric",
+                "digits_between:1,2"
+            ],
+            "sort": 1
         },
         {
             "name": "Version",
@@ -47,9 +54,12 @@
             "default_value": "0.8.6",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:20",
-            "sort": null,
-            "field_type": "text"
+            "rules": [
+                "required",
+                "string",
+                "max:20"
+            ],
+            "sort": 2
         }
     ]
 }

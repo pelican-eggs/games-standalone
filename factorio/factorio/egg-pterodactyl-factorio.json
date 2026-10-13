@@ -4,7 +4,7 @@
         "version": "PTDL_v2",
         "update_url": null
     },
-    "exported_at": "2024-09-08T19:55:12+02:00",
+    "exported_at": "2026-01-11T12:43:05+00:00",
     "name": "Factorio",
     "author": "parker@parkervcp.com",
     "description": "The vanilla Factorio server.\r\n\r\nhttps:\/\/www.factorio.com\/",
@@ -13,10 +13,10 @@
         "ghcr.io\/parkervcp\/yolks:debian": "ghcr.io\/parkervcp\/yolks:debian"
     },
     "file_denylist": [],
-    "startup": "if [ ! -f \".\/saves\/{{SAVE_NAME}}.zip\" ]; then .\/bin\/x64\/factorio --create .\/saves\/{{SAVE_NAME}}.zip --map-gen-settings data\/map-gen-settings.json --map-settings data\/map-settings.json; fi; .\/bin\/x64\/factorio --port {{SERVER_PORT}} --server-settings data\/server-settings.json --start-server saves\/{{SAVE_NAME}}.zip",
+    "startup": "[ ! -f \".\/saves\/{{SAVE_NAME}}.zip\" ] && .\/bin\/x64\/factorio --create .\/saves\/{{SAVE_NAME}}.zip --map-gen-settings data\/map-gen-settings.json --map-settings data\/map-settings.json; .\/bin\/x64\/factorio --port {{SERVER_PORT}} --server-settings data\/server-settings.json --start-server saves\/{{SAVE_NAME}}.zip $( [ \"$RCON_ENABLED\" = \"1\" ] && echo \"--rcon-port {{RCON_PORT}} --rcon-password {{RCON_PASSWORD}}\" )",
     "config": {
-        "files": "{\r\n    \"data\/server-settings.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"name\": \"{{server.build.env.SERVER_NAME}}\",\r\n            \"description\": \"{{server.build.env.SERVER_DESC}}\",\r\n            \"max_players\": \"{{server.build.env.MAX_SLOTS}}\",\r\n            \"username\": \"{{server.build.env.SERVER_USERNAME}}\",\r\n            \"token\": \"{{server.build.env.SERVER_TOKEN}}\",\r\n            \"autosave_interval\": \"{{server.build.env.SAVE_INTERVAL}}\",\r\n            \"autosave_slots\": \"{{server.build.env.SAVE_SLOTS}}\",\r\n            \"afk_autokick_interval\": \"{{server.build.env.AFK_KICK}}\",\r\n            \"game_password\": \"{{server.build.env.SERVER_PASSWORD}}\"\r\n        }\r\n    }\r\n}",
-        "startup": "{\r\n    \"done\": \"Hosting game at\"\r\n}",
+        "files": "{\n    \"data\\\/server-settings.json\": {\n        \"parser\": \"json\",\n        \"find\": {\n            \"name\": \"{{server.build.env.SERVER_NAME}}\",\n            \"description\": \"{{server.build.env.SERVER_DESC}}\",\n            \"max_players\": \"{{server.build.env.MAX_SLOTS}}\",\n            \"username\": \"{{server.build.env.SERVER_USERNAME}}\",\n            \"token\": \"{{server.build.env.SERVER_TOKEN}}\",\n            \"autosave_interval\": \"{{server.build.env.SAVE_INTERVAL}}\",\n            \"autosave_slots\": \"{{server.build.env.SAVE_SLOTS}}\",\n            \"afk_autokick_interval\": \"{{server.build.env.AFK_KICK}}\",\n            \"game_password\": \"{{server.build.env.SERVER_PASSWORD}}\"\n        }\n    }\n}",
+        "startup": "{\n    \"done\": \"Hosting game at\"\n}",
         "logs": "{}",
         "stop": "\/quit"
     },
@@ -28,6 +28,16 @@
         }
     },
     "variables": [
+        {
+            "name": "AFK Kick",
+            "description": "Time specified in minutes to kick AFK players.\r\n0 is off",
+            "env_variable": "AFK_KICK",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|digits_between:1,3",
+            "field_type": "text"
+        },
         {
             "name": "Factorio Version",
             "description": "Which version of Factorio to install and use.",
@@ -49,53 +59,33 @@
             "field_type": "text"
         },
         {
-            "name": "Save Name",
-            "description": "The save name for the server.",
-            "env_variable": "SAVE_NAME",
-            "default_value": "gamesave",
+            "name": "RCON Enabled?",
+            "description": "",
+            "env_variable": "RCON_ENABLED",
+            "default_value": "0",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "alpha_dash|between:1,100",
+            "rules": "required|boolean",
             "field_type": "text"
         },
         {
-            "name": "Server Token",
-            "description": "Your factorio.com token, it is required for your server to be visible in the public server list.",
-            "env_variable": "SERVER_TOKEN",
-            "default_value": "undefined",
+            "name": "RCON Password",
+            "description": "",
+            "env_variable": "RCON_PASSWORD",
+            "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "alpha_num|max:100",
+            "rules": "nullable|string",
             "field_type": "text"
         },
         {
-            "name": "Server Name",
-            "description": "Name of the game as it will appear in the game listing",
-            "env_variable": "SERVER_NAME",
-            "default_value": "Factorio Server",
+            "name": "RCON Port",
+            "description": "",
+            "env_variable": "RCON_PORT",
+            "default_value": "",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|string|max:100",
-            "field_type": "text"
-        },
-        {
-            "name": "Server Description",
-            "description": "Description of the game that will appear in the listing.",
-            "env_variable": "SERVER_DESC",
-            "default_value": "Description",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|max:200",
-            "field_type": "text"
-        },
-        {
-            "name": "Server Username",
-            "description": "Username used for the server",
-            "env_variable": "SERVER_USERNAME",
-            "default_value": "unnamed",
-            "user_viewable": true,
-            "user_editable": true,
-            "rules": "required|string|max:40",
+            "rules": "nullable|integer",
             "field_type": "text"
         },
         {
@@ -109,6 +99,16 @@
             "field_type": "text"
         },
         {
+            "name": "Save Name",
+            "description": "The save name for the server.",
+            "env_variable": "SAVE_NAME",
+            "default_value": "gamesave",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "alpha_dash|between:1,100",
+            "field_type": "text"
+        },
+        {
             "name": "Auto Save Slots",
             "description": "The number of auto saves to keep.",
             "env_variable": "SAVE_SLOTS",
@@ -119,13 +119,23 @@
             "field_type": "text"
         },
         {
-            "name": "AFK Kick",
-            "description": "Time specified in minutes to kick AFK players.\r\n0 is off",
-            "env_variable": "AFK_KICK",
-            "default_value": "0",
+            "name": "Server Description",
+            "description": "Description of the game that will appear in the listing.",
+            "env_variable": "SERVER_DESC",
+            "default_value": "Description",
             "user_viewable": true,
             "user_editable": true,
-            "rules": "required|numeric|digits_between:1,3",
+            "rules": "required|string|max:200",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Name",
+            "description": "Name of the game as it will appear in the game listing",
+            "env_variable": "SERVER_NAME",
+            "default_value": "Factorio Server",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
             "field_type": "text"
         },
         {
@@ -136,6 +146,26 @@
             "user_viewable": true,
             "user_editable": true,
             "rules": "max:40",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Token",
+            "description": "Your factorio.com token, it is required for your server to be visible in the public server list.",
+            "env_variable": "SERVER_TOKEN",
+            "default_value": "undefined",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "alpha_num|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Server Username",
+            "description": "Username used for the server",
+            "env_variable": "SERVER_USERNAME",
+            "default_value": "unnamed",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:40",
             "field_type": "text"
         }
     ]
