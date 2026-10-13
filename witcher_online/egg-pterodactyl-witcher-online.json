@@ -1,0 +1,32 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-02-03T11:24:58+01:00",
+    "name": "Witcher Online",
+    "author": "info@r3ps4j.nl",
+    "description": "Server for the Witcher Online mod for the Witcher 3. Mod page: https:\/\/www.nexusmods.com\/witcher3\/mods\/11590",
+    "features": null,
+    "docker_images": {
+        "Native": "ghcr.io\/parkervcp\/yolks:debian",
+        "Emulated with box64": "ghcr.io\/parkervcp\/yolks:box64"
+    },
+    "file_denylist": [],
+    "startup": "[ -x .\/Server\/WitcherOnlineServer ] && .\/Server\/WitcherOnlineServer || echo \"You need to download the \\\"Witcher Online Server\\\" zip from https:\/\/www.nexusmods.com\/witcher3\/mods\/11590 and upload it here. Press the reinstall button once you've done this to finish setting up the server.\"",
+    "config": {
+        "files": "{\r\n    \"Server\/server.properties\": {\r\n        \"parser\": \"properties\",\r\n        \"find\": {\r\n            \"port\": \"{{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"For help, type \\\"help\\\" or \\\"?\\\"\"\r\n}",
+        "logs": "{}",
+        "stop": "stop"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n\r\ncd \/mnt\/server\/\r\n\r\nshopt -s nullglob\r\nzips=(\"Witcher Online Server-\"*.zip)\r\nshopt -u nullglob\r\n\r\nif [ ${#zips[@]} -eq 0 ]; then\r\n    msg=\"You need to download the \\\"Witcher Online Server\\\" zip from https:\/\/www.nexusmods.com\/witcher3\/mods\/11590 and upload it here. Press the reinstall button once you've done this to finish setting up the server.\"\r\n    echo \"$msg\"\r\n    echo \"$msg\" >> MISSING_FILES.txt\r\n    exit 1\r\nfi\r\n\r\n# Use the first matching zip\r\nzip_file=\"${zips[0]}\"\r\nunzip -o \"$zip_file\"\r\n\r\nchmod +x \".\/Server\/WitcherOnlineServer\"",
+            "container": "ghcr.io\/parkervcp\/installers:debian",
+            "entrypoint": "\/bin\/bash"
+        }
+    },
+    "variables": []
+}
