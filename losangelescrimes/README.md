@@ -20,7 +20,7 @@ Website: https://lacrimesonline.com/
 
 ## Server Port
 
-> **The LAC server can only run on port 7777. So the server port in the pterodactyl panel that you will use must be 7777.**
+> **The LAC server can only run on port 7777. So the server port in the pelican panel that you will use must be 7777.**
 
 | Port | Default |
 |---|---|
