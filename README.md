@@ -32,6 +32,8 @@
 * [Cube Engine](cubeengine)
   * [AssaultCube](cubeengine/assaultcube)
   * [Cube 2: Sauerbraten](cubeengine/cube2)
+* [Cyberpunk 2077](cyberpunk_2077)
+  * [CyberMP](cyberpunk_2077/cybermp)
 * [Daggerfall Online](daggerfall_online)
 * [DDRaceNetwork](ddracenetwork)
 * [Doom](doom)

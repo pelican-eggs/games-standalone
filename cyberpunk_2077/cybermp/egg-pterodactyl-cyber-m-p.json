@@ -1,0 +1,99 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2026-11-15T00:00:00+00:00",
+    "name": "CyberMP",
+    "author": "37917612+CoZmoTheGod@users.noreply.github.com",
+    "uuid": "3c78ceb1-3eb5-4ea1-82a7-aff9f9fa0152",
+    "description": "CyberMP - multiplayer mod for Cyberpunk 2077. https://docs.cyber.mp",
+    "features": [],
+    "docker_images": {
+        "Debian": "ghcr.io/pelican-eggs/yolks:debian"
+    },
+    "file_denylist": [],
+    "startup": "LD_LIBRARY_PATH=./libs CYBERMP_TCP_HOST=0.0.0.0:{{SERVER_PORT}} CYBERMP_UDP_HOST=0.0.0.0:{{SERVER_PORT}} CYBERMP_CONNECTION_HOST_ADDR=${PUBLIC_ADDRESS:-127.0.0.1}:{{SERVER_PORT}} ./cybermp-server -run",
+    "config": {
+        "files": "{}",
+        "startup": "{\n    \"done\": \"Server started\"\n}",
+        "logs": "{}",
+        "stop": "quit"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\n# CyberMP server install script\n# Installer is Ubuntu 22.04, same base as the official CyberMP Docker image\nset -e\n\nREPO=\"Cyber-MP/CyberMP-Server-Releases\"\n\n## Runtime dependencies (same set as the official Dockerfile)\necho \"deb http://security.ubuntu.com/ubuntu focal-security main\" > /etc/apt/sources.list.d/focal-security.list\napt-get update\napt-get install -y --no-install-recommends libssl1.1 libnng1 libc-ares2 libatomic1 libcurl3-gnutls\n\nmkdir -p /mnt/server\ncd /mnt/server\n\n## Resolve release\nif [ -z \"${SERVER_VERSION}\" ] || [ \"${SERVER_VERSION}\" = \"latest\" ]; then\n    RELEASE_URL=\"https://api.github.com/repos/${REPO}/releases/latest\"\nelse\n    TAG=\"${SERVER_VERSION}\"\n    if [[ \"${TAG}\" != v* ]]; then\n        TAG=\"v${TAG}\"\n    fi\n    RELEASE_URL=\"https://api.github.com/repos/${REPO}/releases/tags/${TAG}\"\nfi\n\necho \"Resolving release from ${RELEASE_URL}\"\nDOWNLOAD_URL=$(curl -fsSL \"${RELEASE_URL}\" | jq -r '.assets[] | select((.name | startswith(\"cybermp-server-linux-build\")) and (.name | endswith(\".zip\"))) | .browser_download_url' | head -n 1)\n\nif [ -z \"${DOWNLOAD_URL}\" ] || [ \"${DOWNLOAD_URL}\" = \"null\" ]; then\n    echo \"Could not find a Linux server build for version '${SERVER_VERSION}'\"\n    exit 1\nfi\n\necho \"Downloading ${DOWNLOAD_URL}\"\ncurl -fsSL -o cybermp-server.zip \"${DOWNLOAD_URL}\"\n\n## Keep the user's config across reinstalls/updates\nif [ -f server.toml ]; then\n    mv server.toml server.toml.keep\nfi\n\nunzip -o -q cybermp-server.zip\nrm -f cybermp-server.zip\n\nif [ -f server.toml.keep ]; then\n    mv -f server.toml.keep server.toml\nfi\n\nmkdir -p resources\n\nif [ ! -f server.toml ]; then\n    echo \"Downloading default server.toml\"\n    curl -fsSL -o server.toml \"https://raw.githubusercontent.com/${REPO}/main/server.toml\"\nfi\n\n## Upstream default still uses the old key name\nsed -i 's/^disable_VoIP_server/disable_voice/' server.toml\n\nchmod +x cybermp-server\nif [ -f bin/crashpad_handler ]; then\n    chmod +x bin/crashpad_handler\nfi\n\n## Bundle shared libraries into ./libs so the stock yolk image can run the server.\n## glibc, libstdc++ and libgcc_s are provided (newer) by the runtime image.\nif ldd ./cybermp-server | grep -q \"not found\"; then\n    echo \"Missing libraries:\"\n    ldd ./cybermp-server | grep \"not found\"\n    exit 1\nfi\n\nrm -rf libs\nmkdir -p libs\nfor BIN in ./cybermp-server ./bin/crashpad_handler; do\n    if [ -f \"${BIN}\" ]; then\n        ldd \"${BIN}\" | awk '$2 == \"=>\" {print $3}' | grep '^/' || true\n    fi\ndone | sort -u | while read -r LIB; do\n    case \"$(basename \"${LIB}\")\" in\n        libc.so.*|libm.so.*|libdl.so.*|libpthread.so.*|librt.so.*|libresolv.so.*|ld-linux*|libstdc++.so.*|libgcc_s.so.*)\n            ;;\n        *)\n            cp -L \"${LIB}\" libs/\n            ;;\n    esac\ndone\n\necho \"Bundled libraries:\"\nls -1 libs\n\necho \"CyberMP install complete\"\n",
+            "container": "ghcr.io/pelican-eggs/installers:ubuntu",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "sort": 1,
+            "name": "Server Version",
+            "description": "Release tag to install (e.g. v4.0.4-beta.1) or \"latest\". Reinstall the server to apply.",
+            "env_variable": "SERVER_VERSION",
+            "default_value": "latest",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:64",
+            "field_type": "text"
+        },
+        {
+            "sort": 2,
+            "name": "Public Address",
+            "description": "Public IP or hostname clients use to connect (connection_host_addr). Port is added automatically. Defaults to 127.0.0.1 when empty.",
+            "env_variable": "PUBLIC_ADDRESS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "sort": 3,
+            "name": "Max Players",
+            "description": "Maximum number of concurrent player slots.",
+            "env_variable": "CYBERMP_MAX_PLAYERS",
+            "default_value": "20",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|integer|between:1,1000",
+            "field_type": "text"
+        },
+        {
+            "sort": 4,
+            "name": "Masterlist Token",
+            "description": "Masterlist server token (private_token). Leave empty for private/local servers.",
+            "env_variable": "CYBERMP_PRIVATE_TOKEN",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255",
+            "field_type": "text"
+        },
+        {
+            "sort": 5,
+            "name": "Disable Voice",
+            "description": "Disable the built-in 3D positional VoIP server.",
+            "env_variable": "CYBERMP_DISABLE_VOICE",
+            "default_value": "false",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:true,false",
+            "field_type": "text"
+        },
+        {
+            "sort": 6,
+            "name": "Phantom Liberty DLC",
+            "description": "Enable content from the Phantom Liberty expansion (ep2_dlc_enabled).",
+            "env_variable": "CYBERMP_EP2_DLC_ENABLED",
+            "default_value": "false",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:true,false",
+            "field_type": "text"
+        }
+    ]
+}
