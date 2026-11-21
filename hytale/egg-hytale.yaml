@@ -304,17 +304,6 @@ variables:
     rules:
       - boolean
   - sort: 18
-    name: 'Transport'
-    description: 'Network transport protocol. QUIC (UDP) is default; QUICHE is an alternative QUIC backend.'
-    env_variable: TRANSPORT
-    default_value: QUIC
-    user_viewable: true
-    user_editable: true
-    rules:
-      - required
-      - string
-      - 'in:QUIC,QUICHE'
-  - sort: 19
     name: 'Profile UUID'
     description: 'Specify a specific Hytale profile UUID for the servers session.'
     env_variable: HYTALE_PROFILE_UUID
