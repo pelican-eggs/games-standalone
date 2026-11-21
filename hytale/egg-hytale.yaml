@@ -43,8 +43,13 @@ scripts:
       mkdir -p /mnt/server/.server-backups/pre-release
       echo '  ✓ Directories created'
       
-      echo '[2/2] Creating config.json...'
-      cat > /mnt/server/Server/config.json << 'EOF'
+      echo '[2/2] Preparing config.json...'
+      if [ -e /mnt/server/Server/config.json ] || [ -L /mnt/server/Server/config.json ]; then
+        echo '  Existing Server/config.json preserved'
+      elif [ -e /mnt/server/config.json ] || [ -L /mnt/server/config.json ]; then
+        echo '  Legacy config.json preserved for migration on startup'
+      else
+        cat > /mnt/server/Server/config.json << 'EOF'
       {
         "Version": 4,
         "ServerName": "Hytale Server",
@@ -125,13 +130,14 @@ scripts:
         "Update": {}
       }
       EOF
-      echo '  ✓ config.json created'
+        echo '  config.json created'
+      fi
       
       echo 'Installation complete!'
       echo '============================================'
       echo 'Installed components:'
       echo '  - Base directories'
-      echo '  - config.json'
+      echo '  - config.json (created only if no existing configuration)'
       echo '============================================'
     container: 'ghcr.io/pelican-eggs/installers:debian'
     entrypoint: bash
@@ -158,7 +164,7 @@ variables:
       - 'in:release,pre-release'
   - sort: 3
     name: 'Server Version'
-    description: 'Version to run: latest, previous or a specific version.'
+    description: 'Version to run: latest or a specific version.'
     env_variable: SERVER_VERSION
     default_value: latest
     user_viewable: true
@@ -299,7 +305,7 @@ variables:
       - boolean
   - sort: 18
     name: 'Transport'
-    description: 'Network transport protocol. QUIC (UDP) is default; use TCP if UDP/QUIC is blocked by your host or network.'
+    description: 'Network transport protocol. QUIC (UDP) is default; QUICHE is an alternative QUIC backend.'
     env_variable: TRANSPORT
     default_value: QUIC
     user_viewable: true
@@ -307,7 +313,7 @@ variables:
     rules:
       - required
       - string
-      - 'in:QUIC,TCP'
+      - 'in:QUIC,QUICHE'
   - sort: 19
     name: 'Profile UUID'
     description: 'Specify a specific Hytale profile UUID for the servers session.'
