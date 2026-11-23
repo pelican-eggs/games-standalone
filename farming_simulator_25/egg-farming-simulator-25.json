@@ -1,0 +1,302 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PANEL",
+    "meta": {
+        "version": "PLCN_v3",
+        "update_url": null
+    },
+    "exported_at": "2026-11-07T21:27:22+00:00",
+    "name": "Farming Simulator 25",
+    "author": "60920916+DasEric@users.noreply.github.com",
+    "uuid": "19643c2a-df99-42ce-be66-1fdf12b1179a",
+    "description": "Farming Simulator 25 dedicated server for Linux amd64 using the official GIANTS installer and GE-Proton.",
+    "icon": null,
+    "tags": [],
+    "features": [],
+    "docker_images": {
+        "Pelican FS25": "ghcr.io/pelican-eggs/games:fs25"
+    },
+    "file_denylist": [
+        "/.fs25-secrets",
+        "/.fs25-secrets/**",
+        "/game/pk.pem",
+        "/game/dedicatedServer.xml"
+    ],
+    "startup_commands": {
+        "Default": "/usr/bin/python3 /opt/fs25/server.py start"
+    },
+    "config": {
+        "files": "{}",
+        "startup": "{\n    \"done\": \"FS25 web interface ready\"\n}",
+        "logs": "{}",
+        "stop": "^SIGTERM"
+    },
+    "scripts": {
+        "installation": {
+            "script": "exec /usr/bin/python3 /opt/fs25/server.py install\n",
+            "container": "ghcr.io/pelican-eggs/games:fs25",
+            "entrypoint": "/bin/sh"
+        }
+    },
+    "variables": [
+        {
+            "name": "Allow Crossplay",
+            "description": "true or false. Blank keeps the web interface setting.",
+            "env_variable": "FS25_CROSSPLAY",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "nullable",
+                "in:true,false"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Autosave Interval",
+            "description": "Minutes between saves. Blank keeps the web interface setting.",
+            "env_variable": "FS25_AUTOSAVE",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "nullable",
+                "integer",
+                "min:0"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Autostart Game",
+            "description": "Start the game when the GIANTS web interface is ready. Use false to start it manually from that interface.",
+            "env_variable": "FS25_AUTOSTART",
+            "default_value": "true",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "required",
+                "in:true,false"
+            ],
+            "sort": null
+        },
+        {
+            "name": "DLC Installation Sources",
+            "description": "Optional matching list: pumps=https://.../installer.exe;mercedes=installer.img. Local paths are relative to dlc-installers/. With no override, the DLC key is looked up at GIANTS.",
+            "env_variable": "FS25_DLC_INSTALL_SOURCES",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": [
+                "nullable",
+                "string",
+                "max:8192"
+            ],
+            "sort": null
+        },
+        {
+            "name": "DLC Installer Timeout",
+            "description": "Maximum seconds per DLC installer, including online activation. The base game starts only after all configured DLC installers succeed.",
+            "env_variable": "FS25_DLC_INSTALLER_TIMEOUT",
+            "default_value": "1800",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": [
+                "required",
+                "integer",
+                "between:60,7200"
+            ],
+            "sort": null
+        },
+        {
+            "name": "DLC Product Keys",
+            "description": "Optional admin-only list: pumps=KEY;mercedes=KEY. Use matching names in DLC Installation Sources. Blank leaves DLC installation disabled unless a key file is present.",
+            "env_variable": "FS25_DLC_PRODUCT_KEYS",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": [
+                "nullable",
+                "string",
+                "max:4096"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Enable TLS",
+            "description": "Requires game/cert.pem and game/pk.pem. Allocate the TLS port before enabling.",
+            "env_variable": "FS25_TLS",
+            "default_value": "false",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": [
+                "required",
+                "in:true,false"
+            ],
+            "sort": null
+        },
+        {
+            "name": "GE-Proton Release",
+            "description": "Pinned GE-Proton release. Apply changes by reinstalling. Changing this may require activation again.",
+            "env_variable": "FS25_PROTON_VERSION",
+            "default_value": "GE-Proton11-12",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": [
+                "nullable",
+                "regex:/^GE-Proton[0-9]+-[0-9]+$/"
+            ],
+            "sort": null
+        },
+        {
+            "name": "GIANTS IMG Download Link",
+            "description": "Optional direct HTTPS .img link from the GIANTS CDN. Blank looks up the base game with the product key.",
+            "env_variable": "FS25_DOWNLOAD_URL",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": [
+                "nullable",
+                "string",
+                "max:2048"
+            ],
+            "sort": null
+        },
+        {
+            "name": "GIANTS Product Key",
+            "description": "Admin only. FS25 product key for the GIANTS download and first activation. Blank uses .fs25-secrets/activation-key if present. Wings may log egg variables during installation.",
+            "env_variable": "FS25_PRODUCT_KEY",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": [
+                "nullable",
+                "string",
+                "max:80"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Max Players",
+            "description": "Player slots (2\u201316). Blank keeps the web interface setting.",
+            "env_variable": "FS25_MAX_PLAYERS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "nullable",
+                "integer",
+                "between:2,16"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Pause When Empty",
+            "description": "1 = no, 2 = immediately. Blank keeps the web interface setting.",
+            "env_variable": "FS25_PAUSE_EMPTY",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "nullable",
+                "in:1,2"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Savegame Slot",
+            "description": "Savegame slot. Blank keeps the web interface setting.",
+            "env_variable": "FS25_SAVEGAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "nullable",
+                "integer",
+                "min:1"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Server Language",
+            "description": "FS25 language code. Blank keeps the web interface setting.",
+            "env_variable": "FS25_LANGUAGE",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "nullable",
+                "in:en,de,fr,es,it,pl,cz,ru,pt,hu,nl,jp"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Server Name",
+            "description": "In-game server browser name. Blank keeps the web interface setting.",
+            "env_variable": "FS25_SERVER_NAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "nullable",
+                "string",
+                "max:100"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Stats Interval",
+            "description": "Minutes between stats writes. Blank keeps the web interface setting.",
+            "env_variable": "FS25_STATS_INTERVAL",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": [
+                "nullable",
+                "integer",
+                "min:0"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Web Admin Username",
+            "description": "Admin login for the GIANTS web interface. Set a password in .fs25-secrets/web-admin-password, or use the one generated in game/dedicatedServer.xml.",
+            "env_variable": "FS25_ADMIN_USER",
+            "default_value": "admin",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": [
+                "required",
+                "string",
+                "max:64"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Web Interface Port",
+            "description": "TCP allocation for the GIANTS web interface.",
+            "env_variable": "FS25_WEB_PORT",
+            "default_value": "8080",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": [
+                "required",
+                "integer",
+                "between:1024,65535"
+            ],
+            "sort": null
+        },
+        {
+            "name": "Web Interface TLS Port",
+            "description": "Additional TCP allocation when TLS is enabled.",
+            "env_variable": "FS25_TLS_PORT",
+            "default_value": "8443",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": [
+                "required",
+                "integer",
+                "between:1024,65535"
+            ],
+            "sort": null
+        }
+    ]
+}
