@@ -91,6 +91,8 @@
 * [The Battle For Wesnoth](thebattleforwesnoth)
 * [Tiny Block Server](tiny_block)
 * [Trackmania (2020)](trackmania2020)
+* [Unreal Tournament](unreal_tournament)
+  * [Unreal Tournament 2004](unreal_tournament/ut2004)
 * [Urban Terror](urbanterror)
 * [Veloren](veloren)
 * [Venice Unleashed](venice_unleashed)
